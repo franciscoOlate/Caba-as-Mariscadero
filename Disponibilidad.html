@@ -587,13 +587,12 @@
   </div>
 
   <script>
-    // ===== CONFIGURACIÓN =====
+    // ===== CONFIGURACIÓN PANTRY =====
     const ADMIN_PASS = 'mariscadero2025';
-    // JSONBin.io - bin compartido para todos los dispositivos
-    // JSONBin.io - bin compartido para todos los dispositivos
-    const BIN_ID = '6a3266cada38895dfecf15d0';
-    const API_KEY = '$2a$10$M8IrnZuHgaByjy0xPcDtsOrzsVCikZ3AuLtuUPp/BzLaDtJE7HrVK';
-    const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+    const PANTRY_ID = '6117a5bf-8250-4cae-a652-cdf866b37961';
+    const BASKET_NAME = 'reservas';
+    const API_URL = `https://getpantry.cloud/apiv1/pantry/${PANTRY_ID}/basket/${BASKET_NAME}`;
+
     // ===== LOGIN =====
     function doLogin() {
       const pass = document.getElementById('loginPass').value;
@@ -617,18 +616,16 @@
       document.getElementById('loadingOverlay').style.display = v ? 'flex' : 'none';
     }
 
-    // ===== API JSONBin =====
+    // ===== API PANTRY =====
     async function cargarReservas() {
       showLoading(true);
       try {
-        const res = await fetch(API_URL + '/latest', {
-          headers: { 'X-Master-Key': API_KEY }
-        });
-        const json = await res.json();
-        const data = json.record || {};
-        renderPanel(data);
+        const res = await fetch(API_URL);
+        const data = await res.json();
+        renderPanel(data || {});
       } catch (e) {
         alert('Error al cargar reservas. Verifica tu conexión.');
+        console.error(e);
       }
       showLoading(false);
     }
@@ -637,18 +634,15 @@
       showLoading(true);
       try {
         await fetch(API_URL, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Master-Key': API_KEY
-          },
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
         });
-        // Guardar también en localStorage como caché para index.html
         localStorage.setItem('reservas_publicas', JSON.stringify(data));
         localStorage.setItem('reservas_cache_ts', Date.now().toString());
       } catch (e) {
         alert('Error al guardar. Intenta de nuevo.');
+        console.error(e);
       }
       showLoading(false);
     }
@@ -664,9 +658,8 @@
       if (salida <= llegada) { alert('⚠️ La salida debe ser posterior a la llegada.'); return; }
 
       showLoading(true);
-      const res = await fetch(API_URL + '/latest', { headers: { 'X-Master-Key': API_KEY } });
-      const json = await res.json();
-      const data = json.record || {};
+      const res = await fetch(API_URL);
+      const data = await res.json() || {};
       showLoading(false);
 
       if (!data[cabana]) data[cabana] = [];
@@ -693,9 +686,8 @@
     async function eliminarReserva(cabana, id) {
       if (!confirm('¿Eliminar esta reserva?')) return;
       showLoading(true);
-      const res = await fetch(API_URL + '/latest', { headers: { 'X-Master-Key': API_KEY } });
-      const json = await res.json();
-      const data = json.record || {};
+      const res = await fetch(API_URL);
+      const data = await res.json() || {};
       showLoading(false);
 
       if (data[cabana]) {
@@ -710,9 +702,8 @@
     async function liberarCabana(cabana) {
       if (!confirm(`¿Eliminar TODAS las reservas de Cabaña N°${cabana}?`)) return;
       showLoading(true);
-      const res = await fetch(API_URL + '/latest', { headers: { 'X-Master-Key': API_KEY } });
-      const json = await res.json();
-      const data = json.record || {};
+      const res = await fetch(API_URL);
+      const data = await res.json() || {};
       showLoading(false);
       delete data[cabana];
       await guardarReservas(data);
@@ -732,26 +723,26 @@
         totalRes += reservas.length;
 
         html += `
-        <div class="cabana-card ${ocupada ? 'ocupada' : ''}">
-          <div class="cabana-header">
-            <div class="cabana-nombre"><i class="bi bi-house-fill" style="color:var(--ocean);margin-right:6px"></i>Cabaña N°${i}</div>
-            <span class="badge ${ocupada ? 'badge-ocupada' : 'badge-libre'}">${ocupada ? '🔴 Ocupada' : '🟢 Disponible'}</span>
-          </div>
-          <div class="cabana-reservas">
-            ${reservas.length === 0
+    <div class="cabana-card ${ocupada ? 'ocupada' : ''}">
+      <div class="cabana-header">
+        <div class="cabana-nombre"><i class="bi bi-house-fill" style="color:var(--ocean);margin-right:6px"></i>Cabaña N°${i}</div>
+        <span class="badge ${ocupada ? 'badge-ocupada' : 'badge-libre'}">${ocupada ? '🔴 Ocupada' : '🟢 Disponible'}</span>
+      </div>
+      <div class="cabana-reservas">
+        ${reservas.length === 0
             ? '<div class="sin-reservas">Sin reservas activas</div>'
             : reservas.map(r => `
-                  <div class="reserva-item">
-                    <div>
-                      <div class="reserva-fechas"><i class="bi bi-calendar3"></i> ${fmt(r.llegada)} → ${fmt(r.salida)}</div>
-                      <div class="reserva-nota">${r.nombre}</div>
-                    </div>
-                    <button class="btn-eliminar" onclick="eliminarReserva(${i}, ${r.id})"><i class="bi bi-trash3"></i></button>
-                  </div>`).join('')
+              <div class="reserva-item">
+                <div>
+                  <div class="reserva-fechas"><i class="bi bi-calendar3"></i> ${fmt(r.llegada)} → ${fmt(r.salida)}</div>
+                  <div class="reserva-nota">${r.nombre}</div>
+                </div>
+                <button class="btn-eliminar" onclick="eliminarReserva(${i}, ${r.id})"><i class="bi bi-trash3"></i></button>
+              </div>`).join('')
           }
-          </div>
-          ${ocupada ? `<div class="cabana-footer"><button class="btn-liberar" onclick="liberarCabana(${i})"><i class="bi bi-unlock-fill"></i> Liberar todas las fechas</button></div>` : ''}
-        </div>`;
+      </div>
+      ${ocupada ? `<div class="cabana-footer"><button class="btn-liberar" onclick="liberarCabana(${i})"><i class="bi bi-unlock-fill"></i> Liberar todas las fechas</button></div>` : ''}
+    </div>`;
       }
 
       document.getElementById('cabanasGrid').innerHTML = html;

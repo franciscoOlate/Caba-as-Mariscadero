@@ -476,10 +476,11 @@
           <div class="servicio-item"><i class="bi bi-clock servicio-icon"></i><span>24/7 disponible</span></div>
         </div>
         <div class="col-6 col-md-3">
-          <div class="servicio-item"><i class="bi bi-door-open servicio-icon"></i><span>Terraza privada</span></div>          </div>
-          </div>
+          <div class="servicio-item"><i class="bi bi-door-open servicio-icon"></i><span>Terraza privada</span></div>
         </div>
       </div>
+    </div>
+    </div>
     </div>
   </section>
 
@@ -508,140 +509,153 @@
     </div>
   </section>
 
-  <!-- ===== RESERVA + CONTACTO ===== -->
-  <section id="reserva" class="section-lp">
-    <div class="container">
-      <div class="row g-5 align-items-start">
-        <div class="col-lg-6">
-          <p class="section-eyebrow">Contacto y reservas</p>
-          <h2 class="section-title">¿Listo para escaparte?</h2>
-          <p class="section-sub mb-4">Completa el formulario y te respondemos en menos de 24 horas para confirmar tu
-            reserva.</p>
-          <form action="https://formspree.io/f/xqeonzvz" method="POST" class="form-lp" id="formReserva" novalidate>
-            <input type="hidden" name="_subject" value="Nueva reserva — Cabañas Mariscadero" />
-            <!-- ✅ ANTI-BOT: campo honeypot oculto; los bots lo rellenan, los humanos no -->
-            <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
-            <div class="mb-3">
-              <label class="form-label-lp">Nombre completo</label>
-              <input type="text" name="nombre" class="input-lp" placeholder="Tu nombre" required minlength="2"
-                maxlength="80" pattern="[A-Za-zÁáÉéÍíÓóÚúÑñÜü\s]+" title="Solo letras y espacios" />
-            </div>
-            <div class="mb-3">
-              <label class="form-label-lp">Correo electrónico</label>
-              <input type="email" name="email" class="input-lp" placeholder="tu@correo.com" required maxlength="100" />
-            </div>
-            <div class="mb-3">
-              <label class="form-label-lp">Teléfono (WhatsApp)</label>
-              <input type="tel" name="telefono" class="input-lp" placeholder="+56 9 XXXX XXXX"
-                pattern="[\+]?[0-9\s\-]{7,20}" maxlength="20" title="Número de teléfono válido" />
-            </div>
-            <div class="row g-3 mb-3">
-              <div class="col-6">
-                <label class="form-label-lp">Llegada</label>
-                <input type="date" name="llegada" class="input-lp" required id="fechaLlegada" />
-              </div>
-              <div class="col-6">
-                <label class="form-label-lp">Salida</label>
-                <input type="date" name="salida" class="input-lp" required id="fechaSalida" />
-              </div>
-            </div>
-            <div class="mb-3">
-              <label class="form-label-lp">Cabaña de interés</label>
-              <select name="cabana" class="input-lp">
-                <option value="">Selecciona una cabaña</option>
-                <option>Cabaña N°1</option>
-                <option>Cabaña N°2</option>
-                <option>Cabaña N°3</option>
-                <option>Cabaña N°4</option>
-                <option>Cabaña N°5</option>
-                <option>Cabaña N°6</option>
-                <option>Cabaña N°7</option>
-                <option>Sin preferencia</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label class="form-label-lp">Número de personas</label>
-              <select name="personas" class="input-lp" id="selectPersonas" onchange="calcularPrecio()">
-                <option value="">Selecciona</option>
-                <option value="2">2 personas — $45.000</option>
-                <option value="3">3 personas — $50.000</option>
-                <option value="4">4 personas — $55.000</option>
-                <option value="5">5 personas — $60.000</option>
-                <option value="6">6 personas — $65.000</option>
-              </select>
-            </div>
-            <div class="mb-3" id="precioEstimado" style="display:none">
-              <div class="precio-estimado-box">
-                <i class="bi bi-tag-fill"></i> Precio estimado por noche: <strong id="precioTexto"></strong>
-              </div>
-            </div>
-            <div class="mb-3">
-              <label class="form-label-lp">¿Vienes con mascotas?</label>
-              <select name="mascotas" class="input-lp">
-                <option value="no">No</option>
-                <option value="si">Sí 🐾</option>
-              </select>
-            </div>
-            <div class="mb-4">
-              <label class="form-label-lp">Mensaje adicional</label>
-              <textarea name="mensaje" class="input-lp" rows="3" placeholder="Cuéntanos algo más sobre tu visita..."
-                maxlength="500"></textarea>
-              <small class="text-muted" style="font-size:0.78rem">Máximo 500 caracteres</small>
-            </div>
-            <button type="submit" class="btn btn-primary-lp w-100" id="btnReserva">Enviar solicitud de reserva</button>
-            <p class="form-nota mt-2">Te responderemos por email o WhatsApp.</p>
-          </form>
-        </div>
-
-        <div class="col-lg-6">
-          <div class="info-contacto">
-            <h3 class="info-titulo">Información de contacto</h3>
-            <div class="info-item">
-              <i class="bi bi-telephone-fill info-icon"></i>
-              <div>
-                <strong>Teléfono / WhatsApp</strong>
-                <p><a href="https://wa.me/56995265545" target="_blank">+56 9 9526 5545</a></p>
-              </div>
-            </div>
-            <div class="info-item">
-              <i class="bi bi-geo-alt-fill info-icon"></i>
-              <div>
-                <strong>Ubicación</strong>
-                <p>Sector Mariscadero<br>Pelluhue, Maule, Chile</p>
-              </div>
-            </div>
-            <div class="info-item">
-              <i class="bi bi-clock-fill info-icon"></i>
-              <div>
-                <strong>Horario de atención</strong>
-                <p>Abierto las 24 horas, todos los días</p>
-              </div>
-            </div>
-            <div class="info-item">
-              <i class="bi bi-houses-fill info-icon"></i>
-              <div>
-                <strong>Disponibilidad</strong>
-                <p>7 cabañas · hasta 6 personas c/u</p>
-              </div>
-            </div>
-            <div class="info-item">
-              <i class="bi bi-heart-fill info-icon"></i>
-              <div>
-                <strong>Mascotas</strong>
-                <p>¡Sí se permiten perros! Bienvenidos 🐾</p>
-              </div>
-            </div>
-            <a href="https://wa.me/56995265545?text=Hola!%20Quiero%20información%20sobre%20las%20Cabañas%20Mariscadero"
-              target="_blank" rel="noopener noreferrer"
-              class="btn-wsp w-100 mt-3 d-flex align-items-center justify-content-center gap-2">
-              <i class="bi bi-whatsapp"></i> Escribir por WhatsApp
-            </a>
+<!-- ===== RESERVA + CONTACTO ===== -->
+<section id="reserva" class="section-lp">
+  <div class="container">
+    <div class="row g-5 align-items-start">
+      <div class="col-lg-6">
+        <p class="section-eyebrow">Contacto y reservas</p>
+        <h2 class="section-title">¿Listo para escaparte?</h2>
+        <p class="section-sub mb-4">Completa el formulario y te respondemos en menos de 24 horas para confirmar tu reserva.</p>
+        <form action="https://formspree.io/f/xqeonzvz" method="POST" class="form-lp" id="formReserva" novalidate>
+          <input type="hidden" name="_subject" value="Nueva reserva — Cabañas Mariscadero" />
+          <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+          <div class="mb-3">
+            <label class="form-label-lp">Nombre completo</label>
+            <input type="text" name="nombre" class="input-lp" placeholder="Tu nombre" required minlength="2" maxlength="80" pattern="[A-Za-zÁáÉéÍíÓóÚúÑñÜü\s]+" title="Solo letras y espacios" />
           </div>
+          <div class="mb-3">
+            <label class="form-label-lp">Correo electrónico</label>
+            <input type="email" name="email" class="input-lp" placeholder="tu@correo.com" required maxlength="100" />
+          </div>
+          <div class="mb-3">
+            <label class="form-label-lp">Teléfono (WhatsApp)</label>
+            <input type="tel" name="telefono" class="input-lp" placeholder="+56 9 XXXX XXXX" pattern="[\+]?[0-9\s\-]{7,20}" maxlength="20" title="Número de teléfono válido" />
+          </div>
+          <div class="row g-3 mb-3">
+            <div class="col-6">
+              <label class="form-label-lp">Llegada</label>
+              <input type="date" name="llegada" class="input-lp" required id="fechaLlegada" />
+            </div>
+            <div class="col-6">
+              <label class="form-label-lp">Salida</label>
+              <input type="date" name="salida" class="input-lp" required id="fechaSalida" />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label-lp">Cabaña de interés</label>
+            <select name="cabana" class="input-lp">
+              <option value="">Selecciona una cabaña</option>
+              <option>Cabaña N°1</option>
+              <option>Cabaña N°2</option>
+              <option>Cabaña N°3</option>
+              <option>Cabaña N°4</option>
+              <option>Cabaña N°5</option>
+              <option>Cabaña N°6</option>
+              <option>Cabaña N°7</option>
+              <option>Sin preferencia</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label-lp">Número de personas</label>
+            <select name="personas" class="input-lp" id="selectPersonas" onchange="calcularPrecio()">
+              <option value="">Selecciona</option>
+              <option value="2">2 personas — $45.000</option>
+              <option value="3">3 personas — $50.000</option>
+              <option value="4">4 personas — $55.000</option>
+              <option value="5">5 personas — $60.000</option>
+              <option value="6">6 personas — $65.000</option>
+            </select>
+          </div>
+          <div class="mb-3" id="precioEstimado" style="display:none">
+            <div class="precio-estimado-box">
+              <i class="bi bi-tag-fill"></i> Precio estimado por noche: <strong id="precioTexto"></strong>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label-lp">¿Vienes con mascotas?</label>
+            <select name="mascotas" class="input-lp">
+              <option value="no">No</option>
+              <option value="si">Sí 🐾</option>
+            </select>
+          </div>
+          <div class="mb-4">
+            <label class="form-label-lp">Mensaje adicional</label>
+            <textarea name="mensaje" class="input-lp" rows="3" placeholder="Cuéntanos algo más sobre tu visita..." maxlength="500"></textarea>
+            <small class="text-muted" style="font-size:0.78rem">Máximo 500 caracteres</small>
+          </div>
+          <button type="submit" class="btn btn-primary-lp w-100" id="btnReserva">Enviar solicitud de reserva</button>
+          <p class="form-nota mt-2">Te responderemos por email o WhatsApp.</p>
+        </form>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="info-contacto">
+          <h3 class="info-titulo">Información de contacto</h3>
+
+          <div class="info-item">
+            <i class="bi bi-telephone-fill info-icon"></i>
+            <div>
+              <strong>Teléfono / WhatsApp</strong>
+              <p><a href="https://wa.me/56995265545" target="_blank">+56 9 9526 5545</a></p>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <i class="bi bi-geo-alt-fill info-icon"></i>
+            <div>
+              <strong>Ubicación</strong>
+              <p>Sector Mariscadero<br>Pelluhue, Maule, Chile</p>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <i class="bi bi-clock-fill info-icon"></i>
+            <div>
+              <strong>Horario de atención</strong>
+              <p>Abierto las 24 horas, todos los días</p>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <i class="bi bi-clock-fill info-icon"></i>
+            <div>
+              <strong>Entrada / Salida</strong>
+              <p>
+                Entrada: desde las 2:00 PM (14:00 hrs)<br>
+                Salida: antes de las 12:00 PM (mediodía)<br>
+                <span style="color:#e53e3e;font-weight:600">⏰ Hora extra: $5.000 CLP por hora adicional.</span><br>
+                <small style="color:#5a6a7a;font-style:italic">¿Necesitas un horario especial? Consulta con la dueña por WhatsApp 💬</small>
+              </p>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <i class="bi bi-houses-fill info-icon"></i>
+            <div>
+              <strong>Disponibilidad</strong>
+              <p>7 cabañas · hasta 6 personas c/u</p>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <i class="bi bi-heart-fill info-icon"></i>
+            <div>
+              <strong>Mascotas</strong>
+              <p>¡Sí se permiten perros! Bienvenidos 🐾</p>
+            </div>
+          </div>
+
+          <a href="https://wa.me/56995265545?text=Hola!%20Quiero%20información%20sobre%20las%20Cabañas%20Mariscadero"
+            target="_blank" rel="noopener noreferrer"
+            class="btn-wsp w-100 mt-3 d-flex align-items-center justify-content-center gap-2">
+            <i class="bi bi-whatsapp"></i> Escribir por WhatsApp
+          </a>
         </div>
       </div>
     </div>
-  </section>
-
+  </div>
+</section>
 
   <!-- ===== DISPONIBILIDAD ===== -->
   <section id="disponibilidad" class="section-lp section-crema">
@@ -1336,6 +1350,7 @@
       <button data-q="¿Se permiten mascotas?">🐾 Mascotas</button>
       <button data-q="¿Cómo llego desde Talca?">📍 Cómo llegar</button>
       <button data-q="¿Qué incluyen las cabañas?">🏠 Servicios</button>
+      <button data-q="¿A qué hora es la entrada y salida?">⏰ Horarios</button>
     </div>
 
     <form class="chatbot-input-wrap" id="chatbot-form">
@@ -1662,7 +1677,7 @@ INFORMACIÓN OFICIAL QUE DEBES USAR PARA RESPONDER:
  CABAÑAS:
 - 7 cabañas idénticas y completamente equipadas
 - Capacidad máxima: 6 personas por cabaña
-- Todas tienen terraza privada de madera
+- Todas tienen terraza privada de maderaF
 - Se permiten mascotas (pet-friendly) 🐾
 
 💰 PRECIOS POR NOCHE (temporada estándar):
@@ -1681,6 +1696,12 @@ INFORMACIÓN OFICIAL QUE DEBES USAR PARA RESPONDER:
 - Terraza privada con mesas y sillas
 - Pet-friendly (se aceptan mascotas)
 - Abierto las 24 horas, los 7 días de la semana
+
+⏰ HORARIOS DE CHECK-IN Y CHECK-OUT:
+- Entrada (check-in): a partir de las 2:00 PM (14:00 hrs)
+- Salida (check-out): antes de las 12:00 PM (mediodía)
+- Hora extra: si el huésped desea quedarse más tiempo después del check-out, el costo es de $5.000 CLP por hora adicional.
+- Si necesitas un check-in temprano, check-out tardío o quedarte más horas, por favor consulta directamente con la dueña a través de WhatsApp al +56 9 9526 5545. Ella estará encantada de ayudarte y coordinar lo que necesites.
 
 
  UBICACIÓN:

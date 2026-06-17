@@ -1296,5 +1296,512 @@
       if (dS) dS.min = hoy;
     });
   </script>
+  <!-- ===== CHATBOT IA (Google Gemini) ===== -->
+  <button id="chatbot-toggle" aria-label="Abrir chatbot">
+    <i class="bi bi-chat-dots-fill"></i>
+    <span class="chatbot-label">¿Dudas? Pregúntame</span>
+  </button>
+
+  <div class="chatbot-container" id="chatbot-container">
+    <div class="chatbot-header">
+      <div class="chatbot-header-info">
+        <i class="bi bi-robot"></i>
+        <div>
+          <strong>Asistente Mariscadero</strong>
+          <span class="chatbot-status">● En línea</span>
+        </div>
+      </div>
+      <button id="chatbot-close" aria-label="Cerrar chatbot">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="chatbot-messages" id="chatbot-messages">
+      <div class="chatbot-message bot">
+        ¡Hola! 👋 Soy el asistente virtual de Cabañas Mariscadero. Puedo ayudarte con:
+        <ul>
+          <li>💰 Precios y tarifas</li>
+          <li>📅 Disponibilidad de cabañas</li>
+          <li> Políticas de mascotas</li>
+          <li>📍 Cómo llegar a Pelluhue</li>
+          <li> Servicios de las cabañas</li>
+        </ul>
+        ¿En qué te puedo ayudar?
+      </div>
+    </div>
+
+    <div class="chatbot-suggestions" id="chatbot-suggestions">
+      <button data-q="¿Cuáles son los precios por noche?">💰 Precios</button>
+      <button data-q="¿Se permiten mascotas?">🐾 Mascotas</button>
+      <button data-q="¿Cómo llego desde Talca?">📍 Cómo llegar</button>
+      <button data-q="¿Qué incluyen las cabañas?">🏠 Servicios</button>
+    </div>
+
+    <form class="chatbot-input-wrap" id="chatbot-form">
+      <input type="text" id="chatbot-input" placeholder="Escribe tu pregunta..." autocomplete="off" maxlength="500" />
+      <button type="submit" id="chatbot-send" aria-label="Enviar">
+        <i class="bi bi-send-fill"></i>
+      </button>
+    </form>
+  </div>
+
+  <style>
+    /* ===== CHATBOT STYLES ===== */
+    #chatbot-toggle {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      z-index: 9998;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #1a6b8a, #2a9bc4);
+      color: #fff;
+      padding: 12px 18px 12px 14px;
+      border: none;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      box-shadow: 0 6px 24px rgba(26, 107, 138, 0.45);
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+
+    #chatbot-toggle i {
+      font-size: 1.4rem;
+    }
+
+    #chatbot-toggle:hover {
+      transform: scale(1.06);
+      box-shadow: 0 10px 30px rgba(26, 107, 138, 0.6);
+    }
+
+    #chatbot-toggle .chatbot-label {
+      display: inline;
+    }
+
+    @media (max-width: 480px) {
+      #chatbot-toggle .chatbot-label {
+        display: none;
+      }
+
+      #chatbot-toggle {
+        padding: 14px;
+        border-radius: 50%;
+      }
+    }
+
+    .chatbot-container {
+      position: fixed;
+      bottom: 90px;
+      left: 24px;
+      width: 380px;
+      max-width: calc(100vw - 48px);
+      height: 520px;
+      max-height: calc(100vh - 140px);
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 9999;
+      font-family: 'Inter', sans-serif;
+      animation: chatbot-slide-up 0.3s ease;
+    }
+
+    .chatbot-container.active {
+      display: flex;
+    }
+
+    @keyframes chatbot-slide-up {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .chatbot-header {
+      background: linear-gradient(135deg, #1a6b8a, #2a9bc4);
+      color: #fff;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .chatbot-header-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .chatbot-header-info i {
+      font-size: 1.5rem;
+    }
+
+    .chatbot-header-info strong {
+      display: block;
+      font-size: 0.95rem;
+    }
+
+    .chatbot-status {
+      font-size: 0.72rem;
+      opacity: 0.9;
+    }
+
+    #chatbot-close {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    #chatbot-close:hover {
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .chatbot-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      background: #f9fafb;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .chatbot-messages::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .chatbot-messages::-webkit-scrollbar-thumb {
+      background: #2a9bc4;
+      border-radius: 3px;
+    }
+
+    .chatbot-message {
+      max-width: 85%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 0.88rem;
+      line-height: 1.5;
+      word-wrap: break-word;
+    }
+
+    .chatbot-message.bot {
+      background: #fff;
+      color: #1a2430;
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+
+    .chatbot-message.user {
+      background: linear-gradient(135deg, #1a6b8a, #2a9bc4);
+      color: #fff;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+
+    .chatbot-message.bot ul {
+      margin: 6px 0 0 0;
+      padding-left: 20px;
+    }
+
+    .chatbot-message.bot li {
+      margin-bottom: 3px;
+    }
+
+    .chatbot-typing {
+      display: flex;
+      gap: 4px;
+      padding: 10px 14px;
+      background: #fff;
+      border-radius: 14px;
+      align-self: flex-start;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+
+    .chatbot-typing span {
+      width: 7px;
+      height: 7px;
+      background: #2a9bc4;
+      border-radius: 50%;
+      animation: typing 1.4s infinite;
+    }
+
+    .chatbot-typing span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .chatbot-typing span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes typing {
+
+      0%,
+      60%,
+      100% {
+        transform: translateY(0);
+        opacity: 0.5;
+      }
+
+      30% {
+        transform: translateY(-6px);
+        opacity: 1;
+      }
+    }
+
+    .chatbot-suggestions {
+      padding: 10px 16px;
+      background: #fff;
+      border-top: 1px solid #e2eaf0;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .chatbot-suggestions button {
+      background: #f0f8fb;
+      color: #1a6b8a;
+      border: 1px solid #c6e4f0;
+      border-radius: 50px;
+      padding: 6px 12px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .chatbot-suggestions button:hover {
+      background: #1a6b8a;
+      color: #fff;
+    }
+
+    .chatbot-input-wrap {
+      display: flex;
+      gap: 8px;
+      padding: 12px 16px;
+      background: #fff;
+      border-top: 1px solid #e2eaf0;
+    }
+
+    #chatbot-input {
+      flex: 1;
+      padding: 10px 14px;
+      border: 2px solid #e2eaf0;
+      border-radius: 50px;
+      font-size: 0.88rem;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.2s;
+    }
+
+    #chatbot-input:focus {
+      border-color: #2a9bc4;
+    }
+
+    #chatbot-send {
+      background: linear-gradient(135deg, #1a6b8a, #2a9bc4);
+      color: #fff;
+      border: none;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+    }
+
+    #chatbot-send:hover {
+      transform: scale(1.08);
+    }
+
+    #chatbot-send:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 480px) {
+      .chatbot-container {
+        left: 12px;
+        right: 12px;
+        width: auto;
+        bottom: 80px;
+      }
+    }
+  </style>
+
+  <script>
+    // ===== CHATBOT GOOGLE GEMINI =====
+    const GEMINI_API_KEY = 'AQ.Ab8RN6J5-8RpYL_7YdgZ3l6zVAlNkxo5cEDtcLfVeO9gSRcWhQ'; 
+    const GEMINI_MODEL = 'gemini-2.0-flash';
+
+    const SYSTEM_PROMPT = `Eres el asistente virtual oficial de "Cabañas Mariscadero", un complejo turístico ubicado en el Sector Mariscadero, Pelluhue, Región del Maule, Chile.
+
+INFORMACIÓN OFICIAL QUE DEBES USAR PARA RESPONDER:
+
+🏠 CABAÑAS:
+- 7 cabañas idénticas y completamente equipadas
+- Capacidad máxima: 6 personas por cabaña
+- Todas tienen terraza privada de madera
+- Se permiten mascotas (pet-friendly) 🐾
+
+💰 PRECIOS POR NOCHE (temporada estándar):
+- 2 personas: $45.000 CLP
+- 3 personas: $50.000 CLP
+- 4 personas: $55.000 CLP
+- 5 personas: $60.000 CLP
+- 6 personas: $65.000 CLP
+- Los precios pueden variar en temporada alta (verano, festivos)
+
+🛎️ SERVICIOS INCLUIDOS:
+- WiFi gratis
+- Agua caliente
+- Calefacción
+- Cocina totalmente equipada
+- Terraza privada con mesas y sillas
+- Pet-friendly (se aceptan mascotas)
+- Abierto las 24 horas, los 7 días de la semana
+
+📍 UBICACIÓN:
+- Sector Mariscadero, Pelluhue, Región del Maule, Chile
+- Cerca del río, el bosque y el mar
+- Link de Google Maps: https://maps.app.goo.gl/inhM1z4WkECH3x8W6
+
+📞 CONTACTO:
+- WhatsApp: +56 9 9526 5545
+- Link directo: https://wa.me/56995265545
+- Formulario de reservas en la web
+
+🐾 POLÍTICA DE MASCOTAS:
+- ¡Sí se permiten mascotas! Perros y gatos bienvenidos
+- Sin costo adicional
+
+REGLAS DE RESPUESTA:
+1. Responde SIEMPRE en español chileno, de forma amable y cercana
+2. Usa emojis de forma moderada para hacer las respuestas más cálidas
+3. Si te preguntan por disponibilidad de fechas específicas, indica que deben revisar la sección "Disponibilidad" en la web o consultar por WhatsApp al +56 9 9526 5545
+4. Si te preguntan algo fuera del tema de las cabañas, responde amablemente que solo puedes ayudar con información sobre Cabañas Mariscadero
+5. Sé conciso pero completo (máximo 3-4 oraciones por respuesta)
+6. Si el cliente quiere reservar, invítalo a usar el formulario de la web o escribir por WhatsApp
+7. NUNCA inventes precios, fechas ni información que no esté en este prompt`;
+
+    // Elementos del DOM
+    const toggleBtn = document.getElementById('chatbot-toggle');
+    const container = document.getElementById('chatbot-container');
+    const closeBtn = document.getElementById('chatbot-close');
+    const messagesDiv = document.getElementById('chatbot-messages');
+    const form = document.getElementById('chatbot-form');
+    const input = document.getElementById('chatbot-input');
+    const sendBtn = document.getElementById('chatbot-send');
+    const suggestionsDiv = document.getElementById('chatbot-suggestions');
+
+    // Abrir/cerrar chatbot
+    toggleBtn.addEventListener('click', () => {
+      container.classList.toggle('active');
+      if (container.classList.contains('active')) input.focus();
+    });
+    closeBtn.addEventListener('click', () => container.classList.remove('active'));
+
+    // Sugerencias rápidas
+    suggestionsDiv.addEventListener('click', (e) => {
+      if (e.target.tagName === 'BUTTON') {
+        const pregunta = e.target.dataset.q;
+        input.value = pregunta;
+        form.requestSubmit();
+      }
+    });
+
+    // Enviar mensaje
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const texto = input.value.trim();
+      if (!texto) return;
+
+      // Agregar mensaje del usuario
+      agregarMensaje(texto, 'user');
+      input.value = '';
+      sendBtn.disabled = true;
+
+      // Mostrar indicador de "escribiendo..."
+      const typing = mostrarTyping();
+
+      try {
+        const respuesta = await consultarGemini(texto);
+        typing.remove();
+        agregarMensaje(respuesta, 'bot');
+      } catch (error) {
+        typing.remove();
+        agregarMensaje('😕 Lo siento, tuve un problema de conexión. Por favor intenta de nuevo o escríbenos por WhatsApp al +56 9 9526 5545.', 'bot');
+        console.error('Error Gemini:', error);
+      } finally {
+        sendBtn.disabled = false;
+        input.focus();
+      }
+    });
+
+    function agregarMensaje(texto, tipo) {
+      const div = document.createElement('div');
+      div.className = `chatbot-message ${tipo}`;
+      div.innerHTML = texto.replace(/\n/g, '<br>');
+      messagesDiv.appendChild(div);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    function mostrarTyping() {
+      const div = document.createElement('div');
+      div.className = 'chatbot-typing';
+      div.innerHTML = '<span></span><span></span><span></span>';
+      messagesDiv.appendChild(div);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      return div;
+    }
+
+    async function consultarGemini(pregunta) {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [
+            { role: 'user', parts: [{ text: SYSTEM_PROMPT }] },
+            { role: 'model', parts: [{ text: 'Entendido. Soy el asistente de Cabañas Mariscadero. ¿En qué puedo ayudarte?' }] },
+            { role: 'user', parts: [{ text: pregunta }] }
+          ],
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 500
+          }
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.candidates?.[0]?.content?.parts?.[0]?.text || 'No pude generar una respuesta. Intenta de nuevo.';
+    }
+  </script>
 </body>
+
 </html>

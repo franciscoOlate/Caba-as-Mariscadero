@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Panel Admin — Cabañas Mariscadero</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --ocean:#1a6b8a; --ocean-lt:#2a9bc4; --sand:#fdf8f0;
+      --gold:#f0c070; --night:#0d2035; --gris:#5a6a7a;
+      --borde:#e2eaf0; --blanco:#ffffff; --rojo:#e53e3e; --verde:#38a169;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Inter',sans-serif;background:var(--sand);color:var(--night);}
+
+    /* LOGIN */
+    .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--night),var(--ocean));}
+    .login-box{background:var(--blanco);border-radius:20px;padding:2.5rem;width:100%;max-width:380px;box-shadow:0 30px 80px rgba(0,0,0,0.4);text-align:center;}
+    .login-logo{width:60px;height:60px;background:linear-gradient(135deg,var(--ocean),var(--ocean-lt));border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 1.2rem;font-size:1.6rem;color:var(--blanco);}
+    .login-box h2{font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:0.3rem;}
+    .login-box p{color:var(--gris);font-size:0.88rem;margin-bottom:1.5rem;}
+    .login-input{width:100%;padding:0.75rem 1rem;border:2px solid var(--borde);border-radius:10px;font-size:0.95rem;font-family:inherit;margin-bottom:1rem;outline:none;transition:border-color 0.2s;}
+    .login-input:focus{border-color:var(--ocean);}
+    .login-btn{width:100%;padding:0.8rem;background:linear-gradient(135deg,var(--ocean),var(--ocean-lt));color:var(--blanco);border:none;border-radius:10px;font-size:1rem;font-weight:600;cursor:pointer;transition:opacity 0.2s;}
+    .login-btn:hover{opacity:0.9;}
+    .login-error{color:var(--rojo);font-size:0.82rem;margin-top:0.5rem;display:none;}
+
+    /* PANEL */
+    .panel-wrap{display:none;}
+    .panel-nav{background:var(--night);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;}
+    .panel-brand{color:var(--gold);font-family:'Playfair Display',serif;font-size:1.1rem;}
+    .panel-nav-right{display:flex;align-items:center;gap:1rem;}
+    .panel-nav-right a{color:rgba(255,255,255,0.6);text-decoration:none;font-size:0.85rem;transition:color 0.2s;}
+    .panel-nav-right a:hover{color:var(--gold);}
+    .logout-btn{background:rgba(255,255,255,0.1);color:var(--blanco);border:1px solid rgba(255,255,255,0.2);border-radius:50px;padding:0.35rem 1rem;font-size:0.82rem;cursor:pointer;transition:all 0.2s;}
+    .logout-btn:hover{background:rgba(255,255,255,0.2);}
+    .panel-body{max-width:1100px;margin:0 auto;padding:2rem 1.5rem;}
+    .panel-title{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:0.3rem;}
+    .panel-sub{color:var(--gris);font-size:0.9rem;margin-bottom:2rem;}
+
+    /* RESUMEN */
+    .resumen-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:2rem;}
+    .resumen-card{background:var(--blanco);border-radius:14px;padding:1.2rem 1.5rem;border:1px solid var(--borde);display:flex;align-items:center;gap:1rem;}
+    .resumen-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;}
+    .resumen-icon.verde{background:#f0fff4;color:var(--verde);}
+    .resumen-icon.rojo{background:#fff5f5;color:var(--rojo);}
+    .resumen-icon.gold{background:#fffbeb;color:#d97706;}
+    .resumen-num{font-size:1.8rem;font-weight:700;line-height:1;}
+    .resumen-label{font-size:0.82rem;color:var(--gris);margin-top:2px;}
+
+    /* FORM */
+    .bloqueo-form{background:var(--blanco);border-radius:16px;padding:1.5rem;border:1px solid var(--borde);margin-bottom:2rem;}
+    .bloqueo-form h3{font-size:1.1rem;font-weight:600;margin-bottom:1.2rem;}
+    .form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;align-items:end;}
+    .form-group label{display:block;font-size:0.82rem;font-weight:600;color:var(--gris);margin-bottom:5px;}
+    .form-group select,.form-group input{width:100%;padding:0.65rem 0.9rem;border:2px solid var(--borde);border-radius:8px;font-size:0.9rem;font-family:inherit;outline:none;transition:border-color 0.2s;background:var(--blanco);}
+    .form-group select:focus,.form-group input:focus{border-color:var(--ocean);}
+    .btn-bloquear{padding:0.65rem 1.5rem;background:var(--rojo);color:var(--blanco);border:none;border-radius:8px;font-weight:600;font-size:0.9rem;cursor:pointer;transition:opacity 0.2s;white-space:nowrap;width:100%;}
+    .btn-bloquear:hover{opacity:0.85;}
+
+    /* GRID CABAÑAS */
+    .cabanas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;}
+    .cabana-card{background:var(--blanco);border-radius:14px;border:2px solid var(--borde);overflow:hidden;transition:box-shadow 0.2s;}
+    .cabana-card:hover{box-shadow:0 8px 30px rgba(0,0,0,0.08);}
+    .cabana-card.ocupada{border-color:#fed7d7;}
+    .cabana-header{padding:1rem 1.2rem;display:flex;align-items:center;justify-content:space-between;}
+    .cabana-nombre{font-weight:700;font-size:1rem;}
+    .badge{font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:50px;}
+    .badge-libre{background:#f0fff4;color:var(--verde);}
+    .badge-ocupada{background:#fff5f5;color:var(--rojo);}
+    .cabana-reservas{padding:0 1.2rem 1rem;}
+    .reserva-item{display:flex;align-items:center;justify-content:space-between;padding:0.5rem 0.75rem;background:#fff5f5;border-radius:8px;margin-bottom:6px;font-size:0.82rem;}
+    .reserva-fechas{color:var(--rojo);font-weight:500;}
+    .reserva-nota{color:var(--gris);font-size:0.78rem;}
+    .btn-eliminar{background:none;border:none;color:#fc8181;cursor:pointer;font-size:1rem;padding:2px 6px;border-radius:6px;transition:background 0.2s;}
+    .btn-eliminar:hover{background:#fed7d7;}
+    .sin-reservas{color:var(--gris);font-size:0.82rem;padding:0.3rem 0;}
+    .cabana-footer{padding:0.75rem 1.2rem;border-top:1px solid var(--borde);}
+    .btn-liberar{width:100%;padding:0.5rem;background:#f0fff4;color:var(--verde);border:1px solid #c6f6d5;border-radius:8px;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+    .btn-liberar:hover{background:var(--verde);color:var(--blanco);}
+
+    /* LOADING */
+    .loading-overlay{position:fixed;inset:0;background:rgba(13,32,53,0.7);display:flex;align-items:center;justify-content:center;z-index:9999;display:none;}
+    .loading-spinner{width:50px;height:50px;border:4px solid rgba(255,255,255,0.2);border-top-color:#f0c070;border-radius:50%;animation:spin 0.8s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+
+    .alert-info{background:#e8f4fd;border:1px solid #bee3f8;color:#2b6cb0;padding:1rem;border-radius:8px;margin-bottom:1.5rem;font-size:0.88rem;}
+    @media(max-width:600px){.resumen-grid{grid-template-columns:1fr 1fr;}.form-row{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-spinner"></div>
+</div>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="loginWrap">
+  <div class="login-box">
+    <div class="login-logo"><i class="bi bi-shield-lock-fill"></i></div>
+    <h2>Panel Admin</h2>
+    <p>Cabañas Mariscadero — Gestión de reservas</p>
+    <input type="password" class="login-input" id="loginPass" placeholder="Contraseña" onkeydown="if(event.key==='Enter') doLogin()"/>
+    <button class="login-btn" onclick="doLogin()">Ingresar al panel</button>
+    <p class="login-error" id="loginError">⚠️ Contraseña incorrecta</p>
+    <p style="font-size:0.75rem;color:#aaa;margin-top:1.5rem;">🔒 Acceso solo para administradores</p>
+  </div>
+</div>
+
+<!-- PANEL -->
+<div class="panel-wrap" id="panelWrap">
+  <nav class="panel-nav">
+    <div class="panel-brand">🏠 Cabañas Mariscadero</div>
+    <div class="panel-nav-right">
+      <a href="index.html" target="_blank"><i class="bi bi-box-arrow-up-right"></i> Ver página</a>
+      <a href="disponibilidad.html" target="_blank"><i class="bi bi-calendar2-check"></i> Ver disponibilidad pública</a>
+      <button class="logout-btn" onclick="doLogout()"><i class="bi bi-box-arrow-left"></i> Salir</button>
+    </div>
+  </nav>
+  <div class="panel-body">
+    <h1 class="panel-title">Panel de disponibilidad</h1>
+    <p class="panel-sub">Gestiona las reservas de las 7 cabañas. Los cambios son visibles para todos los clientes en tiempo real.</p>
+
+    <div class="alert-info">
+      <i class="bi bi-cloud-check-fill"></i> <strong>Datos en la nube:</strong> Las reservas se guardan en un servidor externo y son visibles para todos los clientes en tiempo real desde cualquier dispositivo.
+    </div>
+
+    <div class="resumen-grid">
+      <div class="resumen-card">
+        <div class="resumen-icon verde"><i class="bi bi-house-check-fill"></i></div>
+        <div><div class="resumen-num" id="countLibres">—</div><div class="resumen-label">Cabañas disponibles</div></div>
+      </div>
+      <div class="resumen-card">
+        <div class="resumen-icon rojo"><i class="bi bi-house-x-fill"></i></div>
+        <div><div class="resumen-num" id="countOcupadas">—</div><div class="resumen-label">Cabañas ocupadas</div></div>
+      </div>
+      <div class="resumen-card">
+        <div class="resumen-icon gold"><i class="bi bi-calendar-week"></i></div>
+        <div><div class="resumen-num" id="countReservas">—</div><div class="resumen-label">Reservas activas</div></div>
+      </div>
+    </div>
+
+    <div class="bloqueo-form">
+      <h3><i class="bi bi-calendar-x" style="color:var(--rojo)"></i> Agregar reserva</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Cabaña</label>
+          <select id="fCabana">
+            <option value="1">Cabaña N°1</option>
+            <option value="2">Cabaña N°2</option>
+            <option value="3">Cabaña N°3</option>
+            <option value="4">Cabaña N°4</option>
+            <option value="5">Cabaña N°5</option>
+            <option value="6">Cabaña N°6</option>
+            <option value="7">Cabaña N°7</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Fecha llegada</label>
+          <input type="date" id="fLlegada"/>
+        </div>
+        <div class="form-group">
+          <label>Fecha salida</label>
+          <input type="date" id="fSalida"/>
+        </div>
+        <div class="form-group">
+          <label>Nombre cliente (opcional)</label>
+          <input type="text" id="fNombre" placeholder="Ej: Familia González" maxlength="50"/>
+        </div>
+        <div class="form-group">
+          <button class="btn-bloquear" onclick="bloquearCabana()">
+            <i class="bi bi-lock-fill"></i> Guardar reserva
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="cabanas-grid" id="cabanasGrid">
+      <p style="color:var(--gris);padding:1rem;">Cargando reservas...</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ===== CONFIGURACIÓN =====
+  const ADMIN_PASS = 'mariscadero2025';
+  // JSONBin.io - bin compartido para todos los dispositivos
+  const BIN_ID  = '6852e0f98a456b796685836e';
+  const API_KEY = '$2a$10$abc123placeholder'; // reemplaza con tu key real de jsonbin.io
+  const API_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+
+  // ===== LOGIN =====
+  function doLogin() {
+    const pass = document.getElementById('loginPass').value;
+    if (pass === ADMIN_PASS) {
+      document.getElementById('loginWrap').style.display = 'none';
+      document.getElementById('panelWrap').style.display = 'block';
+      cargarReservas();
+    } else {
+      document.getElementById('loginError').style.display = 'block';
+    }
+  }
+
+  function doLogout() {
+    document.getElementById('loginWrap').style.display = 'flex';
+    document.getElementById('panelWrap').style.display = 'none';
+    document.getElementById('loginPass').value = '';
+  }
+
+  // ===== LOADING =====
+  function showLoading(v) {
+    document.getElementById('loadingOverlay').style.display = v ? 'flex' : 'none';
+  }
+
+  // ===== API JSONBin =====
+  async function cargarReservas() {
+    showLoading(true);
+    try {
+      const res = await fetch(API_URL + '/latest', {
+        headers: { 'X-Master-Key': API_KEY }
+      });
+      const json = await res.json();
+      const data = json.record || {};
+      renderPanel(data);
+    } catch(e) {
+      alert('Error al cargar reservas. Verifica tu conexión.');
+    }
+    showLoading(false);
+  }
+
+  async function guardarReservas(data) {
+    showLoading(true);
+    try {
+      await fetch(API_URL, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Master-Key': API_KEY
+        },
+        body: JSON.stringify(data)
+      });
+      // Guardar también en localStorage como caché para index.html
+      localStorage.setItem('reservas_publicas', JSON.stringify(data));
+      localStorage.setItem('reservas_cache_ts', Date.now().toString());
+    } catch(e) {
+      alert('Error al guardar. Intenta de nuevo.');
+    }
+    showLoading(false);
+  }
+
+  // ===== BLOQUEAR =====
+  async function bloquearCabana() {
+    const cabana  = document.getElementById('fCabana').value;
+    const llegada = document.getElementById('fLlegada').value;
+    const salida  = document.getElementById('fSalida').value;
+    const nombre  = document.getElementById('fNombre').value.trim() || 'Reservado';
+
+    if (!llegada || !salida) { alert('⚠️ Selecciona las fechas.'); return; }
+    if (salida <= llegada)   { alert('⚠️ La salida debe ser posterior a la llegada.'); return; }
+
+    showLoading(true);
+    const res  = await fetch(API_URL + '/latest', { headers: { 'X-Master-Key': API_KEY } });
+    const json = await res.json();
+    const data = json.record || {};
+    showLoading(false);
+
+    if (!data[cabana]) data[cabana] = [];
+
+    const conflicto = data[cabana].some(r =>
+      (llegada >= r.llegada && llegada < r.salida) ||
+      (salida > r.llegada && salida <= r.salida) ||
+      (llegada <= r.llegada && salida >= r.salida)
+    );
+
+    if (conflicto && !confirm('⚠️ Hay una reserva que se superpone en esas fechas. ¿Agregar de todos modos?')) return;
+
+    data[cabana].push({ llegada, salida, nombre, id: Date.now() });
+    await guardarReservas(data);
+
+    alert(`✅ Reserva guardada: Cabaña N°${cabana} del ${fmt(llegada)} al ${fmt(salida)}`);
+    document.getElementById('fLlegada').value = '';
+    document.getElementById('fSalida').value  = '';
+    document.getElementById('fNombre').value  = '';
+    renderPanel(data);
+  }
+
+  // ===== ELIMINAR =====
+  async function eliminarReserva(cabana, id) {
+    if (!confirm('¿Eliminar esta reserva?')) return;
+    showLoading(true);
+    const res  = await fetch(API_URL + '/latest', { headers: { 'X-Master-Key': API_KEY } });
+    const json = await res.json();
+    const data = json.record || {};
+    showLoading(false);
+
+    if (data[cabana]) {
+      data[cabana] = data[cabana].filter(r => r.id !== id);
+      if (data[cabana].length === 0) delete data[cabana];
+    }
+    await guardarReservas(data);
+    renderPanel(data);
+  }
+
+  // ===== LIBERAR =====
+  async function liberarCabana(cabana) {
+    if (!confirm(`¿Eliminar TODAS las reservas de Cabaña N°${cabana}?`)) return;
+    showLoading(true);
+    const res  = await fetch(API_URL + '/latest', { headers: { 'X-Master-Key': API_KEY } });
+    const json = await res.json();
+    const data = json.record || {};
+    showLoading(false);
+    delete data[cabana];
+    await guardarReservas(data);
+    renderPanel(data);
+  }
+
+  // ===== RENDER =====
+  function renderPanel(data) {
+    const hoy = new Date().toISOString().split('T')[0];
+    let libres = 0, ocupadas = 0, totalRes = 0;
+    let html = '';
+
+    for (let i = 1; i <= 7; i++) {
+      const reservas = (data[i] || []).filter(r => r.salida >= hoy);
+      const ocupada  = reservas.length > 0;
+      if (ocupada) ocupadas++; else libres++;
+      totalRes += reservas.length;
+
+      html += `
+        <div class="cabana-card ${ocupada ? 'ocupada' : ''}">
+          <div class="cabana-header">
+            <div class="cabana-nombre"><i class="bi bi-house-fill" style="color:var(--ocean);margin-right:6px"></i>Cabaña N°${i}</div>
+            <span class="badge ${ocupada ? 'badge-ocupada' : 'badge-libre'}">${ocupada ? '🔴 Ocupada' : '🟢 Disponible'}</span>
+          </div>
+          <div class="cabana-reservas">
+            ${reservas.length === 0
+              ? '<div class="sin-reservas">Sin reservas activas</div>'
+              : reservas.map(r => `
+                  <div class="reserva-item">
+                    <div>
+                      <div class="reserva-fechas"><i class="bi bi-calendar3"></i> ${fmt(r.llegada)} → ${fmt(r.salida)}</div>
+                      <div class="reserva-nota">${r.nombre}</div>
+                    </div>
+                    <button class="btn-eliminar" onclick="eliminarReserva(${i}, ${r.id})"><i class="bi bi-trash3"></i></button>
+                  </div>`).join('')
+            }
+          </div>
+          ${ocupada ? `<div class="cabana-footer"><button class="btn-liberar" onclick="liberarCabana(${i})"><i class="bi bi-unlock-fill"></i> Liberar todas las fechas</button></div>` : ''}
+        </div>`;
+    }
+
+    document.getElementById('cabanasGrid').innerHTML = html;
+    document.getElementById('countLibres').textContent   = libres;
+    document.getElementById('countOcupadas').textContent = ocupadas;
+    document.getElementById('countReservas').textContent = totalRes;
+  }
+
+  function fmt(f) {
+    if (!f) return '';
+    const [y,m,d] = f.split('-');
+    return `${d}/${m}/${y}`;
+  }
+
+  // Fechas mínimas
+  document.addEventListener('DOMContentLoaded', () => {
+    const hoy = new Date().toISOString().split('T')[0];
+    const fL  = document.getElementById('fLlegada');
+    const fS  = document.getElementById('fSalida');
+    fL.min = hoy;
+    fS.min = hoy;
+    fL.addEventListener('change', () => {
+      fS.min = fL.value;
+      if (fS.value && fS.value <= fL.value) fS.value = '';
+    });
+  });
+</script>
+</body>
+</html>

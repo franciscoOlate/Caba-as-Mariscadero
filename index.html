@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cabañas Mariscadero — Pelluhue, Maule</title>
+
+  <!-- ✅ SEGURIDAD: evita que la página sea embebida en iframes de otros sitios -->
+  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN"/>
+  <!-- ✅ SEGURIDAD: el navegador no adivina el tipo de archivo (evita ataques MIME) -->
+  <meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+  <!-- ✅ SEGURIDAD: activa protección XSS en navegadores antiguos -->
+  <meta http-equiv="X-XSS-Protection" content="1; mode=block"/>
+  <!-- ✅ SEGURIDAD: no envía el referer a sitios externos -->
+  <meta name="referrer" content="strict-origin-when-cross-origin"/>
+  <!-- ✅ SEGURIDAD: Content Security Policy — solo carga recursos de fuentes conocidas -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com;
+    font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net;
+    script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;
+    img-src 'self' data: https://images.unsplash.com https://maps.googleapis.com https://maps.gstatic.com;
+    frame-src https://www.google.com;
+    connect-src 'self' https://formspree.io https://wa.me https://api.jsonbin.io;
+  "/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="cabanas.css"/>
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar navbar-expand-lg fixed-top nav-lp">
+    <div class="container">
+      <a class="navbar-brand lp-brand" href="#">
+        <span class="brand-logo">
+          <i class="bi bi-house-heart-fill brand-icon-casa"></i>
+          <i class="bi bi-water brand-icon-ola"></i>
+        </span>
+        Cabañas Mariscadero
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto gap-1">
+          <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link" href="#cabanas">Cabañas</a></li>
+          <li class="nav-item"><a class="nav-link" href="#precios">Precios</a></li>
+          <li class="nav-item"><a class="nav-link" href="#galeria">Galería</a></li>
+          <li class="nav-item"><a class="nav-link" href="#servicios">Servicios</a></li>
+          <li class="nav-item"><a class="nav-link" href="#ubicacion">Ubicación</a></li>
+          <li class="nav-item"><a class="nav-link" href="#ofertas">Ofertas</a></li>
+          <li class="nav-item ms-2">
+            <a class="nav-link btn-reserva-nav" href="#reserva">Reservar</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section id="inicio" class="hero-lp d-flex align-items-center">
+    <div class="hero-overlay"></div>
+    <div class="container text-white text-center position-relative z-1">
+      <p class="hero-eyebrow">Pelluhue · Maule · Chile</p>
+      <h1 class="hero-h1">Desconéctate del mundo.<br>Conéctate con la naturaleza.</h1>
+      <p class="hero-sub">Cabañas Mariscadero — donde el río, el bosque y el mar se encuentran.<br>Se permiten mascotas 🐾 · 7 cabañas disponibles</p>
+      <div class="d-flex gap-3 justify-content-center flex-wrap mt-4">
+        <a href="#reserva" class="btn btn-primary-lp">Reservar ahora</a>
+        <a href="#cabanas" class="btn btn-outline-lp">Ver cabañas</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- OLA DIVISORA -->
+  <div class="ola-divisora" style="background: linear-gradient(to bottom, transparent, #1a6b8a);">
+    <svg viewBox="0 0 1440 80" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path fill="#fdf8f0" d="M0,40 C240,80 480,10 720,45 C960,80 1200,15 1440,40 L1440,80 L0,80 Z"/>
+    </svg>
+  </div>
+
+  <!-- ===== DESTACADOS ===== -->
+  <section class="destacados-bar">
+    <div class="container">
+      <div class="row text-center g-3">
+        <div class="col-6 col-md-3">
+          <div class="dest-item"><i class="bi bi-clock-fill dest-icon"></i><span>Abierto 24 hrs</span></div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="dest-item"><i class="bi bi-heart-fill dest-icon"></i><span>Mascotas bienvenidas</span></div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="dest-item"><i class="bi bi-houses-fill dest-icon"></i><span>7 cabañas disponibles</span></div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="dest-item"><i class="bi bi-people-fill dest-icon"></i><span>Hasta 6 personas</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CABAÑAS ===== -->
+  <section id="cabanas" class="section-lp">
+    <div class="container">
+      <div class="section-header text-center mb-5">
+        <p class="section-eyebrow">Nuestras cabañas</p>
+        <h2 class="section-title">Elige tu cabaña</h2>
+        <p class="section-sub">7 cabañas idénticas, cómodas y equipadas. Todas con capacidad para hasta 6 personas.</p>
+      </div>
+      <div class="row g-4">
+
+        <!-- Cabaña 1 -->
+        <div class="col-md-6 col-lg-4"> 
+          <div class="card-lp h-100"> 
+            <div class="card-img-lp" style="background-image: url('IMG - Cabañas Mariscadero/IMG - Cabañas Mariscadero - 1.jpeg');"></div>
+            <div class="card-body-lp"> 
+              <div class="d-flex align-items-center justify-content-between mb-2"> 
+                <span class="tag-lp">Hasta 6 personas</span>
+                <span class="precio-desde">desde <strong>$45.000</strong></span>
+              </div>
+              <h3 class="card-titulo">Cabaña N°1</h3>
+              <p class="card-desc">Cómoda cabaña con terraza de madera privada, perfecta para disfrutar el atardecer en Pelluhue rodeado de naturaleza.</p>
+              <ul class="amenidades">
+                <li><i class="bi bi-wifi"></i> WiFi</li>
+                <li><i class="bi bi-fire"></i> Calefacción</li>
+                <li><i class="bi bi-cup-hot"></i> Cocina</li>
+                <li><i class="bi bi-door-open"></i> Terraza</li>
+                <li><i class="bi bi-heart"></i> Pet-friendly</li>
+              </ul>
+              <a href="#reserva" class="btn btn-card-lp w-100 mt-3">Reservar esta cabaña</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cabaña 2 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="card-lp h-100">
+            <div class="card-img-lp" style="background-image: url('IMG - Cabañas Mariscadero/IMG - Cabañas Mariscadero - 1.jpeg');"></div>
+            <div class="card-body-lp">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <span class="tag-lp">Hasta 6 personas</span>
+                <span class="precio-desde">desde <strong>$45.000</strong></span>
+              </div>
+              <h3 class="card-titulo">Cabaña N°2</h3>
+              <p class="card-desc">Espacio tranquilo con terraza equipada con mesas y sillas. Ideal para familias que buscan descanso y contacto con la naturaleza.</p>
+              <ul class="amenidades">
+                <li><i class="bi bi-wifi"></i> WiFi</li>
+                <li><i class="bi bi-fire"></i> Calefacción</li>
+                <li><i class="bi bi-cup-hot"></i> Cocina</li>
+                <li><i class="bi bi-door-open"></i> Terraza</li>
+                <li><i class="bi bi-heart"></i> Pet-friendly</li>
+              </ul>
+              <a href="#reserva" class="btn btn-card-lp w-100 mt-3">Reservar esta cabaña</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cabaña 3 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="card-lp h-100">
+            <div class="card-img-lp" style="background-image: url('IMG - Cabañas Mariscadero/IMG - Cabañas Mariscadero - 1.jpeg');"></div>
+            <div class="card-body-lp">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <span class="tag-lp">Hasta 6 personas</span>
+                <span class="precio-desde">desde <strong>$45.000</strong></span>
+              </div>
+              <h3 class="card-titulo">Cabaña N°3</h3>
+              <p class="card-desc">Cabaña acogedora con amplia terraza de madera. Perfecta para grupos de amigos o familia con mascotas incluidas.</p>
+              <ul class="amenidades">
+                <li><i class="bi bi-wifi"></i> WiFi</li>
+                <li><i class="bi bi-fire"></i> Calefacción</li>
+                <li><i class="bi bi-cup-hot"></i> Cocina</li>
+                <li><i class="bi bi-door-open"></i> Terraza</li>
+                <li><i class="bi bi-heart"></i> Pet-friendly</li>
+              </ul>
+              <a href="#reserva" class="btn btn-card-lp w-100 mt-3">Reservar esta cabaña</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cabaña 4 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="card-lp h-100">
+            <div class="card-img-lp" style="background-image: url('IMG - Cabañas Mariscadero/IMG - Cabañas Mariscadero - 1.jpeg');"></div>
+            <div class="card-body-lp">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <span class="tag-lp">Hasta 6 personas</span>
+                <span class="precio-desde">desde <strong>$45.000</strong></span>
+              </div>
+              <h3 class="card-titulo">Cabaña N°4</h3>
+              <p class="card-desc">Refugio perfecto para desconectarse. Terraza privada con vista al entorno natural de Mariscadero, Pelluhue.</p>
+              <ul class="amenidades">
+                <li><i class="bi bi-wifi"></i> WiFi</li>
+                <li><i class="bi bi-fire"></i> Calefacción</li>
+                <li><i class="bi bi-cup-hot"></i> Cocina</li>
+                <li><i class="bi bi-door-open"></i> Terraza</li>
+                <li><i class="bi bi-heart"></i> Pet-friendly</li>
+              </ul>
+              <a href="#reserva" class="btn btn-card-lp w-100 mt-3">Reservar esta cabaña</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cabaña 5 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="card-lp h-100">
+            <div class="card-img-lp" style="background-image: url('IMG - Cabañas Mariscadero/IMG - Cabañas Mariscadero - 1.jpeg');"></div>
+            <div class="card-body-lp">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <span class="tag-lp">Hasta 6 personas</span>
+                <span class="precio-desde">desde <strong>$45.000</strong></span>
+              </div>
+              <h3 class="card-titulo">Cabaña N°5</h3>
+              <p class="card-desc">Cabaña con terraza amplia y cómoda, equipada para estadías en familia. Disfruta la tranquilidad de Pelluhue.</p>
+              <ul class="amenidades">
+                <li><i class="bi bi-wifi"></i> WiFi</li>
+                <li><i class="bi bi-fire"></i> Calefacción</li>
+                <li><i class="bi bi-cup-hot"></i> Cocina</li>
+                <li><i class="bi bi-door-open"></i> Terraza</li>
+                <li><i class="bi bi-heart"></i> Pet-friendly</li>
+              </ul>
+              <a href="#reserva" class="btn btn-card-lp w-100 mt-3">Reservar esta cabaña</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cabaña 6 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="card-lp h-100">
+            <div class="card-img-lp" style="background-image: url('IMG - Cabañas Mariscadero/IMG - Cabañas Mariscadero - 1.jpeg');"></div>
+            <div class="card-body-lp">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <span class="tag-lp">Hasta 6 personas</span>
+                <span class="precio-desde">desde <strong>$45.000</strong></span>
+              </div>
+              <h3 class="card-titulo">Cabaña N°6</h3>
+              <p class="card-desc">Acogedora y bien equipada, con terraza de madera donde podrás relajarte viendo el paisaje del sector Mariscadero.</p>
+              <ul class="amenidades">
+                <li><i class="bi bi-wifi"></i> WiFi</li>
+                <li><i class="bi bi-fire"></i> Calefacción</li>
+                <li><i class="bi bi-cup-hot"></i> Cocina</li>
+                <li><i class="bi bi-door-open"></i> Terraza</li>
+                <li><i class="bi bi-heart"></i> Pet-friendly</li>
+              </ul>
+              <a href="#reserva" class="btn btn-card-lp w-100 mt-3">Reservar esta cabaña</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cabaña 7 — centrada -->
+        <div class="col-md-6 col-lg-4 mx-auto">
+          <div class="card-lp card-lp-destacada h-100">
+            <div class="ribbon-lp">Última disponible</div>
+            <div class="card-img-lp" style="background-image: url('IMG - Cabañas Mariscadero/IMG - Cabañas Mariscadero - 1.jpeg');"></div>
+            <div class="card-body-lp">
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <span class="tag-lp">Hasta 6 personas</span>
+                <span class="precio-desde">desde <strong>$45.000</strong></span>
+              </div>
+              <h3 class="card-titulo">Cabaña N°7</h3>
+              <p class="card-desc">La más tranquila del complejo. Terraza privada rodeada de vegetación, ideal para quienes buscan descanso total.</p>
+              <ul class="amenidades">
+                <li><i class="bi bi-wifi"></i> WiFi</li>
+                <li><i class="bi bi-fire"></i> Calefacción</li>
+                <li><i class="bi bi-cup-hot"></i> Cocina</li>
+                <li><i class="bi bi-door-open"></i> Terraza</li>
+                <li><i class="bi bi-heart"></i> Pet-friendly</li>
+              </ul>
+              <a href="#reserva" class="btn btn-card-lp btn-card-dest w-100 mt-3">Reservar esta cabaña</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GALERÍA ===== -->
+  <section id="galeria" class="section-lp section-crema">
+    <div class="container">
+      <div class="text-center mb-5">
+        <p class="section-eyebrow">Fotografías</p>
+        <h2 class="section-title">Galería</h2>
+        <p class="section-sub">Conoce nuestros espacios, la naturaleza que nos rodea y los rincones que te esperan en Mariscadero.</p>
+      </div>
+
+      <!-- GRID GALERÍA -->
+      <div class="galeria-grid">
+
+        <div class="galeria-item">
+          <img src="IMG - Cabañas Mariscadero/IMG - Cabañas Mariscadero - 1.jpeg" alt="Exterior Cabañas Mariscadero al atardecer"/>
+          <div class="galeria-overlay"><i class="bi bi-zoom-in"></i></div>
+        </div>
+
+        <div class="galeria-item">
+          <img src="IMG - Cabañas Mariscadero/IMG - Cabañas Mariscadero - 2.jpeg" alt="Dormitorio matrimonial"/>
+          <div class="galeria-overlay"><i class="bi bi-zoom-in"></i></div>
+        </div>
+
+        <div class="galeria-item">
+          <img src="IMG - Cabañas Mariscadero/IMG - Cabañas Mariscadero - 3.jpeg" alt="Habitación con literas"/>
+          <div class="galeria-overlay"><i class="bi bi-zoom-in"></i></div>
+        </div>
+
+        <div class="galeria-item">
+          <img src="IMG - Cabañas Mariscadero/IMG - Cabañas Mariscadero - 4.jpeg" alt="Living con cocina equipada"/>
+          <div class="galeria-overlay"><i class="bi bi-zoom-in"></i></div>
+        </div>
+
+        <div class="galeria-item">
+          <img src="IMG - Cabañas Mariscadero/IMG - Cabañas Mariscadero - 5.jpeg" alt="Comedor y living con TV"/>
+          <div class="galeria-overlay"><i class="bi bi-zoom-in"></i></div>
+        </div>
+
+        <div class="galeria-item">
+          <img src="IMG - Cabañas Mariscadero/IMG - Cabañas Mariscadero - 6.jpeg" alt="Baño con vanitory"/>
+          <div class="galeria-overlay"><i class="bi bi-zoom-in"></i></div>
+        </div>
+
+        <div class="galeria-item">
+          <img src="IMG - Cabañas Mariscadero/IMG - Cabañas Mariscadero - 7.jpeg" alt="Baño con ducha"/>
+          <div class="galeria-overlay"><i class="bi bi-zoom-in"></i></div>
+        </div>
+
+        <div class="galeria-item">
+          <img src="IMG - Cabañas Mariscadero/IMG - Cabañas Mariscadero - 8.jpeg" alt="Vista exterior de las cabañas"/>
+          <div class="galeria-overlay"><i class="bi bi-zoom-in"></i></div>
+        </div>
+
+        <div class="galeria-item">
+          <img src="IMG - Cabañas Mariscadero/IMG - Cabañas Mariscadero - 9.jpeg" alt="Piscina"/>
+          <div class="galeria-overlay"><i class="bi bi-zoom-in"></i></div>
+        </div>
+
+      </div>
+    </div>
+
+    </div>
+
+    <!-- LIGHTBOX CON CARRUSEL -->
+    <div class="galeria-lightbox" id="galeriaLightbox">
+      <!-- Fondo oscuro para cerrar -->
+      <div class="lb-backdrop" id="lbBackdrop"></div>
+
+      <!-- Botón cerrar -->
+      <button class="lb-close" id="lbClose" aria-label="Cerrar">
+        <i class="bi bi-x-lg"></i>
+      </button>
+
+      <!-- Contador -->
+      <div class="lb-counter" id="lbCounter">1 / 9</div>
+
+      <!-- Flecha anterior -->
+      <button class="lb-prev" id="lbPrev" aria-label="Anterior">
+        <i class="bi bi-chevron-left"></i>
+      </button>
+
+      <!-- Imagen principal -->
+      <div class="lb-img-wrap">
+        <img src="" alt="" id="lbImg"/>
+        <div class="lb-spinner" id="lbSpinner">
+          <div class="lb-spin"></div>
+        </div>
+      </div>
+
+      <!-- Flecha siguiente -->
+      <button class="lb-next" id="lbNext" aria-label="Siguiente">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+
+      <!-- Miniaturas carrusel -->
+      <div class="lb-thumbnails" id="lbThumbnails"></div>
+    </div>
+  </section>
+
+  <!-- ===== TABLA DE PRECIOS ===== -->
+  <section id="precios" class="section-lp section-crema">
+    <div class="container">
+      <div class="text-center mb-5">
+        <p class="section-eyebrow">Tarifas</p>
+        <h2 class="section-title">Precios por noche</h2>
+        <p class="section-sub">El precio base es para 2 personas. Cada persona adicional tiene un costo de $5.000 por noche.</p>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-lg-7">
+          <div class="tabla-precios">
+            <div class="precio-fila precio-fila-header">
+              <span>Personas</span>
+              <span>Precio por noche</span>
+            </div>
+            <div class="precio-fila">
+              <span><i class="bi bi-people"></i> 2 personas</span>
+              <span class="precio-valor">$45.000</span>
+            </div>
+            <div class="precio-fila">
+              <span><i class="bi bi-people"></i> 3 personas</span>
+              <span class="precio-valor">$50.000</span>
+            </div>
+            <div class="precio-fila">
+              <span><i class="bi bi-people"></i> 4 personas</span>
+              <span class="precio-valor">$55.000</span>
+            </div>
+            <div class="precio-fila">
+              <span><i class="bi bi-people"></i> 5 personas</span>
+              <span class="precio-valor">$60.000</span>
+            </div>
+            <div class="precio-fila precio-fila-max">
+              <span><i class="bi bi-people-fill"></i> 6 personas <span class="badge-max">Máximo</span></span>
+              <span class="precio-valor">$65.000</span>
+            </div>
+            <div class="precio-nota">
+              <i class="bi bi-info-circle"></i> Precios referenciales. Pueden variar en temporada alta. Consulta disponibilidad por WhatsApp.
+            </div>
+          </div>
+          <div class="text-center mt-4">
+            <a href="#reserva" class="btn btn-primary-lp">Quiero reservar</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SERVICIOS ===== -->
+  <section id="servicios" class="section-lp section-verde">
+    <div class="container">
+      <div class="section-header text-center mb-5">
+        <p class="section-eyebrow" style="color:#a8d5b5">¿Qué incluye?</p>
+        <h2 class="section-title text-white">Todo lo que necesitas</h2>
+      </div>
+      <div class="row g-3 justify-content-center">
+        <div class="col-6 col-md-3"><div class="servicio-item"><i class="bi bi-wifi servicio-icon"></i><span>WiFi gratis</span></div></div>
+        <div class="col-6 col-md-3"><div class="servicio-item"><i class="bi bi-droplet servicio-icon"></i><span>Agua caliente</span></div></div>
+        <div class="col-6 col-md-3"><div class="servicio-item"><i class="bi bi-snow servicio-icon"></i><span>Calefacción</span></div></div>
+        <div class="col-6 col-md-3"><div class="servicio-item"><i class="bi bi-egg-fried servicio-icon"></i><span>Cocina equipada</span></div></div>
+        <div class="col-6 col-md-3"><div class="servicio-item"><i class="bi bi-heart servicio-icon"></i><span>Pet-friendly</span></div></div>
+        <div class="col-6 col-md-3"><div class="servicio-item"><i class="bi bi-tree servicio-icon"></i><span>Naturaleza</span></div></div>
+        <div class="col-6 col-md-3"><div class="servicio-item"><i class="bi bi-clock servicio-icon"></i><span>24/7 disponible</span></div></div>
+        <div class="col-6 col-md-3"><div class="servicio-item"><i class="bi bi-door-open servicio-icon"></i><span>Terraza privada</span></div></div>
+      </div>
+    </div>
+  </section>
+
+<!-- ===== OFERTAS ===== -->
+  <section id="ofertas" class="section-lp section-oferta">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-7 text-center">
+          <p class="section-eyebrow">Días de oferta</p>
+          <h2 class="section-title">¿No quieres perderte ninguna oferta?</h2>
+          <p class="section-sub mb-4">Regístrate y te avisamos por email cuando tengamos precios especiales, fines de semana en oferta o temporada baja.</p>
+          <form action="https://formspree.io/f/mlgkzrqe" method="POST" class="oferta-form d-flex gap-2 flex-wrap justify-content-center" id="formOfertas">
+            <input type="hidden" name="_subject" value="Nueva suscripción a ofertas — Mariscadero"/>
+            <input type="hidden" name="tipo" value="suscripcion-ofertas"/>
+            <!-- ✅ ANTI-BOT honeypot -->
+            <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off"/>
+            <input type="email" name="email" class="form-control oferta-input" placeholder="tu@correo.com" required maxlength="100"/>
+            <button type="submit" class="btn btn-primary-lp">Quiero las ofertas</button>
+          </form>
+          <p class="oferta-nota mt-3">Sin spam. Solo te escribimos cuando hay algo que vale la pena.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== RESERVA + CONTACTO ===== -->
+  <section id="reserva" class="section-lp">
+    <div class="container">
+      <div class="row g-5 align-items-start">
+        <div class="col-lg-6">
+          <p class="section-eyebrow">Contacto y reservas</p>
+          <h2 class="section-title">¿Listo para escaparte?</h2>
+          <p class="section-sub mb-4">Completa el formulario y te respondemos en menos de 24 horas para confirmar tu reserva.</p>
+          <form action="https://formspree.io/f/xqeonzvz" method="POST" class="form-lp" id="formReserva" novalidate>
+            <input type="hidden" name="_subject" value="Nueva reserva — Cabañas Mariscadero"/>
+            <!-- ✅ ANTI-BOT: campo honeypot oculto; los bots lo rellenan, los humanos no -->
+            <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off"/>
+            <div class="mb-3">
+              <label class="form-label-lp">Nombre completo</label>
+              <input type="text" name="nombre" class="input-lp" placeholder="Tu nombre" required
+                minlength="2" maxlength="80" pattern="[A-Za-zÁáÉéÍíÓóÚúÑñÜü\s]+"
+                title="Solo letras y espacios"/>
+            </div>
+            <div class="mb-3">
+              <label class="form-label-lp">Correo electrónico</label>
+              <input type="email" name="email" class="input-lp" placeholder="tu@correo.com" required
+                maxlength="100"/>
+            </div>
+            <div class="mb-3">
+              <label class="form-label-lp">Teléfono (WhatsApp)</label>
+              <input type="tel" name="telefono" class="input-lp" placeholder="+56 9 XXXX XXXX"
+                pattern="[\+]?[0-9\s\-]{7,20}" maxlength="20"
+                title="Número de teléfono válido"/>
+            </div>
+            <div class="row g-3 mb-3">
+              <div class="col-6">
+                <label class="form-label-lp">Llegada</label>
+                <input type="date" name="llegada" class="input-lp" required id="fechaLlegada"/>
+              </div>
+              <div class="col-6">
+                <label class="form-label-lp">Salida</label>
+                <input type="date" name="salida" class="input-lp" required id="fechaSalida"/>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label-lp">Cabaña de interés</label>
+              <select name="cabana" class="input-lp">
+                <option value="">Selecciona una cabaña</option>
+                <option>Cabaña N°1</option>
+                <option>Cabaña N°2</option>
+                <option>Cabaña N°3</option>
+                <option>Cabaña N°4</option>
+                <option>Cabaña N°5</option>
+                <option>Cabaña N°6</option>
+                <option>Cabaña N°7</option>
+                <option>Sin preferencia</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label-lp">Número de personas</label>
+              <select name="personas" class="input-lp" id="selectPersonas" onchange="calcularPrecio()">
+                <option value="">Selecciona</option>
+                <option value="2">2 personas — $45.000</option>
+                <option value="3">3 personas — $50.000</option>
+                <option value="4">4 personas — $55.000</option>
+                <option value="5">5 personas — $60.000</option>
+                <option value="6">6 personas — $65.000</option>
+              </select>
+            </div>
+            <div class="mb-3" id="precioEstimado" style="display:none">
+              <div class="precio-estimado-box">
+                <i class="bi bi-tag-fill"></i> Precio estimado por noche: <strong id="precioTexto"></strong>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label-lp">¿Vienes con mascotas?</label>
+              <select name="mascotas" class="input-lp">
+                <option value="no">No</option>
+                <option value="si">Sí 🐾</option>
+              </select>
+            </div>
+            <div class="mb-4">
+              <label class="form-label-lp">Mensaje adicional</label>
+              <textarea name="mensaje" class="input-lp" rows="3" placeholder="Cuéntanos algo más sobre tu visita..."
+                maxlength="500"></textarea>
+              <small class="text-muted" style="font-size:0.78rem">Máximo 500 caracteres</small>
+            </div>
+            <button type="submit" class="btn btn-primary-lp w-100" id="btnReserva">Enviar solicitud de reserva</button>
+            <p class="form-nota mt-2">Te responderemos por email o WhatsApp.</p>
+          </form>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="info-contacto">
+            <h3 class="info-titulo">Información de contacto</h3>
+            <div class="info-item">
+              <i class="bi bi-telephone-fill info-icon"></i>
+              <div>
+                <strong>Teléfono / WhatsApp</strong>
+                <p><a href="https://wa.me/56995265545" target="_blank">+56 9 9526 5545</a></p>
+              </div>
+            </div>
+            <div class="info-item">
+              <i class="bi bi-geo-alt-fill info-icon"></i>
+              <div>
+                <strong>Ubicación</strong>
+                <p>Sector Mariscadero<br>Pelluhue, Maule, Chile</p>
+              </div>
+            </div>
+            <div class="info-item">
+              <i class="bi bi-clock-fill info-icon"></i>
+              <div>
+                <strong>Horario de atención</strong>
+                <p>Abierto las 24 horas, todos los días</p>
+              </div>
+            </div>
+            <div class="info-item">
+              <i class="bi bi-houses-fill info-icon"></i>
+              <div>
+                <strong>Disponibilidad</strong>
+                <p>7 cabañas · hasta 6 personas c/u</p>
+              </div>
+            </div>
+            <div class="info-item">
+              <i class="bi bi-heart-fill info-icon"></i>
+              <div>
+                <strong>Mascotas</strong>
+                <p>¡Sí se permiten perros! Bienvenidos 🐾</p>
+              </div>
+            </div>
+            <a href="https://wa.me/56995265545?text=Hola!%20Quiero%20información%20sobre%20las%20Cabañas%20Mariscadero" target="_blank" rel="noopener noreferrer" class="btn-wsp w-100 mt-3 d-flex align-items-center justify-content-center gap-2">
+              <i class="bi bi-whatsapp"></i> Escribir por WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ===== DISPONIBILIDAD ===== -->
+  <section id="disponibilidad" class="section-lp section-crema">
+    <div class="container">
+      <div class="text-center mb-5">
+        <p class="section-eyebrow">Consulta en tiempo real</p>
+        <h2 class="section-title">Disponibilidad de cabañas</h2>
+        <p class="section-sub">Ingresa tus fechas y te mostramos qué cabañas están libres para tu estadía.</p>
+      </div>
+
+      <!-- Buscador de fechas -->
+      <div class="disp-buscador">
+        <div class="disp-row">
+          <div class="disp-field">
+            <label><i class="bi bi-calendar-event"></i> Fecha llegada</label>
+            <input type="date" id="dispLlegada" class="input-lp"/>
+          </div>
+          <div class="disp-field">
+            <label><i class="bi bi-calendar-check"></i> Fecha salida</label>
+            <input type="date" id="dispSalida" class="input-lp"/>
+          </div>
+          <div class="disp-field disp-btn-wrap">
+            <button class="btn btn-primary-lp w-100" onclick="buscarDisponibilidad()">
+              <i class="bi bi-search"></i> Ver disponibilidad
+            </button>
+          </div>
+        </div>
+        <div id="dispResultado" style="margin-top:1.5rem;display:none;"></div>
+      </div>
+
+      <!-- Grid cabañas -->
+      <div class="disp-grid" id="dispGrid">
+        <div class="disp-loading"><i class="bi bi-arrow-repeat spin-icon"></i> Cargando disponibilidad...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MAPA ===== -->
+  <section id="ubicacion" class="section-mapa">
+    <div class="container">
+      <div class="text-center mb-4">
+        <p class="section-eyebrow">¿Cómo llegar?</p>
+        <h2 class="section-title">Encuéntranos aquí</h2>
+      </div>
+      <div class="mapa-wrapper rounded-3 overflow-hidden">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3205.0!2d-72.45!3d-35.45!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzXCsDI3JzAwLjAiUyA3MsKwMjcnMDAuMCJX!5e0!3m2!1ses!2scl!4v1234567890!5m2!1ses!2scl"
+          width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade" title="Ubicación Cabañas Mariscadero">
+        </iframe>
+      </div>
+      <div class="text-center mt-3">
+        <a href="https://maps.app.goo.gl/inhM1z4WkECH3x8W6" target="_blank" class="btn btn-outline-verde">
+          <i class="bi bi-map"></i> Abrir en Google Maps
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer-lp pt-5 pb-3">
+    <div class="container">
+      <div class="row gy-4">
+        <div class="col-md-4">
+          <h5 class="footer-brand">🌿 Mariscadero</h5>
+          <p class="footer-desc">7 cabañas en plena naturaleza, Pelluhue, Maule.<br>Tu refugio siempre disponible.</p>
+        </div>
+        <div class="col-md-4 text-md-center">
+          <h6 class="footer-heading">Navegación</h6>
+          <ul class="footer-links list-unstyled">
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#cabanas">Cabañas</a></li>
+            <li><a href="#precios">Precios</a></li>
+            <li><a href="#reserva">Reservar</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4 text-md-end">
+          <h6 class="footer-heading">Contacto</h6>
+          <p class="footer-contact">
+            <i class="bi bi-telephone-fill"></i> +56 9 9526 5545<br>
+            <i class="bi bi-geo-alt-fill"></i> Mariscadero, Pelluhue<br>
+            <i class="bi bi-clock-fill"></i> Abierto 24 horas
+          </p>
+          <a href="https://wa.me/56995265545" target="_blank" class="footer-wsp">
+            <i class="bi bi-whatsapp"></i> WhatsApp
+          </a>
+        </div>
+      </div>
+      <hr class="footer-hr mt-4"/>
+      <p class="footer-copy text-center mt-3">
+        &copy; 2025 Cabañas Mariscadero — Pelluhue, Maule. Todos los derechos reservados.
+      </p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const precios = { 2: 45000, 3: 50000, 4: 55000, 5: 60000, 6: 65000 };
+    function calcularPrecio() {
+      const sel = document.getElementById('selectPersonas');
+      const box = document.getElementById('precioEstimado');
+      const txt = document.getElementById('precioTexto');
+      const val = parseInt(sel.value);
+      if (val && precios[val]) {
+        txt.textContent = '$' + precios[val].toLocaleString('es-CL') + ' / noche';
+        box.style.display = 'block';
+      } else {
+        box.style.display = 'none';
+      }
+    }
+  </script>
+  <style>
+  /* DISPONIBILIDAD */
+  .disp-buscador{background:#fff;border-radius:16px;padding:1.5rem;border:1px solid #e2eaf0;margin-bottom:2rem;box-shadow:0 4px 20px rgba(0,0,0,0.05);}
+  .disp-row{display:grid;grid-template-columns:1fr 1fr auto;gap:1rem;align-items:end;}
+  .disp-field label{display:block;font-size:0.82rem;font-weight:600;color:#5a6a7a;margin-bottom:5px;}
+  .disp-btn-wrap{min-width:160px;}
+  .disp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem;}
+  .disp-card{background:#fff;border-radius:14px;border:2px solid #e2eaf0;padding:1.2rem;display:flex;align-items:center;gap:1rem;transition:box-shadow 0.2s;}
+  .disp-card:hover{box-shadow:0 6px 20px rgba(0,0,0,0.08);}
+  .disp-card.libre{border-color:#c6f6d5;}
+  .disp-card.ocupada{border-color:#fed7d7;background:#fff5f5;}
+  .disp-card.conflicto{border-color:#fed7d7;background:#fff5f5;}
+  .disp-icono{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;}
+  .disp-icono.verde{background:#f0fff4;color:#38a169;}
+  .disp-icono.rojo{background:#fff5f5;color:#e53e3e;}
+  .disp-nombre{font-weight:700;font-size:0.95rem;margin-bottom:3px;}
+  .disp-estado{font-size:0.82rem;font-weight:600;}
+  .disp-estado.libre{color:#38a169;}
+  .disp-estado.ocupada{color:#e53e3e;}
+  .disp-fechas{font-size:0.75rem;color:#5a6a7a;margin-top:2px;}
+  .disp-loading{text-align:center;padding:2rem;color:#5a6a7a;grid-column:1/-1;}
+  .spin-icon{display:inline-block;animation:spin 1s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .alerta-disp{padding:1rem 1.2rem;border-radius:10px;font-size:0.9rem;font-weight:500;}
+  .alerta-disp.libre{background:#f0fff4;color:#276749;border:1px solid #c6f6d5;}
+  .alerta-disp.parcial{background:#fffbeb;color:#7b5e1a;border:1px solid #fcd34d;}
+  .alerta-disp.ocupada{background:#fff5f5;color:#9b2335;border:1px solid #fed7d7;}
+  @media(max-width:600px){.disp-row{grid-template-columns:1fr;}}
+</style>
+
+<!-- ===== BOTÓN WHATSAPP FLOTANTE ===== -->
+<a href="https://wa.me/56995265545?text=Hola!%20Quiero%20información%20sobre%20las%20Cabañas%20Mariscadero"
+   target="_blank" rel="noopener noreferrer"
+   id="wsp-flotante" title="Escríbenos por WhatsApp">
+  <i class="bi bi-whatsapp"></i>
+  <span class="wsp-label">¿Consultas?</span>
+</a>
+
+<style>
+  #wsp-flotante {
+    position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+    display: flex; align-items: center; gap: 10px;
+    background: #25d366; color: #fff;
+    padding: 12px 18px 12px 14px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600; font-size: 0.95rem;
+    box-shadow: 0 6px 24px rgba(37,211,102,0.45);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  #wsp-flotante i { font-size: 1.5rem; }
+  #wsp-flotante:hover {
+    transform: scale(1.06);
+    box-shadow: 0 10px 30px rgba(37,211,102,0.6);
+    color: #fff;
+  }
+  @media (max-width: 480px) {
+    #wsp-flotante .wsp-label { display: none; }
+    #wsp-flotante { padding: 14px; border-radius: 50%; }
+  }
+</style>
+
+
+<script>
+  // 1. Fechas
+  const hoy = new Date().toISOString().split('T')[0];
+  const llegada = document.getElementById('fechaLlegada');
+  const salida  = document.getElementById('fechaSalida');
+  if (llegada) llegada.min = hoy;
+  if (salida)  salida.min  = hoy;
+  if (llegada) llegada.addEventListener('change', () => {
+    if (salida) salida.min = llegada.value;
+    if (salida && salida.value && salida.value <= llegada.value) salida.value = '';
+    actualizarOpcionesCabana();
+  });
+  if (salida) salida.addEventListener('change', actualizarOpcionesCabana);
+
+  async function actualizarOpcionesCabana() {
+    const llegadaVal = llegada?.value;
+    const salidaVal  = salida?.value;
+    const sel = document.querySelector('select[name="cabana"]');
+    if (!sel || !llegadaVal || !salidaVal || salidaVal <= llegadaVal) return;
+
+    try {
+      const data   = reservasCache || await fetchReservas();
+      const hoyStr = new Date().toISOString().split('T')[0];
+      const opts   = sel.querySelectorAll('option');
+      opts.forEach(opt => {
+        const m = opt.value.match(/(\d+)/);
+        if (!m) return; // "Sin preferencia" u opción vacía
+        const n = m[1];
+        const reservasCab = (data[n] || []).filter(r => r.salida >= hoyStr);
+        const ocupada = hayConflicto(reservasCab, llegadaVal, salidaVal);
+        opt.textContent = ocupada
+          ? `Cabaña N°${n} — 🔴 Ocupada en esas fechas`
+          : `Cabaña N°${n} — 🟢 Disponible`;
+        opt.disabled = ocupada;
+        opt.style.color = ocupada ? '#e53e3e' : '';
+      });
+
+      // Mostrar mini-resumen junto al select
+      let miniInfo = document.getElementById('cabana-mini-info');
+      if (!miniInfo) {
+        miniInfo = document.createElement('p');
+        miniInfo.id = 'cabana-mini-info';
+        miniInfo.style.cssText = 'font-size:0.78rem;color:#5a6a7a;margin-top:5px;';
+        sel.closest('.mb-3').appendChild(miniInfo);
+      }
+      const libres = Array.from(opts).filter(o => o.value.match(/\d/) && !o.disabled).length;
+      miniInfo.textContent = libres === 7
+        ? '✅ Todas las cabañas están disponibles para esas fechas.'
+        : libres > 0
+          ? `✅ ${libres} cabaña${libres>1?'s':''} disponible${libres>1?'s':''} — las opciones bloqueadas están ocupadas.`
+          : '⚠️ Todas las cabañas están ocupadas en esas fechas. Contáctanos por WhatsApp.';
+    } catch(e) {
+      // silencioso
+    }
+  }
+
+  // 2. Anti-spam + validación de disponibilidad
+  document.getElementById('formReserva')?.addEventListener('submit', async function(e) {
+    e.preventDefault(); // Siempre detenemos primero para validar
+
+    const btn        = document.getElementById('btnReserva');
+    const llegadaVal = document.getElementById('fechaLlegada')?.value;
+    const salidaVal  = document.getElementById('fechaSalida')?.value;
+    const cabanaSelect = this.querySelector('select[name="cabana"]');
+    const cabanaVal  = cabanaSelect?.value || '';
+
+    // Validar fechas
+    if (llegadaVal && salidaVal && salidaVal <= llegadaVal) {
+      alert('⚠️ La fecha de salida debe ser posterior a la fecha de llegada.');
+      return;
+    }
+
+    // Eliminar mensaje de error anterior si existe
+    const errorPrev = document.getElementById('reserva-error-disp');
+    if (errorPrev) errorPrev.remove();
+
+    // Si eligió una cabaña específica Y tiene ambas fechas → verificar disponibilidad
+    const numCabana = cabanaVal.match(/(\d+)/)?.[1];
+    if (numCabana && llegadaVal && salidaVal) {
+      if (btn) { btn.disabled = true; btn.textContent = 'Verificando disponibilidad…'; }
+
+      try {
+        const data = reservasCache || await fetchReservas();
+        const hoyStr = new Date().toISOString().split('T')[0];
+        const reservasCabana = (data[numCabana] || []).filter(r => r.salida >= hoyStr);
+        const ocupada = hayConflicto(reservasCabana, llegadaVal, salidaVal);
+
+        if (ocupada) {
+          // Mostrar error inline bajo el select de cabaña
+          const errorDiv = document.createElement('div');
+          errorDiv.id = 'reserva-error-disp';
+          errorDiv.style.cssText = 'background:#fff5f5;border:1.5px solid #fed7d7;color:#9b2335;padding:0.9rem 1.1rem;border-radius:10px;font-size:0.88rem;font-weight:500;margin-top:0.5rem;';
+          errorDiv.innerHTML = `<i class="bi bi-x-circle-fill" style="margin-right:6px"></i><strong>Cabaña N°${numCabana} no está disponible</strong> del ${fmtFecha(llegadaVal)} al ${fmtFecha(salidaVal)}.<br><span style="font-weight:400;margin-top:4px;display:block">Elige otra cabaña o cambia las fechas. También puedes <a href="https://wa.me/56995265545" target="_blank" style="color:#9b2335;font-weight:700;">consultarnos por WhatsApp</a>.</span>`;
+          cabanaSelect.closest('.mb-3').appendChild(errorDiv);
+          if (btn) { btn.disabled = false; btn.textContent = 'Enviar solicitud de reserva'; }
+          cabanaSelect.focus();
+          return;
+        }
+      } catch(err) {
+        // Si falla la consulta, dejamos pasar el formulario de todos modos
+        console.warn('No se pudo verificar disponibilidad:', err);
+      }
+    }
+
+    // Todo OK → enviar
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = 'Enviando…';
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.textContent = 'Enviar solicitud de reserva';
+      }, 5000);
+    }
+    this.submit();
+  });
+
+  // 3. Sanitizar
+  document.querySelectorAll('input[type="text"], textarea').forEach(el => {
+    el.addEventListener('input', function() {
+      if (/<script|javascript:|on\w+=/i.test(this.value)) {
+        this.value = this.value.replace(/<script.*?>.*?<\/script>/gi, '')
+                               .replace(/javascript:/gi, '')
+                               .replace(/on\w+=/gi, '');
+      }
+    });
+  });
+
+  // 4. Galería
+  const galeriaItems = document.querySelectorAll('.galeria-item');
+  const lightbox = document.getElementById('galeriaLightbox');
+  const lbImg = document.getElementById('lbImg');
+  const lbClose = document.getElementById('lbClose');
+  const lbPrev = document.getElementById('lbPrev');
+  const lbNext = document.getElementById('lbNext');
+  const lbCounter = document.getElementById('lbCounter');
+  const lbSpinner = document.getElementById('lbSpinner');
+  const lbThumbnails = document.getElementById('lbThumbnails');
+  const lbBackdrop = document.getElementById('lbBackdrop');
+
+  let currentIndex = 0;
+  const imgs = [];
+
+  galeriaItems.forEach((item, i) => {
+    const imgEl = item.querySelector('img');
+    imgs.push({ src: imgEl.src, alt: imgEl.alt });
+    item.style.cursor = 'pointer';
+    item.addEventListener('click', () => openLb(i));
+  });
+
+  imgs.forEach((img, i) => {
+    const thumb = document.createElement('div');
+    thumb.className = 'lb-thumb';
+    thumb.innerHTML = '<img src="' + img.src + '" alt="' + img.alt + '"/>';
+    thumb.addEventListener('click', (e) => { e.stopPropagation(); openLb(i); });
+    lbThumbnails.appendChild(thumb);
+  });
+
+  function openLb(i) {
+    currentIndex = i;
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    loadImg(i);
+    updateThumbs(i);
+  }
+
+  function loadImg(i) {
+    lbSpinner.style.display = 'flex';
+    lbImg.style.opacity = '0';
+    lbCounter.textContent = (i + 1) + ' / ' + imgs.length;
+    const tempImg = new Image();
+    tempImg.onload = () => {
+      lbImg.src = imgs[i].src;
+      lbImg.alt = imgs[i].alt;
+      lbImg.style.opacity = '1';
+      lbSpinner.style.display = 'none';
+    };
+    tempImg.src = imgs[i].src;
+  }
+
+  function updateThumbs(i) {
+    document.querySelectorAll('.lb-thumb').forEach((t, idx) => {
+      t.classList.toggle('lb-thumb-active', idx === i);
+    });
+    const activeThumb = lbThumbnails.children[i];
+    if (activeThumb) {
+      activeThumb.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }
+  }
+
+  function closeLb() {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function goTo(i) {
+    currentIndex = (i + imgs.length) % imgs.length;
+    loadImg(currentIndex);
+    updateThumbs(currentIndex);
+  }
+
+  let touchStartX = 0;
+  lbImg.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+  lbImg.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) goTo(currentIndex + (diff > 0 ? 1 : -1));
+  });
+
+  lbClose.addEventListener('click', closeLb);
+  lbBackdrop.addEventListener('click', closeLb);
+  lbPrev.addEventListener('click', e => { e.stopPropagation(); goTo(currentIndex - 1); });
+  lbNext.addEventListener('click', e => { e.stopPropagation(); goTo(currentIndex + 1); });
+
+  document.addEventListener('keydown', e => {
+    if (!lightbox.classList.contains('active')) return;
+    if (e.key === 'Escape') closeLb();
+    if (e.key === 'ArrowLeft') goTo(currentIndex - 1);
+    if (e.key === 'ArrowRight') goTo(currentIndex + 1);
+  });
+</script>
+<script>
+  // ===== DISPONIBILIDAD PÚBLICA =====
+  const BIN_ID_PUB  = '6852e0f98a456b796685836e';
+  const API_KEY_PUB = '$2a$10$abc123placeholder';
+  const API_URL_PUB = `https://api.jsonbin.io/v3/b/${BIN_ID_PUB}`;
+
+  let reservasCache = null;
+
+  async function fetchReservas() {
+    // Usar caché si es reciente (5 minutos)
+    const ts = parseInt(localStorage.getItem('reservas_cache_ts') || '0');
+    if (Date.now() - ts < 300000) {
+      const cached = localStorage.getItem('reservas_publicas');
+      if (cached) return JSON.parse(cached);
+    }
+    try {
+      const res  = await fetch(API_URL_PUB + '/latest', { headers: { 'X-Master-Key': API_KEY_PUB } });
+      const json = await res.json();
+      const data = json.record || {};
+      localStorage.setItem('reservas_publicas', JSON.stringify(data));
+      localStorage.setItem('reservas_cache_ts', Date.now().toString());
+      return data;
+    } catch(e) {
+      const cached = localStorage.getItem('reservas_publicas');
+      return cached ? JSON.parse(cached) : {};
+    }
+  }
+
+  function hayConflicto(reservas, llegada, salida) {
+    const hoy = new Date().toISOString().split('T')[0];
+    return reservas.filter(r => r.salida >= hoy).some(r =>
+      (llegada >= r.llegada && llegada < r.salida) ||
+      (salida > r.llegada && salida <= r.salida) ||
+      (llegada <= r.llegada && salida >= r.salida)
+    );
+  }
+
+  async function cargarGridDisponibilidad() {
+    const grid = document.getElementById('dispGrid');
+    if (!grid) return;
+    const data = await fetchReservas();
+    const hoy  = new Date().toISOString().split('T')[0];
+    reservasCache = data;
+
+    let html = '';
+    for (let i = 1; i <= 7; i++) {
+      const reservas = (data[i] || []).filter(r => r.salida >= hoy);
+      const ocupada  = reservas.length > 0;
+      const proximaR = reservas.sort((a,b) => a.llegada.localeCompare(b.llegada))[0];
+      html += `
+        <div class="disp-card ${ocupada ? 'ocupada' : 'libre'}">
+          <div class="disp-icono ${ocupada ? 'rojo' : 'verde'}">
+            <i class="bi bi-house-${ocupada ? 'x' : 'check'}-fill"></i>
+          </div>
+          <div>
+            <div class="disp-nombre">Cabaña N°${i}</div>
+            <div class="disp-estado ${ocupada ? 'ocupada' : 'libre'}">${ocupada ? '🔴 Ocupada' : '🟢 Disponible'}</div>
+            ${ocupada && proximaR ? `<div class="disp-fechas">Hasta el ${fmtFecha(proximaR.salida)}</div>` : ''}
+          </div>
+        </div>`;
+    }
+    grid.innerHTML = html;
+  }
+
+  async function buscarDisponibilidad() {
+    const llegada = document.getElementById('dispLlegada').value;
+    const salida  = document.getElementById('dispSalida').value;
+    const res     = document.getElementById('dispResultado');
+
+    if (!llegada || !salida) { alert('⚠️ Selecciona las fechas para buscar.'); return; }
+    if (salida <= llegada)   { alert('⚠️ La salida debe ser posterior a la llegada.'); return; }
+
+    const data   = reservasCache || await fetchReservas();
+    const hoy    = new Date().toISOString().split('T')[0];
+    let libres = 0, ocupadasN = 0;
+    let html = '';
+
+    for (let i = 1; i <= 7; i++) {
+      const reservas  = (data[i] || []).filter(r => r.salida >= hoy);
+      const conflicto = hayConflicto(reservas, llegada, salida);
+      if (conflicto) ocupadasN++; else libres++;
+      html += `
+        <div class="disp-card ${conflicto ? 'conflicto' : 'libre'}">
+          <div class="disp-icono ${conflicto ? 'rojo' : 'verde'}">
+            <i class="bi bi-house-${conflicto ? 'x' : 'check'}-fill"></i>
+          </div>
+          <div>
+            <div class="disp-nombre">Cabaña N°${i}</div>
+            <div class="disp-estado ${conflicto ? 'ocupada' : 'libre'}">${conflicto ? '🔴 No disponible' : '🟢 Disponible'}</div>
+          </div>
+        </div>`;
+    }
+
+    document.getElementById('dispGrid').innerHTML = html;
+
+    let alertaHtml = '';
+    if (libres === 7) {
+      alertaHtml = `<div class="alerta-disp libre"><i class="bi bi-check-circle-fill"></i> ¡Todas las cabañas están disponibles del ${fmtFecha(llegada)} al ${fmtFecha(salida)}! <a href="#reserva" style="font-weight:700;color:inherit;">Reserva ahora →</a></div>`;
+    } else if (libres > 0) {
+      alertaHtml = `<div class="alerta-disp parcial"><i class="bi bi-exclamation-circle-fill"></i> Hay <strong>${libres} cabaña${libres>1?'s':''} disponible${libres>1?'s':''}</strong> para esas fechas. <a href="#reserva" style="font-weight:700;color:inherit;">Reservar →</a></div>`;
+    } else {
+      alertaHtml = `<div class="alerta-disp ocupada"><i class="bi bi-x-circle-fill"></i> Todas las cabañas están ocupadas en esas fechas. Contáctanos por <a href="https://wa.me/56995265545" target="_blank" style="font-weight:700;color:inherit;">WhatsApp</a> para opciones.</div>`;
+    }
+    res.innerHTML = alertaHtml;
+    res.style.display = 'block';
+  }
+
+  function fmtFecha(f) {
+    if (!f) return '';
+    const [y,m,d] = f.split('-');
+    return `${d}/${m}/${y}`;
+  }
+
+  // Fechas mínimas buscador
+  document.addEventListener('DOMContentLoaded', () => {
+    cargarGridDisponibilidad();
+    const hoy = new Date().toISOString().split('T')[0];
+    const dL  = document.getElementById('dispLlegada');
+    const dS  = document.getElementById('dispSalida');
+    if (dL) { dL.min = hoy; dL.addEventListener('change', () => { if(dS){dS.min=dL.value; if(dS.value&&dS.value<=dL.value)dS.value='';}}); }
+    if (dS) dS.min = hoy;
+  });
+</script>
+</body>
+</html>

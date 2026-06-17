@@ -1,0 +1,1080 @@
+/* ============================================================
+   CABAÑAS MARISCADERO — cabanas.css
+   Paleta: océano, arena dorada, atardecer, blanco
+   ============================================================ */
+
+:root {
+  --verde:       #1a6b8a;   /* azul océano profundo */
+  --verde-claro: #2a9bc4;   /* azul mar claro */
+  --verde-suave: #d6eef7;   /* celeste suave */
+  --crema:       #fdf8f0;   /* arena clara */
+  --tierra:      #c07a3a;   /* arena dorada */
+  --tierra-clr:  #e09a5a;   /* dorado atardecer */
+  --negro:       #1a2430;   /* azul noche */
+  --gris:        #5a6a7a;   /* gris oceánico */
+  --gris-borde:  #e2eaf0;   /* borde azulado suave */
+  --blanco:      #ffffff;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: var(--blanco);
+  color: var(--negro);
+  scroll-behavior: smooth;
+}
+
+/* ---------- NAVBAR ---------- */
+.nav-lp {
+  background-color: rgba(255,255,255,0.96);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--gris-borde);
+  padding: 0.6rem 0;
+}
+
+.lp-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--verde) !important;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-logo {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #1a6b8a, #2a9bc4);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(26,107,138,0.3);
+  flex-shrink: 0;
+}
+
+.brand-icon-casa {
+  color: #ffffff;
+  font-size: 1.1rem;
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.brand-icon-ola {
+  color: #f0c070;
+  font-size: 0.75rem;
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.nav-lp .nav-link {
+  color: var(--gris) !important;
+  font-size: 0.88rem;
+  font-weight: 500;
+  transition: color 0.2s;
+  padding: 0.4rem 0.7rem !important;
+}
+
+.nav-lp .nav-link:hover { color: var(--verde) !important; }
+
+.btn-reserva-nav {
+  background: linear-gradient(135deg, #e8941a, #f0b830) !important;
+  color: var(--blanco) !important;
+  border-radius: 50px !important;
+  padding: 0.4rem 1.1rem !important;
+  font-weight: 600 !important;
+  box-shadow: 0 2px 10px rgba(232,148,26,0.35) !important;
+  transition: all 0.2s !important;
+}
+
+.btn-reserva-nav:hover {
+  background: linear-gradient(135deg, #f0a020, #f8c840) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 16px rgba(232,148,26,0.5) !important;
+}
+
+/* ---------- HERO ---------- */
+.hero-lp {
+  min-height: 100vh;
+  background:
+    url('IMG - Fondo/IMG - Fondo - 1.jpeg')
+    center / cover no-repeat;
+  padding-top: 80px;
+  position: relative;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 30, 50, 0.35) 0%,
+    rgba(15, 40, 65, 0.55) 50%,
+    rgba(20, 50, 80, 0.80) 100%
+  );
+}
+
+.hero-eyebrow {
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #f0c070;
+  margin-bottom: 1rem;
+}
+
+.hero-h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.2rem, 5.5vw, 4rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 1.2rem;
+}
+
+.hero-sub {
+  font-size: 1.05rem;
+  color: rgba(255,255,255,0.8);
+  max-width: 560px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* ---------- BOTONES ---------- */
+.btn-primary-lp {
+  background-color: var(--verde);
+  color: var(--blanco);
+  border: none;
+  border-radius: 50px;
+  padding: 0.75rem 2rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: background-color 0.2s, transform 0.2s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn-primary-lp:hover {
+  background-color: var(--verde-claro);
+  color: var(--blanco);
+  transform: translateY(-2px);
+}
+
+.btn-outline-lp {
+  background-color: transparent;
+  color: var(--blanco);
+  border: 2px solid rgba(255,255,255,0.7);
+  border-radius: 50px;
+  padding: 0.75rem 2rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.2s;
+}
+
+.btn-outline-lp:hover {
+  background-color: rgba(255,255,255,0.15);
+  color: var(--blanco);
+}
+
+.btn-outline-verde {
+  background-color: transparent;
+  color: var(--verde);
+  border: 2px solid var(--verde);
+  border-radius: 50px;
+  padding: 0.6rem 1.6rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.2s;
+}
+
+.btn-outline-verde:hover {
+  background-color: var(--verde);
+  color: var(--blanco);
+}
+
+/* ---------- DESTACADOS ---------- */
+.destacados-bar {
+  background-color: var(--verde);
+  padding: 1.2rem 0;
+}
+
+.dest-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: rgba(255,255,255,0.9);
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.dest-icon {
+  color: #f0c070;
+  font-size: 1rem;
+}
+
+/* ---------- SECCIONES ---------- */
+.section-lp {
+  padding: 80px 0;
+}
+
+.section-verde {
+  background-color: var(--verde);
+}
+
+.section-oferta {
+  background-color: var(--crema);
+}
+
+.section-eyebrow {
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--verde-claro);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  font-weight: 700;
+  color: var(--negro);
+  margin-bottom: 0.75rem;
+}
+
+.section-sub {
+  color: var(--gris);
+  font-size: 1rem;
+  line-height: 1.7;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+/* ---------- CARDS CABAÑAS ---------- */
+.card-lp {
+  background: var(--blanco);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--gris-borde);
+  position: relative;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.card-lp:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(26,107,138,0.18);
+}
+
+.card-lp-destacada {
+  border: 2px solid var(--verde);
+}
+
+.ribbon-lp {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background-color: var(--verde);
+  color: var(--blanco);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 50px;
+  letter-spacing: 0.05em;
+  z-index: 2;
+}
+
+.card-img-lp {
+  height: 220px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.img-pino     { background-image: url('https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=600&auto=format&fit=crop'); }
+.img-roble    { background-image: url('https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?w=600&auto=format&fit=crop'); }
+.img-araucaria{ background-image: url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600&auto=format&fit=crop'); }
+
+.card-body-lp { padding: 1.5rem; }
+
+.tag-lp {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--verde-claro);
+  background-color: var(--verde-suave);
+  padding: 3px 10px;
+  border-radius: 50px;
+  display: inline-block;
+  margin-bottom: 0.6rem;
+}
+
+.card-titulo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--negro);
+  margin-bottom: 0.5rem;
+}
+
+.card-desc {
+  font-size: 0.9rem;
+  color: var(--gris);
+  line-height: 1.65;
+  margin-bottom: 0.75rem;
+}
+
+.amenidades {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.amenidades li {
+  font-size: 0.8rem;
+  color: var(--gris);
+  background: var(--crema);
+  padding: 4px 10px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.amenidades .bi { color: var(--verde-claro); }
+
+.btn-card-lp {
+  background-color: var(--crema);
+  color: var(--verde);
+  border: 2px solid var(--verde);
+  border-radius: 50px;
+  padding: 0.6rem 1rem;
+  font-weight: 600;
+  font-size: 0.88rem;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.btn-card-lp:hover {
+  background-color: var(--verde);
+  color: var(--blanco);
+}
+
+.btn-card-dest {
+  background-color: var(--verde);
+  color: var(--blanco);
+}
+
+.btn-card-dest:hover {
+  background-color: var(--verde-claro);
+  color: var(--blanco);
+}
+
+/* ---------- SERVICIOS ---------- */
+.servicio-item {
+  background-color: rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 1.25rem 0.75rem;
+  text-align: center;
+  color: var(--blanco);
+  font-size: 0.88rem;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s;
+}
+
+.servicio-item:hover {
+  background-color: rgba(255,255,255,0.18);
+}
+
+.servicio-icon {
+  font-size: 1.6rem;
+  color: #a8d5b5;
+}
+
+/* ---------- OFERTAS ---------- */
+.oferta-form { max-width: 500px; margin: 0 auto; }
+
+.oferta-input {
+  flex: 1;
+  min-width: 200px;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--gris-borde);
+  border-radius: 50px;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.oferta-input:focus { border-color: var(--verde); }
+
+.oferta-nota {
+  font-size: 0.82rem;
+  color: var(--gris);
+}
+
+/* ---------- FORMULARIO RESERVA ---------- */
+.form-lp { background: var(--crema); border-radius: 16px; padding: 2rem; }
+
+.form-label-lp {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--negro);
+  margin-bottom: 5px;
+}
+
+.input-lp {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border: 2px solid var(--gris-borde);
+  border-radius: 10px;
+  font-size: 0.92rem;
+  font-family: inherit;
+  background: var(--blanco);
+  color: var(--negro);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input-lp:focus { border-color: var(--verde); }
+
+.form-nota {
+  font-size: 0.8rem;
+  color: var(--gris);
+  text-align: center;
+}
+
+/* ---------- INFO CONTACTO ---------- */
+.info-contacto {
+  background: var(--crema);
+  border-radius: 16px;
+  padding: 2rem;
+}
+
+.info-titulo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--negro);
+  margin-bottom: 1.5rem;
+}
+
+.info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 1.25rem;
+}
+
+.info-icon {
+  color: var(--verde);
+  font-size: 1.25rem;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.info-item strong { display: block; font-size: 0.88rem; margin-bottom: 2px; }
+
+.info-item p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--gris);
+  line-height: 1.6;
+}
+
+.info-item a {
+  color: var(--verde);
+  text-decoration: none;
+}
+
+.btn-wsp {
+  background-color: #25d366;
+  color: var(--blanco);
+  border: none;
+  border-radius: 50px;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.btn-wsp:hover { background-color: #1ebe57; color: var(--blanco); }
+.btn-wsp .bi { font-size: 1.1rem; }
+
+/* ---------- MAPA ---------- */
+.section-mapa {
+  padding: 80px 0;
+  background: var(--crema);
+}
+
+.mapa-wrapper { border: 1px solid var(--gris-borde); }
+
+/* ---------- FOOTER ---------- */
+.footer-lp {
+  background-color: #0d2035;
+  color: rgba(255,255,255,0.85);
+}
+
+.footer-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  color: #f0c070;
+  margin-bottom: 0.5rem;
+}
+
+.footer-desc { font-size: 0.88rem; color: rgba(255,255,255,0.55); line-height: 1.7; }
+
+.footer-heading {
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #f0c070;
+  margin-bottom: 0.75rem;
+}
+
+.footer-links a {
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  font-size: 0.88rem;
+  line-height: 2.2;
+  display: block;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover { color: #f0c070; }
+
+.footer-contact {
+  font-size: 0.88rem;
+  color: rgba(255,255,255,0.6);
+  line-height: 2;
+}
+
+.footer-contact .bi { color: #f0c070; margin-right: 5px; }
+
+.footer-wsp {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #25d366;
+  color: var(--blanco);
+  padding: 6px 16px;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  margin-top: 8px;
+  transition: background-color 0.2s;
+}
+
+.footer-wsp:hover { background-color: #1ebe57; color: var(--blanco); }
+
+.footer-hr { border-color: rgba(255,255,255,0.1); }
+
+.footer-copy { font-size: 0.8rem; color: rgba(255,255,255,0.3); }
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 767px) {
+  .hero-h1 { font-size: 2rem; }
+  .form-lp, .info-contacto { padding: 1.25rem; }
+  .section-lp { padding: 55px 0; }
+}
+
+/* ---------- FOTO REAL CABAÑA ---------- */
+.img-real {
+  background-image: url('img/cabana.png');
+  background-size: cover;
+  background-position: center;
+}
+
+/* ---------- PRECIO DESDE ---------- */
+.precio-desde {
+  font-size: 0.82rem;
+  color: var(--gris);
+}
+.precio-desde strong { color: var(--verde); font-size: 0.95rem; }
+
+/* ---------- TABLA PRECIOS ---------- */
+.section-crema { background-color: var(--crema); }
+
+.tabla-precios {
+  background: var(--blanco);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--gris-borde);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+
+.precio-fila {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--gris-borde);
+  font-size: 0.95rem;
+  color: var(--negro);
+  transition: background-color 0.15s;
+}
+
+.precio-fila:hover { background-color: var(--crema); }
+
+.precio-fila:last-child { border-bottom: none; }
+
+.precio-fila-header {
+  background-color: var(--verde);
+  color: var(--blanco);
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.precio-fila-header:hover { background-color: var(--verde); }
+
+.precio-fila .bi { color: var(--verde-claro); margin-right: 8px; }
+.precio-fila-header .bi { color: rgba(255,255,255,0.7); }
+
+.precio-valor {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--verde);
+}
+
+.precio-fila-max { background-color: #f0faf4; }
+.precio-fila-max .precio-valor { font-size: 1.15rem; }
+
+.badge-max {
+  background-color: var(--verde-suave);
+  color: var(--verde);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 50px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.precio-nota {
+  padding: 0.85rem 1.5rem;
+  font-size: 0.82rem;
+  color: var(--gris);
+  background-color: #f9fafb;
+  border-top: 1px solid var(--gris-borde);
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.precio-nota .bi { color: var(--verde-claro); margin-top: 2px; flex-shrink: 0; }
+
+/* ---------- PRECIO ESTIMADO EN FORMULARIO ---------- */
+.precio-estimado-box {
+  background-color: var(--verde-suave);
+  color: var(--verde);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.precio-estimado-box .bi { font-size: 1rem; }
+
+/* ---------- GALERÍA ---------- */
+.galeria-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.galeria-item {
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  background-color: var(--gris-borde);
+  aspect-ratio: 4 / 3;
+}
+
+.galeria-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.45s ease;
+}
+
+.galeria-item:hover img {
+  transform: scale(1.06);
+}
+
+.galeria-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 40, 20, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s;
+}
+
+.galeria-overlay .bi {
+  color: var(--blanco);
+  font-size: 1.8rem;
+  opacity: 0;
+  transform: scale(0.7);
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.galeria-item:hover .galeria-overlay {
+  background: rgba(20, 40, 20, 0.45);
+}
+
+.galeria-item:hover .galeria-overlay .bi {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* --- LIGHTBOX CON CARRUSEL --- */
+.galeria-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.galeria-lightbox.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Fondo oscuro */
+.lb-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 15, 30, 0.96);
+  cursor: pointer;
+}
+
+/* Imagen principal */
+.lb-img-wrap {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 90vw;
+  max-height: 70vh;
+}
+
+.lb-img-wrap img {
+  max-width: 90vw;
+  max-height: 70vh;
+  border-radius: 12px;
+  box-shadow: 0 25px 70px rgba(0,0,0,0.7);
+  object-fit: contain;
+  transition: opacity 0.25s ease;
+  display: block;
+}
+
+/* Spinner de carga */
+.lb-spinner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lb-spin {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255,255,255,0.2);
+  border-top-color: #f0c070;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Contador */
+.lb-counter {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10001;
+  background: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.8);
+  font-size: 0.82rem;
+  padding: 4px 14px;
+  border-radius: 50px;
+  backdrop-filter: blur(6px);
+  letter-spacing: 0.05em;
+}
+
+/* Botones navegación */
+.lb-close, .lb-prev, .lb-next {
+  position: fixed;
+  background: rgba(255,255,255,0.1);
+  color: var(--blanco);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 50%;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  z-index: 10001;
+  backdrop-filter: blur(6px);
+}
+
+.lb-close:hover, .lb-prev:hover, .lb-next:hover {
+  background: rgba(240,192,112,0.25);
+  border-color: #f0c070;
+  color: #f0c070;
+  transform: scale(1.1);
+}
+
+.lb-close { top: 16px; right: 16px; }
+.lb-prev  { left: 16px; top: 50%; transform: translateY(-50%); }
+.lb-next  { right: 16px; top: 50%; transform: translateY(-50%); }
+.lb-prev:hover { transform: translateY(-50%) scale(1.1); }
+.lb-next:hover { transform: translateY(-50%) scale(1.1); }
+
+/* Miniaturas carrusel */
+.lb-thumbnails {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10001;
+  display: flex;
+  gap: 8px;
+  padding: 14px 20px;
+  overflow-x: auto;
+  justify-content: center;
+  background: linear-gradient(to top, rgba(5,15,30,0.95), transparent);
+  scrollbar-width: none;
+}
+
+.lb-thumbnails::-webkit-scrollbar { display: none; }
+
+.lb-thumb {
+  flex-shrink: 0;
+  width: 70px;
+  height: 50px;
+  border-radius: 7px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  opacity: 0.55;
+  transition: all 0.2s;
+}
+
+.lb-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.lb-thumb:hover {
+  opacity: 0.85;
+  transform: translateY(-3px);
+}
+
+.lb-thumb-active {
+  border-color: #f0c070;
+  opacity: 1;
+  transform: translateY(-4px);
+  box-shadow: 0 4px 14px rgba(240,192,112,0.4);
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+  .lb-prev { left: 6px; }
+  .lb-next { right: 6px; }
+  .lb-close { top: 12px; right: 12px; width: 42px; height: 42px; }
+  .lb-thumb { width: 54px; height: 40px; }
+  .lb-img-wrap img { max-height: 60vh; }
+}
+
+/* ============================================================
+   AMBIENTE PLAYA — elementos decorativos
+   ============================================================ */
+
+/* --- OLA DIVISORA entre hero y contenido --- */
+.ola-divisora {
+  position: relative;
+  margin-top: -2px;
+  line-height: 0;
+  overflow: hidden;
+}
+
+.ola-divisora svg {
+  display: block;
+  width: 100%;
+  height: 80px;
+}
+
+/* --- SECCIÓN SERVICIOS con fondo océano --- */
+.section-verde {
+  background: linear-gradient(135deg, #1a6b8a 0%, #0d4f6e 60%, #0a3550 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.section-verde::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: -10%;
+  width: 120%;
+  height: 120px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 80'%3E%3Cpath fill='%23fdf8f0' d='M0,40 C360,80 1080,0 1440,40 L1440,0 L0,0 Z'/%3E%3C/svg%3E") center/cover no-repeat;
+}
+
+.section-verde::after {
+  content: '';
+  position: absolute;
+  bottom: -60px;
+  left: -10%;
+  width: 120%;
+  height: 120px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 80'%3E%3Cpath fill='%23fdf8f0' d='M0,40 C360,0 1080,80 1440,40 L1440,80 L0,80 Z'/%3E%3C/svg%3E") center/cover no-repeat;
+  z-index: 1;
+}
+
+/* Texto servicios sobre el océano */
+.section-verde .container { position: relative; z-index: 2; }
+
+.servicio-item {
+  background-color: rgba(255,255,255,0.12);
+  border-radius: 12px;
+  padding: 1.25rem 0.75rem;
+  text-align: center;
+  color: var(--blanco);
+  font-size: 0.88rem;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s, transform 0.2s;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.servicio-item:hover {
+  background-color: rgba(255,255,255,0.22);
+  transform: translateY(-3px);
+}
+
+.servicio-icon {
+  font-size: 1.6rem;
+  color: #f0c070;
+}
+
+/* --- CREMA con tono arena --- */
+.section-crema,
+.section-oferta {
+  background-color: #fdf8f0;
+}
+
+/* --- BARRA DESTACADOS con gradiente oceánico --- */
+.destacados-bar {
+  background: linear-gradient(90deg, #1a6b8a 0%, #2a9bc4 50%, #1a6b8a 100%);
+  padding: 1.2rem 0;
+}
+
+/* --- TABLA PRECIOS borde océano --- */
+.precio-fila-header {
+  background: linear-gradient(90deg, #1a6b8a, #2a9bc4);
+  color: var(--blanco);
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.precio-fila-header:hover {
+  background: linear-gradient(90deg, #1a6b8a, #2a9bc4);
+}
+
+/* --- INFO CONTACTO con tono arena --- */
+.info-contacto {
+  background: linear-gradient(135deg, #fdf8f0 0%, #f5efe0 100%);
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid #e8dfc8;
+}
+
+/* --- BADGE arena dorada --- */
+.badge-max {
+  background-color: #fef3d8;
+  color: #b07820;
+}
+
+/* --- PRECIO ESTIMADO oceánico --- */
+.precio-estimado-box {
+  background: linear-gradient(90deg, #d6eef7, #e8f5fc);
+  color: #1a6b8a;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-left: 4px solid #2a9bc4;
+}
+
+/* --- SCROLLBAR temática --- */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #f0f4f8; }
+::-webkit-scrollbar-thumb { background: #2a9bc4; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #1a6b8a; }
+
+/* --- SELECCIÓN de texto --- */
+::selection {
+  background: #2a9bc4;
+  color: white;
+}
+
+@media (max-width: 767px) {
+  .galeria-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+}

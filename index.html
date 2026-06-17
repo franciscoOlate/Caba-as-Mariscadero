@@ -989,7 +989,7 @@
         const opts = sel.querySelectorAll('option');
         opts.forEach(opt => {
           const m = opt.value.match(/(\d+)/);
-          if (!m) return; // "Sin preferencia" u opción vacía
+          if (!m) return;
           const n = m[1];
           const reservasCab = (data[n] || []).filter(r => r.salida >= hoyStr);
           const ocupada = hayConflicto(reservasCab, llegadaVal, salidaVal);
@@ -1000,7 +1000,6 @@
           opt.style.color = ocupada ? '#e53e3e' : '';
         });
 
-        // Mostrar mini-resumen junto al select
         let miniInfo = document.getElementById('cabana-mini-info');
         if (!miniInfo) {
           miniInfo = document.createElement('p');
@@ -1015,35 +1014,30 @@
             ? `✅ ${libres} cabaña${libres > 1 ? 's' : ''} disponible${libres > 1 ? 's' : ''} — las opciones bloqueadas están ocupadas.`
             : '⚠️ Todas las cabañas están ocupadas en esas fechas. Contáctanos por WhatsApp.';
       } catch (e) {
-        // silencioso
+        console.warn('Error al actualizar opciones:', e);
       }
     }
 
-    // 2. Anti-spam + validación de disponibilidad
+    // 2. Anti-spam + validación
     document.getElementById('formReserva')?.addEventListener('submit', async function (e) {
-      e.preventDefault(); // Siempre detenemos primero para validar
-
+      e.preventDefault();
       const btn = document.getElementById('btnReserva');
       const llegadaVal = document.getElementById('fechaLlegada')?.value;
       const salidaVal = document.getElementById('fechaSalida')?.value;
       const cabanaSelect = this.querySelector('select[name="cabana"]');
       const cabanaVal = cabanaSelect?.value || '';
 
-      // Validar fechas
       if (llegadaVal && salidaVal && salidaVal <= llegadaVal) {
         alert('⚠️ La fecha de salida debe ser posterior a la fecha de llegada.');
         return;
       }
 
-      // Eliminar mensaje de error anterior si existe
       const errorPrev = document.getElementById('reserva-error-disp');
       if (errorPrev) errorPrev.remove();
 
-      // Si eligió una cabaña específica Y tiene ambas fechas → verificar disponibilidad
       const numCabana = cabanaVal.match(/(\d+)/)?.[1];
       if (numCabana && llegadaVal && salidaVal) {
         if (btn) { btn.disabled = true; btn.textContent = 'Verificando disponibilidad…'; }
-
         try {
           const data = reservasCache || await fetchReservas();
           const hoyStr = new Date().toISOString().split('T')[0];
@@ -1051,7 +1045,6 @@
           const ocupada = hayConflicto(reservasCabana, llegadaVal, salidaVal);
 
           if (ocupada) {
-            // Mostrar error inline bajo el select de cabaña
             const errorDiv = document.createElement('div');
             errorDiv.id = 'reserva-error-disp';
             errorDiv.style.cssText = 'background:#fff5f5;border:1.5px solid #fed7d7;color:#9b2335;padding:0.9rem 1.1rem;border-radius:10px;font-size:0.88rem;font-weight:500;margin-top:0.5rem;';
@@ -1062,12 +1055,10 @@
             return;
           }
         } catch (err) {
-          // Si falla la consulta, dejamos pasar el formulario de todos modos
           console.warn('No se pudo verificar disponibilidad:', err);
         }
       }
 
-      // Todo OK → enviar
       if (btn) {
         btn.disabled = true;
         btn.textContent = 'Enviando…';
@@ -1182,28 +1173,27 @@
       if (e.key === 'ArrowRight') goTo(currentIndex + 1);
     });
   </script>
+
   <script>
-    // ===== DISPONIBILIDAD PÚBLICA =====
-    const ADMIN_PASS = 'mariscadero2025';
-    const BIN_ID_PUB = '6a3266cada38895dfecf15d0';
-    const API_KEY_PUB = '$2a$10$M8IrnZuHgaByjy0xPcDtsOrzsVCikZ3AuLtuUPp/BzLaDtJE7HrVK';
-    const API_URL_PUB = `https://api.jsonbin.io/v3/b/${BIN_ID_PUB}`;
+    // ===== DISPONIBILIDAD PÚBLICA (Pantry) =====
+    const PANTRY_ID = '6117a5bf-8250-4cae-a652-cdf866b37961';
+    const BASKET_NAME = 'reservas';
+    const API_URL_PUBLIC = `https://getpantry.cloud/apiv1/pantry/${PANTRY_ID}/basket/${BASKET_NAME}`;
     let reservasCache = null;
 
     async function fetchReservas() {
-      // Usar caché si es reciente (5 minutos)
       const ts = parseInt(localStorage.getItem('reservas_cache_ts') || '0');
       if (Date.now() - ts < 300000) {
         const cached = localStorage.getItem('reservas_publicas');
         if (cached) return JSON.parse(cached);
       }
       try {
-        const res = await fetch(API_URL_PUB + '/latest', { headers: { 'X-Master-Key': API_KEY_PUB } });
-        const json = await res.json();
-        const data = json.record || {};
+        const res = await fetch(API_URL_PUBLIC);
+        if (!res.ok) throw new Error('Error de red');
+        const data = await res.json();
         localStorage.setItem('reservas_publicas', JSON.stringify(data));
         localStorage.setItem('reservas_cache_ts', Date.now().toString());
-        return data;
+        return data || {};
       } catch (e) {
         const cached = localStorage.getItem('reservas_publicas');
         return cached ? JSON.parse(cached) : {};
@@ -1225,23 +1215,22 @@
       const data = await fetchReservas();
       const hoy = new Date().toISOString().split('T')[0];
       reservasCache = data;
-
       let html = '';
       for (let i = 1; i <= 7; i++) {
         const reservas = (data[i] || []).filter(r => r.salida >= hoy);
         const ocupada = reservas.length > 0;
         const proximaR = reservas.sort((a, b) => a.llegada.localeCompare(b.llegada))[0];
         html += `
-        <div class="disp-card ${ocupada ? 'ocupada' : 'libre'}">
-          <div class="disp-icono ${ocupada ? 'rojo' : 'verde'}">
-            <i class="bi bi-house-${ocupada ? 'x' : 'check'}-fill"></i>
-          </div>
-          <div>
-            <div class="disp-nombre">Cabaña N°${i}</div>
-            <div class="disp-estado ${ocupada ? 'ocupada' : 'libre'}">${ocupada ? '🔴 Ocupada' : '🟢 Disponible'}</div>
-            ${ocupada && proximaR ? `<div class="disp-fechas">Hasta el ${fmtFecha(proximaR.salida)}</div>` : ''}
-          </div>
-        </div>`;
+    <div class="disp-card ${ocupada ? 'ocupada' : 'libre'}">
+      <div class="disp-icono ${ocupada ? 'rojo' : 'verde'}">
+        <i class="bi bi-house-${ocupada ? 'x' : 'check'}-fill"></i>
+      </div>
+      <div>
+        <div class="disp-nombre">Cabaña N°${i}</div>
+        <div class="disp-estado ${ocupada ? 'ocupada' : 'libre'}">${ocupada ? '🔴 Ocupada' : '🟢 Disponible'}</div>
+        ${ocupada && proximaR ? `<div class="disp-fechas">Hasta el ${fmtFecha(proximaR.salida)}</div>` : ''}
+      </div>
+    </div>`;
       }
       grid.innerHTML = html;
     }
@@ -1250,33 +1239,28 @@
       const llegada = document.getElementById('dispLlegada').value;
       const salida = document.getElementById('dispSalida').value;
       const res = document.getElementById('dispResultado');
-
       if (!llegada || !salida) { alert('⚠️ Selecciona las fechas para buscar.'); return; }
       if (salida <= llegada) { alert('⚠️ La salida debe ser posterior a la llegada.'); return; }
-
       const data = reservasCache || await fetchReservas();
       const hoy = new Date().toISOString().split('T')[0];
       let libres = 0, ocupadasN = 0;
       let html = '';
-
       for (let i = 1; i <= 7; i++) {
         const reservas = (data[i] || []).filter(r => r.salida >= hoy);
         const conflicto = hayConflicto(reservas, llegada, salida);
         if (conflicto) ocupadasN++; else libres++;
         html += `
-        <div class="disp-card ${conflicto ? 'conflicto' : 'libre'}">
-          <div class="disp-icono ${conflicto ? 'rojo' : 'verde'}">
-            <i class="bi bi-house-${conflicto ? 'x' : 'check'}-fill"></i>
-          </div>
-          <div>
-            <div class="disp-nombre">Cabaña N°${i}</div>
-            <div class="disp-estado ${conflicto ? 'ocupada' : 'libre'}">${conflicto ? '🔴 No disponible' : '🟢 Disponible'}</div>
-          </div>
-        </div>`;
+    <div class="disp-card ${conflicto ? 'conflicto' : 'libre'}">
+      <div class="disp-icono ${conflicto ? 'rojo' : 'verde'}">
+        <i class="bi bi-house-${conflicto ? 'x' : 'check'}-fill"></i>
+      </div>
+      <div>
+        <div class="disp-nombre">Cabaña N°${i}</div>
+        <div class="disp-estado ${conflicto ? 'ocupada' : 'libre'}">${conflicto ? '🔴 No disponible' : '🟢 Disponible'}</div>
+      </div>
+    </div>`;
       }
-
       document.getElementById('dispGrid').innerHTML = html;
-
       let alertaHtml = '';
       if (libres === 7) {
         alertaHtml = `<div class="alerta-disp libre"><i class="bi bi-check-circle-fill"></i> ¡Todas las cabañas están disponibles del ${fmtFecha(llegada)} al ${fmtFecha(salida)}! <a href="#reserva" style="font-weight:700;color:inherit;">Reserva ahora →</a></div>`;
@@ -1295,16 +1279,22 @@
       return `${d}/${m}/${y}`;
     }
 
-    // Fechas mínimas buscador
     document.addEventListener('DOMContentLoaded', () => {
       cargarGridDisponibilidad();
       const hoy = new Date().toISOString().split('T')[0];
       const dL = document.getElementById('dispLlegada');
       const dS = document.getElementById('dispSalida');
-      if (dL) { dL.min = hoy; dL.addEventListener('change', () => { if (dS) { dS.min = dL.value; if (dS.value && dS.value <= dL.value) dS.value = ''; } }); }
+      if (dL) {
+        dL.min = hoy;
+        dL.addEventListener('change', () => {
+          if (dS) {
+            dS.min = dL.value;
+            if (dS.value && dS.value <= dL.value) dS.value = '';
+          }
+        });
+      }
       if (dS) dS.min = hoy;
     });
   </script>
 </body>
-
 </html>

@@ -360,6 +360,16 @@
     return p[2] + '/' + p[1] + '/' + p[0];
   }
 
+  function fmtHora(h) {
+    if (!h) return '';
+    var parts = h.split(':');
+    var hora = parseInt(parts[0], 10);
+    var min  = parts[1];
+    var ampm = hora >= 12 ? 'PM' : 'AM';
+    hora = hora % 12 || 12;
+    return hora + ':' + min + ' ' + ampm;
+  }
+
   function fmtPeso(n) {
     if (!n) return '';
     return '$' + Number(n).toLocaleString('es-CL');
@@ -412,7 +422,7 @@
             if (info.primera) {
               // Primera fila: nombre, personas, pagos y hora de llegada
               html += '<div class="c-nombre">👤 ' + r.nombre + '</div>';
-              if (r.horaLlegada) html += '<div class="c-hora">🕐 Entrada: ' + r.horaLlegada + '</div>';
+              if (r.horaLlegada) html += '<div class="c-hora">🕐 Entrada: ' + fmtHora(r.horaLlegada) + '</div>';
               html += '<div class="c-personas">👥 ' + (r.personas || '—') + ' personas</div>';
               html += '<div class="c-pagos">';
               if (r.deposito) html += '<div class="c-pago">🏦 Dep: ' + fmtPeso(r.deposito) + '</div>';
@@ -421,7 +431,7 @@
               html += '</div>';
             } else if (info.ultima) {
               // Última fila: solo hora de salida
-              if (r.horaSalida) html += '<div class="c-hora-salida">🕛 Salida: ' + r.horaSalida + '</div>';
+              if (r.horaSalida) html += '<div class="c-hora-salida">🕛 Salida: ' + fmtHora(r.horaSalida) + '</div>';
             }
             html += '</div></td>';
           }

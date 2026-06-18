@@ -468,6 +468,72 @@
       font-size: 0.88rem;
     }
 
+    /* COMPROBANTE UPLOAD */
+    .foto-upload-box {
+      border: 2px dashed var(--borde);
+      border-radius: 12px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: #fafbfc;
+    }
+
+    .foto-upload-box:hover {
+      border-color: var(--ocean);
+      background: #f0f8fb;
+    }
+
+    .foto-upload-box.has-file {
+      border-color: var(--verde);
+      background: #f0fff4;
+    }
+
+    .foto-preview-container {
+      margin-top: 1rem;
+      position: relative;
+      display: inline-block;
+      max-width: 100%;
+    }
+
+    .foto-preview-img {
+      max-width: 100%;
+      max-height: 200px;
+      border-radius: 10px;
+      border: 2px solid var(--borde);
+      object-fit: cover;
+    }
+
+    .foto-remove-btn {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background: var(--rojo);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s;
+    }
+
+    .foto-remove-btn:hover {
+      transform: scale(1.1);
+      background: #c53030;
+    }
+
+    .foto-status {
+      font-size: 0.8rem;
+      color: var(--gris);
+      margin-top: 0.5rem;
+    }
+
     @media(max-width:600px) {
       .resumen-grid {
         grid-template-columns: 1fr 1fr;
@@ -545,7 +611,7 @@
       </div>
 
       <div class="bloqueo-form">
-        <h3><i class="bi bi-calendar-x" style="color:var(--rojo)"></i> Agregar reserva</h3>
+        <h3><i class="bi bi-calendar-plus" style="color:var(--rojo)"></i> Agregar reserva</h3>
         <div class="form-row">
           <div class="form-group">
             <label>Cabaña</label>
@@ -603,18 +669,20 @@
             <input type="number" id="fEfectivo" placeholder="Ej: 5000" min="0" step="1000" />
           </div>
           <div class="form-group" style="grid-column: 1 / -1;">
-            <label>📎 Foto comprobante (opcional)</label>
+            <label>📸 Foto comprobante <span style="color:var(--gris);font-weight:400;font-size:0.8rem">(opcional)</span></label>
             <div class="foto-upload-box" id="fotoBox" onclick="document.getElementById('fFoto').click()">
-              <i class="bi bi-image" style="font-size:1.8rem;color:var(--gris)"></i>
-              <p style="margin:.4rem 0 0;font-size:.82rem;color:var(--gris)">Haz clic para subir foto o arrastra aquí</p>
-              <p style="font-size:.72rem;color:#aaa">JPG, PNG — máx 5MB</p>
+              <i class="bi bi-cloud-upload" style="font-size:2.5rem;color:var(--ocean);opacity:0.7"></i>
+              <p style="margin:0.6rem 0 0.2rem;font-size:0.9rem;color:var(--gris);font-weight:500">Haz clic para subir foto o arrastra aquí</p>
+              <p style="font-size:0.75rem;color:#aaa">JPG, PNG — máx 5MB — se comprime automáticamente</p>
             </div>
             <input type="file" id="fFoto" accept="image/*" style="display:none" onchange="previsualizarFoto(event)" />
-            <div id="fotoPreview" style="display:none;margin-top:.75rem;position:relative;display:none">
-              <img id="fotoImg" src="" style="max-width:100%;max-height:180px;border-radius:10px;border:2px solid var(--borde);object-fit:cover" />
-              <button onclick="quitarFoto()" style="position:absolute;top:5px;right:5px;background:var(--rojo);color:#fff;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:.8rem">✕</button>
+            <div id="fotoPreview" style="display:none;">
+              <div class="foto-preview-container">
+                <img id="fotoImg" src="" class="foto-preview-img" alt="Vista previa" />
+                <button type="button" class="foto-remove-btn" onclick="quitarFoto()" title="Quitar foto">✕</button>
+              </div>
+              <p id="fotoStatus" class="foto-status"></p>
             </div>
-            <p id="fotoStatus" style="font-size:.78rem;color:var(--gris);margin-top:.4rem"></p>
           </div>
           <div class="form-group">
             <button class="btn-bloquear" onclick="bloquearCabana()">
@@ -636,6 +704,8 @@
     const PANTRY_ID = '6117a5bf-8250-4cae-a652-cdf866b37961';
     const BASKET_NAME = 'reservas';
     const API_URL = `https://getpantry.cloud/apiv1/pantry/${PANTRY_ID}/basket/${BASKET_NAME}`;
+
+    let comprobanteBase64 = null;
 
     // ===== LOGIN =====
     function doLogin() {
@@ -691,21 +761,103 @@
       showLoading(false);
     }
 
+    // ===== MANEJO DE FOTO =====
+    function previsualizarFoto(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      // Validar tamaño (5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('⚠️ La imagen es muy grande. El tamaño máximo es 5MB.');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        // Comprimir imagen
+        comprimirImagen(e.target.result, function(b64) {
+          comprobanteBase64 = b64;
+          
+          // Mostrar preview
+          document.getElementById('fotoImg').src = b64;
+          document.getElementById('fotoPreview').style.display = 'block';
+          document.getElementById('fotoBox').classList.add('has-file');
+          document.getElementById('fotoBox').innerHTML = `
+            <i class="bi bi-check-circle" style="font-size:2.5rem;color:var(--verde)"></i>
+            <p style="margin:0.6rem 0 0.2rem;font-size:0.9rem;color:var(--verde);font-weight:600">✅ Imagen cargada</p>
+            <p style="font-size:0.75rem;color:var(--gris)">Haz clic para cambiar la foto</p>
+          `;
+          
+          const sizeKB = Math.round(b64.length / 1024);
+          document.getElementById('fotoStatus').textContent = `Tamaño comprimido: ${sizeKB} KB`;
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function comprimirImagen(dataURL, callback) {
+      const img = new Image();
+      img.onload = function() {
+        const MAX_WIDTH = 800;
+        const MAX_HEIGHT = 800;
+        let width = img.width;
+        let height = img.height;
+
+        // Calcular nuevas dimensiones
+        if (width > height) {
+          if (width > MAX_WIDTH) {
+            height = Math.round((height * MAX_WIDTH) / width);
+            width = MAX_WIDTH;
+          }
+        } else {
+          if (height > MAX_HEIGHT) {
+            width = Math.round((width * MAX_HEIGHT) / height);
+            height = MAX_HEIGHT;
+          }
+        }
+
+        // Crear canvas y comprimir
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        // Comprimir a JPEG con calidad 0.75
+        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.75);
+        callback(compressedDataUrl);
+      };
+      img.src = dataURL;
+    }
+
+    function quitarFoto() {
+      comprobanteBase64 = null;
+      document.getElementById('fFoto').value = '';
+      document.getElementById('fotoPreview').style.display = 'none';
+      document.getElementById('fotoBox').classList.remove('has-file');
+      document.getElementById('fotoBox').innerHTML = `
+        <i class="bi bi-cloud-upload" style="font-size:2.5rem;color:var(--ocean);opacity:0.7"></i>
+        <p style="margin:0.6rem 0 0.2rem;font-size:0.9rem;color:var(--gris);font-weight:500">Haz clic para subir foto o arrastra aquí</p>
+        <p style="font-size:0.75rem;color:#aaa">JPG, PNG — máx 5MB — se comprime automáticamente</p>
+      `;
+      document.getElementById('fotoStatus').textContent = '';
+    }
+
     // ===== BLOQUEAR =====
     async function bloquearCabana() {
-      const cabana   = document.getElementById('fCabana').value;
-      const llegada      = document.getElementById('fLlegada').value;
-      const horaLlegada  = document.getElementById('fHoraLlegada').value || '14:00';
-      const salida       = document.getElementById('fSalida').value;
-      const horaSalida   = document.getElementById('fHoraSalida').value || '12:00';
-      const nombre   = document.getElementById('fNombre').value.trim() || 'Reservado';
+      const cabana = document.getElementById('fCabana').value;
+      const llegada = document.getElementById('fLlegada').value;
+      const horaLlegada = document.getElementById('fHoraLlegada').value || '14:00';
+      const salida = document.getElementById('fSalida').value;
+      const horaSalida = document.getElementById('fHoraSalida').value || '12:00';
+      const nombre = document.getElementById('fNombre').value.trim() || 'Reservado';
       const personas = document.getElementById('fPersonas').value;
       const deposito = parseInt(document.getElementById('fDeposito').value) || 0;
-      const abono    = parseInt(document.getElementById('fAbono').value) || 0;
+      const abono = parseInt(document.getElementById('fAbono').value) || 0;
       const efectivo = parseInt(document.getElementById('fEfectivo').value) || 0;
 
       if (!llegada || !salida) { alert('⚠️ Selecciona las fechas.'); return; }
-      if (salida <= llegada)   { alert('⚠️ La salida debe ser posterior a la llegada.'); return; }
+      if (salida <= llegada) { alert('⚠️ La salida debe ser posterior a la llegada.'); return; }
 
       showLoading(true);
       const res = await fetch(API_URL);
@@ -722,19 +874,40 @@
 
       if (conflicto && !confirm('⚠️ Hay una reserva que se superpone en esas fechas. ¿Agregar de todos modos?')) return;
 
-      data[cabana].push({ llegada, horaLlegada, salida, horaSalida, nombre, personas, deposito, abono, efectivo, id: Date.now() });
+      const nuevaReserva = {
+        llegada,
+        horaLlegada,
+        salida,
+        horaSalida,
+        nombre,
+        personas,
+        deposito,
+        abono,
+        efectivo,
+        id: Date.now()
+      };
+
+      if (comprobanteBase64) {
+        nuevaReserva.comprobante = comprobanteBase64;
+      }
+
+      data[cabana].push(nuevaReserva);
       await guardarReservas(data);
 
       alert(`✅ Reserva guardada: Cabaña N°${cabana} del ${fmt(llegada)} al ${fmt(salida)}`);
-      document.getElementById('fLlegada').value      = '';
-      document.getElementById('fHoraLlegada').value  = '14:00';
-      document.getElementById('fSalida').value       = '';
-      document.getElementById('fHoraSalida').value   = '12:00';
-      document.getElementById('fNombre').value    = '';
-      document.getElementById('fPersonas').value  = '2';
-      document.getElementById('fDeposito').value  = '';
-      document.getElementById('fAbono').value     = '';
-      document.getElementById('fEfectivo').value  = '';
+      
+      // Limpiar formulario
+      document.getElementById('fLlegada').value = '';
+      document.getElementById('fHoraLlegada').value = '14:00';
+      document.getElementById('fSalida').value = '';
+      document.getElementById('fHoraSalida').value = '12:00';
+      document.getElementById('fNombre').value = '';
+      document.getElementById('fPersonas').value = '2';
+      document.getElementById('fDeposito').value = '';
+      document.getElementById('fAbono').value = '';
+      document.getElementById('fEfectivo').value = '';
+      quitarFoto();
+      
       renderPanel(data);
     }
 
@@ -795,8 +968,9 @@
                   <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap">
                     ${r.deposito ? `<span style="font-size:.72rem;background:#ebf8ff;color:#2b6cb0;border-radius:5px;padding:2px 7px"><i class="bi bi-bank"></i> Dep: $${r.deposito.toLocaleString('es-CL')}</span>` : ''}
                     ${r.abono    ? `<span style="font-size:.72rem;background:#f0fff4;color:var(--verde);border-radius:5px;padding:2px 7px"><i class="bi bi-cash"></i> Abono: $${r.abono.toLocaleString('es-CL')}</span>` : ''}
-                    ${r.efectivo ? `<span style="font-size:.72rem;background:#fffbeb;color:#d97706;border-radius:5px;padding:2px 7px"><i class="bi bi-cash-coin"></i> Efectivo: $${r.efectivo.toLocaleString('es-CL')}</span>` : ''}
+                    ${r.efectivo ? `<span style="font-size:.72rem;background:#fffbeb;color:#d97706;border-radius:5px;padding:2px 7px"><i class="bi bi-cash-coin"></i> Efect: $${r.efectivo.toLocaleString('es-CL')}</span>` : ''}
                   </div>
+                  ${r.comprobante ? `<div style="margin-top:6px"><button onclick="verComprobante(${r.id})" style="background:none;border:none;color:var(--ocean);cursor:pointer;font-size:0.75rem;display:flex;align-items:center;gap:4px"><i class="bi bi-paperclip"></i> Ver comprobante</button></div>` : ''}
                 </div>
                 <button class="btn-eliminar" onclick="eliminarReserva(${i}, ${r.id})"><i class="bi bi-trash3"></i></button>
               </div>`).join('')
@@ -816,6 +990,44 @@
       if (!f) return '';
       const [y, m, d] = f.split('-');
       return `${d}/${m}/${y}`;
+    }
+
+    // Ver comprobante en modal
+    function verComprobante(id) {
+      // Buscar la reserva en los datos
+      fetch(API_URL).then(res => res.json()).then(data => {
+        let reserva = null;
+        for (let cab in data) {
+          const encontrada = data[cab].find(r => r.id === id);
+          if (encontrada) {
+            reserva = encontrada;
+            break;
+          }
+        }
+        
+        if (!reserva || !reserva.comprobante) {
+          alert('No hay comprobante disponible');
+          return;
+        }
+
+        // Crear modal
+        const modal = document.createElement('div');
+        modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:10000;padding:1rem;';
+        modal.innerHTML = `
+          <button onclick="this.parentElement.remove()" style="position:absolute;top:1rem;right:1rem;background:#fff;border:none;border-radius:50%;width:40px;height:40px;font-size:1.5rem;cursor:pointer">✕</button>
+          <div style="background:#fff;border-radius:12px;overflow:hidden;max-width:90vw;max-height:90vh;">
+            <div style="background:linear-gradient(135deg,var(--ocean),var(--ocean-lt));color:#fff;padding:1rem 1.5rem;">
+              <h3 style="margin:0;font-size:1.1rem">📎 Comprobante</h3>
+              <p style="margin:0.3rem 0 0 0;font-size:0.85rem;opacity:0.9">${reserva.nombre} · ${fmt(reserva.llegada)} → ${fmt(reserva.salida)}</p>
+            </div>
+            <div style="padding:1rem;background:#f5f5f5;display:flex;align-items:center;justify-content:center;">
+              <img src="${reserva.comprobante}" style="max-width:100%;max-height:65vh;border-radius:8px;" />
+            </div>
+          </div>
+        `;
+        modal.onclick = function(e) { if (e.target === modal) modal.remove(); };
+        document.body.appendChild(modal);
+      });
     }
 
     // Fechas mínimas

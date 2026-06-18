@@ -568,8 +568,31 @@
             <input type="date" id="fSalida" />
           </div>
           <div class="form-group">
-            <label>Nombre cliente (opcional)</label>
-            <input type="text" id="fNombre" placeholder="Ej: Familia González" maxlength="50" />
+            <label>Nombre cliente</label>
+            <input type="text" id="fNombre" placeholder="Ej: Francisco Olate" maxlength="50" />
+          </div>
+          <div class="form-group">
+            <label>N° personas</label>
+            <select id="fPersonas">
+              <option value="1">1 persona</option>
+              <option value="2">2 personas</option>
+              <option value="3">3 personas</option>
+              <option value="4">4 personas</option>
+              <option value="5">5 personas</option>
+              <option value="6">6 personas</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Depósito ($)</label>
+            <input type="number" id="fDeposito" placeholder="Ej: 50000" min="0" step="1000" />
+          </div>
+          <div class="form-group">
+            <label>Abono ($)</label>
+            <input type="number" id="fAbono" placeholder="Ej: 10000" min="0" step="1000" />
+          </div>
+          <div class="form-group">
+            <label>Efectivo ($)</label>
+            <input type="number" id="fEfectivo" placeholder="Ej: 5000" min="0" step="1000" />
           </div>
           <div class="form-group">
             <button class="btn-bloquear" onclick="bloquearCabana()">
@@ -648,13 +671,17 @@
 
     // ===== BLOQUEAR =====
     async function bloquearCabana() {
-      const cabana = document.getElementById('fCabana').value;
-      const llegada = document.getElementById('fLlegada').value;
-      const salida = document.getElementById('fSalida').value;
-      const nombre = document.getElementById('fNombre').value.trim() || 'Reservado';
+      const cabana   = document.getElementById('fCabana').value;
+      const llegada  = document.getElementById('fLlegada').value;
+      const salida   = document.getElementById('fSalida').value;
+      const nombre   = document.getElementById('fNombre').value.trim() || 'Reservado';
+      const personas = document.getElementById('fPersonas').value;
+      const deposito = parseInt(document.getElementById('fDeposito').value) || 0;
+      const abono    = parseInt(document.getElementById('fAbono').value) || 0;
+      const efectivo = parseInt(document.getElementById('fEfectivo').value) || 0;
 
       if (!llegada || !salida) { alert('⚠️ Selecciona las fechas.'); return; }
-      if (salida <= llegada) { alert('⚠️ La salida debe ser posterior a la llegada.'); return; }
+      if (salida <= llegada)   { alert('⚠️ La salida debe ser posterior a la llegada.'); return; }
 
       showLoading(true);
       const res = await fetch(API_URL);
@@ -671,13 +698,17 @@
 
       if (conflicto && !confirm('⚠️ Hay una reserva que se superpone en esas fechas. ¿Agregar de todos modos?')) return;
 
-      data[cabana].push({ llegada, salida, nombre, id: Date.now() });
+      data[cabana].push({ llegada, salida, nombre, personas, deposito, abono, efectivo, id: Date.now() });
       await guardarReservas(data);
 
       alert(`✅ Reserva guardada: Cabaña N°${cabana} del ${fmt(llegada)} al ${fmt(salida)}`);
-      document.getElementById('fLlegada').value = '';
-      document.getElementById('fSalida').value = '';
-      document.getElementById('fNombre').value = '';
+      document.getElementById('fLlegada').value   = '';
+      document.getElementById('fSalida').value    = '';
+      document.getElementById('fNombre').value    = '';
+      document.getElementById('fPersonas').value  = '2';
+      document.getElementById('fDeposito').value  = '';
+      document.getElementById('fAbono').value     = '';
+      document.getElementById('fEfectivo').value  = '';
       renderPanel(data);
     }
 
@@ -732,9 +763,14 @@
             ? '<div class="sin-reservas">Sin reservas activas</div>'
             : reservas.map(r => `
               <div class="reserva-item">
-                <div>
+                <div style="flex:1">
                   <div class="reserva-fechas"><i class="bi bi-calendar3"></i> ${fmt(r.llegada)} → ${fmt(r.salida)}</div>
-                  <div class="reserva-nota">${r.nombre}</div>
+                  <div class="reserva-nota"><i class="bi bi-person-fill"></i> ${r.nombre} &nbsp;·&nbsp; <i class="bi bi-people-fill"></i> ${r.personas || '—'} personas</div>
+                  <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap">
+                    ${r.deposito ? `<span style="font-size:.72rem;background:#ebf8ff;color:#2b6cb0;border-radius:5px;padding:2px 7px"><i class="bi bi-bank"></i> Dep: $${r.deposito.toLocaleString('es-CL')}</span>` : ''}
+                    ${r.abono    ? `<span style="font-size:.72rem;background:#f0fff4;color:var(--verde);border-radius:5px;padding:2px 7px"><i class="bi bi-cash"></i> Abono: $${r.abono.toLocaleString('es-CL')}</span>` : ''}
+                    ${r.efectivo ? `<span style="font-size:.72rem;background:#fffbeb;color:#d97706;border-radius:5px;padding:2px 7px"><i class="bi bi-cash-coin"></i> Efectivo: $${r.efectivo.toLocaleString('es-CL')}</span>` : ''}
+                  </div>
                 </div>
                 <button class="btn-eliminar" onclick="eliminarReserva(${i}, ${r.id})"><i class="bi bi-trash3"></i></button>
               </div>`).join('')

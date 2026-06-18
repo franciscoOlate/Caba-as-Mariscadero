@@ -1,1 +1,733 @@
+<!DOCTYPE html>
+<html lang="es">
 
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calendario Reservas — Cabañas Mariscadero</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --ocean: #1a6b8a;
+            --ocean-lt: #2a9bc4;
+            --sand: #fdf8f0;
+            --gold: #f0c070;
+            --night: #0d2035;
+            --gris: #5a6a7a;
+            --borde: #e2eaf0;
+            --blanco: #ffffff;
+            --rojo: #e53e3e;
+            --rojo-lt: #fff5f5;
+            --verde: #38a169;
+            --verde-lt: #f0fff4;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--sand);
+            color: var(--night);
+        }
+
+        /* ── LOGIN ── */
+        .login-wrap {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--night), var(--ocean));
+        }
+
+        .login-box {
+            background: var(--blanco);
+            border-radius: 20px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, .4);
+            text-align: center;
+        }
+
+        .login-logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--ocean), var(--ocean-lt));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.2rem;
+            font-size: 1.6rem;
+            color: var(--blanco);
+        }
+
+        .login-box h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: .3rem;
+        }
+
+        .login-box p {
+            color: var(--gris);
+            font-size: .88rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: .75rem 1rem;
+            border: 2px solid var(--borde);
+            border-radius: 10px;
+            font-size: .95rem;
+            font-family: inherit;
+            margin-bottom: 1rem;
+            outline: none;
+            transition: border-color .2s;
+        }
+
+        .login-input:focus {
+            border-color: var(--ocean);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: .8rem;
+            background: linear-gradient(135deg, var(--ocean), var(--ocean-lt));
+            color: var(--blanco);
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity .2s;
+        }
+
+        .login-btn:hover {
+            opacity: .9;
+        }
+
+        .login-error {
+            color: var(--rojo);
+            font-size: .82rem;
+            margin-top: .5rem;
+            display: none;
+        }
+
+        /* ── NAV ── */
+        .panel-nav {
+            background: var(--night);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .panel-brand {
+            color: var(--gold);
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, .6);
+            text-decoration: none;
+            font-size: .85rem;
+            transition: color .2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, .1);
+            color: var(--blanco);
+            border: 1px solid rgba(255, 255, 255, .2);
+            border-radius: 50px;
+            padding: .35rem 1rem;
+            font-size: .82rem;
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, .2);
+        }
+
+        /* ── PANEL ── */
+        .panel-wrap {
+            display: none;
+        }
+
+        .panel-body {
+            max-width: 100%;
+            padding: 1.5rem 2rem;
+        }
+
+        .panel-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            margin-bottom: .3rem;
+        }
+
+        .panel-sub {
+            color: var(--gris);
+            font-size: .9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* ── LEYENDA ── */
+        .leyenda {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            align-items: center;
+        }
+
+        .leyenda-item {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            font-size: .82rem;
+        }
+
+        .leyenda-box {
+            width: 24px;
+            height: 24px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .75rem;
+            font-weight: 700;
+        }
+
+        .box-libre {
+            background: var(--verde-lt);
+            border: 1px solid #c6f6d5;
+            color: var(--verde);
+        }
+
+        .box-ocup {
+            background: var(--rojo-lt);
+            border: 1px solid #fed7d7;
+            color: var(--rojo);
+        }
+
+        .box-hoy {
+            background: #ebf8ff;
+            border: 1px solid #90cdf4;
+            color: var(--ocean);
+        }
+
+        /* ── SELECTOR AÑO / MES ── */
+        .controles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .75rem;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .controles select,
+        .controles button {
+            padding: .5rem 1rem;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: .9rem;
+            cursor: pointer;
+            border: 2px solid var(--borde);
+            background: var(--blanco);
+            transition: border-color .2s;
+        }
+
+        .controles select:focus {
+            border-color: var(--ocean);
+            outline: none;
+        }
+
+        .btn-actualizar {
+            background: var(--ocean) !important;
+            color: var(--blanco) !important;
+            border-color: var(--ocean) !important;
+            font-weight: 600;
+        }
+
+        .btn-actualizar:hover {
+            opacity: .85;
+        }
+
+        .btn-hoy {
+            background: var(--gold) !important;
+            border-color: var(--gold) !important;
+            color: var(--night) !important;
+            font-weight: 600;
+        }
+
+        /* ── TABLA CALENDARIO ── */
+        .cal-wrapper {
+            overflow-x: auto;
+            border-radius: 16px;
+            border: 1px solid var(--borde);
+            background: var(--blanco);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, .06);
+        }
+
+        table.cal {
+            border-collapse: collapse;
+            min-width: 600px;
+            width: 100%;
+            font-size: .78rem;
+        }
+
+        /* cabecera cabañas */
+        table.cal thead th {
+            background: var(--night);
+            color: var(--gold);
+            font-weight: 700;
+            text-align: center;
+            padding: .7rem .4rem;
+            white-space: nowrap;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        table.cal thead th:first-child {
+            background: var(--night);
+            min-width: 100px;
+            text-align: left;
+            padding-left: 1rem;
+        }
+
+        /* filas de mes */
+        tr.mes-header td {
+            background: linear-gradient(90deg, var(--ocean), var(--ocean-lt));
+            color: var(--blanco);
+            font-weight: 700;
+            font-size: .8rem;
+            padding: .45rem 1rem;
+            letter-spacing: .05em;
+            text-transform: uppercase;
+        }
+
+        /* filas de días */
+        table.cal tbody tr.dia-row td {
+            padding: .3rem .4rem;
+            border-bottom: 1px solid #f0f4f7;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        table.cal tbody tr.dia-row td:first-child {
+            text-align: left;
+            padding-left: 1rem;
+            white-space: nowrap;
+            color: var(--gris);
+            font-size: .75rem;
+            min-width: 100px;
+        }
+
+        table.cal tbody tr.dia-row:hover td {
+            background: #f7fbff;
+        }
+
+        /* fila hoy */
+        tr.dia-hoy td:first-child {
+            color: var(--ocean) !important;
+            font-weight: 700;
+        }
+
+        tr.dia-hoy td {
+            background: #ebf8ff !important;
+        }
+
+        /* celdas de cabaña */
+        .celda {
+            width: 36px;
+            height: 28px;
+            border-radius: 5px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: .8rem;
+            cursor: default;
+            transition: transform .15s;
+        }
+
+        .celda:hover {
+            transform: scale(1.15);
+        }
+
+        .celda.libre {
+            background: var(--verde-lt);
+            color: #c6f6d5;
+        }
+
+        .celda.ocup {
+            background: var(--rojo-lt);
+            color: var(--rojo);
+        }
+
+        .celda.ocup.primera {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            background: #fed7d7;
+        }
+
+        .celda.ocup.ultima {
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .celda.hoy {
+            outline: 2px solid var(--ocean);
+        }
+
+        /* tooltip */
+        .celda[title] {
+            cursor: pointer;
+        }
+
+        /* ── LOADING ── */
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(13, 32, 53, .7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, .2);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin .8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ── RESPONSIVE ── */
+        @media(max-width:600px) {
+            .panel-body {
+                padding: 1rem;
+            }
+
+            table.cal {
+                font-size: .7rem;
+            }
+
+            .celda {
+                width: 26px;
+                height: 22px;
+                font-size: .68rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- ── LOGIN ── -->
+    <div class="login-wrap" id="loginWrap">
+        <div class="login-box">
+            <div class="login-logo"><i class="bi bi-calendar2-week-fill"></i></div>
+            <h2>Calendario de Reservas</h2>
+            <p>Cabañas Mariscadero — Panel de administración</p>
+            <input type="password" class="login-input" id="loginPass" placeholder="Contraseña"
+                onkeydown="if(event.key==='Enter') doLogin()" />
+            <button class="login-btn" onclick="doLogin()">Ver calendario</button>
+            <p class="login-error" id="loginError">⚠️ Contraseña incorrecta</p>
+            <p style="font-size:.75rem;color:#aaa;margin-top:1.5rem;">🔒 Solo para administradores</p>
+        </div>
+    </div>
+
+    <!-- ── PANEL ── -->
+    <div class="panel-wrap" id="panelWrap">
+        <nav class="panel-nav">
+            <div class="panel-brand">🏠 Cabañas Mariscadero</div>
+            <div class="nav-links">
+                <a href="index.html" target="_blank"><i class="bi bi-box-arrow-up-right"></i> Página</a>
+                <a href="Disponibildad.html"><i class="bi bi-grid-fill"></i> Panel admin</a>
+                <button class="logout-btn" onclick="doLogout()"><i class="bi bi-box-arrow-left"></i> Salir</button>
+            </div>
+        </nav>
+
+        <div class="panel-body">
+            <h1 class="panel-title"><i class="bi bi-calendar3" style="color:var(--ocean)"></i> Calendario anual de
+                reservas</h1>
+            <p class="panel-sub">Vista de todo el año. Las celdas ✓ muestran días reservados por cabaña. Se actualiza
+                desde la nube automáticamente.</p>
+
+            <!-- Controles -->
+            <div class="controles">
+                <label style="font-weight:600;font-size:.9rem;">Año:</label>
+                <select id="selAnio"></select>
+                <label style="font-weight:600;font-size:.9rem;">Mes:</label>
+                <select id="selMes">
+                    <option value="0">Todo el año</option>
+                    <option value="1">Enero</option>
+                    <option value="2">Febrero</option>
+                    <option value="3">Marzo</option>
+                    <option value="4">Abril</option>
+                    <option value="5">Mayo</option>
+                    <option value="6">Junio</option>
+                    <option value="7">Julio</option>
+                    <option value="8">Agosto</option>
+                    <option value="9">Septiembre</option>
+                    <option value="10">Octubre</option>
+                    <option value="11">Noviembre</option>
+                    <option value="12">Diciembre</option>
+                </select>
+                <button class="btn-actualizar" onclick="recargar()"><i class="bi bi-arrow-clockwise"></i>
+                    Actualizar</button>
+                <button class="btn-hoy" onclick="irAHoy()"><i class="bi bi-calendar-check"></i> Ir a hoy</button>
+            </div>
+
+            <!-- Leyenda -->
+            <div class="leyenda">
+                <div class="leyenda-item">
+                    <div class="leyenda-box box-ocup">✓</div><span>Día reservado</span>
+                </div>
+                <div class="leyenda-item">
+                    <div class="leyenda-box box-libre"></div><span>Día libre</span>
+                </div>
+                <div class="leyenda-item">
+                    <div class="leyenda-box box-hoy">●</div><span>Hoy</span>
+                </div>
+            </div>
+
+            <!-- Calendario -->
+            <div class="cal-wrapper" id="calWrapper">
+                <p style="padding:2rem;color:var(--gris)">Cargando calendario...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ── CONFIG ──
+        const ADMIN_PASS = 'mariscadero2025';
+        const PANTRY_ID = '6117a5bf-8250-4cae-a652-cdf866b37961';
+        const BASKET_NAME = 'reservas';
+        const API_URL = `https://getpantry.cloud/apiv1/pantry/${PANTRY_ID}/basket/${BASKET_NAME}`;
+
+        const MESES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+        const DIAS_S = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+
+        let reservasData = {};
+        const hoy = new Date();
+        const hoyStr = isoDate(hoy);
+
+        // ── HELPERS ──
+        function isoDate(d) {
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        }
+
+        function diasEnMes(anio, mes) { // mes 1-based
+            return new Date(anio, mes, 0).getDate();
+        }
+
+        function showLoading(v) {
+            document.getElementById('loadingOverlay').style.display = v ? 'flex' : 'none';
+        }
+
+        // ── LOGIN ──
+        function doLogin() {
+            if (document.getElementById('loginPass').value === ADMIN_PASS) {
+                document.getElementById('loginWrap').style.display = 'none';
+                document.getElementById('panelWrap').style.display = 'block';
+                iniciarPanel();
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        }
+
+        function doLogout() {
+            document.getElementById('loginWrap').style.display = 'flex';
+            document.getElementById('panelWrap').style.display = 'none';
+            document.getElementById('loginPass').value = '';
+        }
+
+        // ── INIT ──
+        function iniciarPanel() {
+            // Llenar selector de años (año actual ± 2)
+            const selAnio = document.getElementById('selAnio');
+            const anioActual = hoy.getFullYear();
+            for (let a = anioActual - 1; a <= anioActual + 2; a++) {
+                const opt = document.createElement('option');
+                opt.value = a;
+                opt.textContent = a;
+                if (a === anioActual) opt.selected = true;
+                selAnio.appendChild(opt);
+            }
+            // Mes actual por defecto
+            document.getElementById('selMes').value = hoy.getMonth() + 1;
+            cargarYRenderizar();
+        }
+
+        async function cargarYRenderizar() {
+            showLoading(true);
+            try {
+                const res = await fetch(API_URL);
+                reservasData = await res.json() || {};
+            } catch (e) {
+                console.error('Error Pantry:', e);
+                reservasData = {};
+            }
+            renderCalendario();
+            showLoading(false);
+        }
+
+        function recargar() { cargarYRenderizar(); }
+
+        function irAHoy() {
+            document.getElementById('selAnio').value = hoy.getFullYear();
+            document.getElementById('selMes').value = hoy.getMonth() + 1;
+            cargarYRenderizar();
+            setTimeout(() => {
+                const el = document.getElementById('fila-' + hoyStr);
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 400);
+        }
+
+        // ── LÓGICA RESERVAS ──
+        // Construye un Set con strings "YYYY-MM-DD|cabana" reservadas
+        function buildReservasSet() {
+            const set = new Set();
+            // Map: "YYYY-MM-DD|cabana" -> {nombre, llegada, salida}
+            const info = {};
+
+            for (let cab = 1; cab <= 7; cab++) {
+                const lista = reservasData[cab] || reservasData[String(cab)] || [];
+                for (const r of lista) {
+                    // Iterar día a día entre llegada (inclusive) y salida (exclusive)
+                    let cur = new Date(r.llegada + 'T00:00:00');
+                    const fin = new Date(r.salida + 'T00:00:00');
+                    while (cur < fin) {
+                        const key = isoDate(cur) + '|' + cab;
+                        set.add(key);
+                        info[key] = { nombre: r.nombre, llegada: r.llegada, salida: r.salida };
+                        cur.setDate(cur.getDate() + 1);
+                    }
+                }
+            }
+            return { set, info };
+        }
+
+        // ── RENDER ──
+        function renderCalendario() {
+            const anio = parseInt(document.getElementById('selAnio').value);
+            const mesSel = parseInt(document.getElementById('selMes').value); // 0 = todo el año
+
+            const { set: resSet, info: resInfo } = buildReservasSet();
+
+            // Rango de meses a mostrar
+            const mesInicio = mesSel === 0 ? 1 : mesSel;
+            const mesFin = mesSel === 0 ? 12 : mesSel;
+
+            let html = '<table class="cal"><thead><tr>';
+            html += '<th>Fecha</th>';
+            for (let c = 1; c <= 7; c++) html += `<th>🏠 N°${c}</th>`;
+            html += '</tr></thead><tbody>';
+
+            for (let mes = mesInicio; mes <= mesFin; mes++) {
+                // Fila de mes
+                html += `<tr class="mes-header"><td colspan="8">📅 ${MESES[mes - 1]} ${anio}</td></tr>`;
+
+                const ndias = diasEnMes(anio, mes);
+                for (let d = 1; d <= ndias; d++) {
+                    const fecha = `${anio}-${String(mes).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                    const diasem = new Date(fecha + 'T00:00:00').getDay();
+                    const esHoy = fecha === hoyStr;
+                    const esFinde = diasem === 0 || diasem === 6;
+
+                    html += `<tr class="dia-row${esHoy ? ' dia-hoy' : ''}" id="fila-${fecha}">`;
+                    html += `<td style="${esFinde ? 'color:#d97706;font-weight:600' : ''}">`;
+                    html += `${DIAS_S[diasem]} ${d}`;
+                    if (esHoy) html += ' <span style="font-size:.65rem;background:var(--ocean);color:#fff;border-radius:4px;padding:1px 5px;margin-left:2px">HOY</span>';
+                    html += '</td>';
+
+                    for (let cab = 1; cab <= 7; cab++) {
+                        const key = fecha + '|' + cab;
+                        const ocupado = resSet.has(key);
+                        const inf = resInfo[key];
+
+                        // Detectar si es primera o última noche del bloque
+                        const keyPrev = prevDate(fecha) + '|' + cab;
+                        const keyNext = nextDate(fecha) + '|' + cab;
+                        const esPrimera = ocupado && !resSet.has(keyPrev);
+                        const esUltima = ocupado && !resSet.has(keyNext);
+
+                        let clases = 'celda ' + (ocupado ? 'ocup' : 'libre');
+                        if (esPrimera) clases += ' primera';
+                        if (esUltima) clases += ' ultima';
+                        if (esHoy) clases += ' hoy';
+
+                        const titulo = ocupado && inf
+                            ? `${inf.nombre} | ${fmt(inf.llegada)} → ${fmt(inf.salida)}`
+                            : '';
+
+                        html += `<td><div class="${clases}"${titulo ? ` title="${titulo}"` : ''}>`;
+                        html += ocupado ? '✓' : '';
+                        html += '</div></td>';
+                    }
+                    html += '</tr>';
+                }
+            }
+
+            html += '</tbody></table>';
+            document.getElementById('calWrapper').innerHTML = html;
+        }
+
+        function prevDate(iso) {
+            const d = new Date(iso + 'T00:00:00');
+            d.setDate(d.getDate() - 1);
+            return isoDate(d);
+        }
+        function nextDate(iso) {
+            const d = new Date(iso + 'T00:00:00');
+            d.setDate(d.getDate() + 1);
+            return isoDate(d);
+        }
+        function fmt(f) {
+            if (!f) return '';
+            const [y, m, d] = f.split('-');
+            return `${d}/${m}/${y}`;
+        }
+    </script>
+</body>
+
+</html>

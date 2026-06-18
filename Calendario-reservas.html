@@ -140,11 +140,17 @@
       font-weight: 700; padding-top: 5px;
     }
     .celda-ocup .c-nombre { font-weight: 700; font-size: .72rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 110px; }
+    .celda-ocup .c-hora   { font-size: .65rem; color: #744210; font-weight: 600; margin-top: 1px; }
     .celda-ocup .c-personas { color: #744210; font-size: .64rem; }
     .celda-ocup .c-pagos { display: flex; flex-direction: column; gap: 1px; margin-top: 2px; }
     .celda-ocup .c-pago { font-size: .62rem; color: #553c1a; }
+    .celda-ocup.primera .c-hora,
     .celda-ocup.primera .c-personas,
     .celda-ocup.primera .c-pago { color: rgba(255,255,255,.85); }
+    .c-hora-salida {
+      font-size: .65rem; font-weight: 700; color: var(--rojo);
+      text-align: center; padding: 4px 2px;
+    }
 
     /* Hoy */
     .celda-libre.hoy, .celda-ocup.hoy { outline: 2px solid var(--ocean); }
@@ -333,10 +339,13 @@
         var r = lista[i];
         var cur = new Date(r.llegada + 'T12:00:00');
         var fin = new Date(r.salida  + 'T12:00:00');
+        // Calcular último día (salida - 1 día)
+        var ultimo = new Date(fin); ultimo.setDate(ultimo.getDate() - 1);
+        var ultimoStr = toISO(ultimo);
         var primera = true;
         while (cur < fin) {
           var key = toISO(cur) + '|' + cab;
-          map[key] = { r: r, primera: primera };
+          map[key] = { r: r, primera: primera, ultima: toISO(cur) === ultimoStr };
           primera = false;
           cur.setDate(cur.getDate() + 1);
         }
@@ -401,14 +410,18 @@
             var clases = 'celda-ocup' + (info.primera ? ' primera' : '') + (esHoy ? ' hoy' : '');
             html += '<td><div class="' + clases + '">';
             if (info.primera) {
-              // Primera fila: mostrar todo
+              // Primera fila: nombre, personas, pagos y hora de llegada
               html += '<div class="c-nombre">👤 ' + r.nombre + '</div>';
+              if (r.horaLlegada) html += '<div class="c-hora">🕐 Entrada: ' + r.horaLlegada + '</div>';
               html += '<div class="c-personas">👥 ' + (r.personas || '—') + ' personas</div>';
               html += '<div class="c-pagos">';
               if (r.deposito) html += '<div class="c-pago">🏦 Dep: ' + fmtPeso(r.deposito) + '</div>';
               if (r.abono)    html += '<div class="c-pago">💵 Abono: ' + fmtPeso(r.abono) + '</div>';
               if (r.efectivo) html += '<div class="c-pago">💰 Efect: ' + fmtPeso(r.efectivo) + '</div>';
               html += '</div>';
+            } else if (info.ultima) {
+              // Última fila: solo hora de salida
+              if (r.horaSalida) html += '<div class="c-hora-salida">🕛 Salida: ' + r.horaSalida + '</div>';
             }
             html += '</div></td>';
           }

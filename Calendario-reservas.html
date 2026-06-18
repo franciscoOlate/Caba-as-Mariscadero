@@ -1,733 +1,425 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Calendario Reservas — Cabañas Mariscadero</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap"
-        rel="stylesheet" />
-    <style>
-        :root {
-            --ocean: #1a6b8a;
-            --ocean-lt: #2a9bc4;
-            --sand: #fdf8f0;
-            --gold: #f0c070;
-            --night: #0d2035;
-            --gris: #5a6a7a;
-            --borde: #e2eaf0;
-            --blanco: #ffffff;
-            --rojo: #e53e3e;
-            --rojo-lt: #fff5f5;
-            --verde: #38a169;
-            --verde-lt: #f0fff4;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calendario Reservas — Cabañas Mariscadero</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ocean: #1a6b8a; --ocean-lt: #2a9bc4; --sand: #fdf8f0;
+      --gold: #f0c070; --night: #0d2035; --gris: #5a6a7a;
+      --borde: #e2eaf0; --blanco: #ffffff; --rojo: #e53e3e;
+      --rojo-lt: #fff5f5; --verde: #38a169; --verde-lt: #f0fff4;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: var(--sand); color: var(--night); }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+    /* LOGIN */
+    .login-wrap {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, var(--night), var(--ocean));
+    }
+    .login-box {
+      background: var(--blanco); border-radius: 20px; padding: 2.5rem;
+      width: 100%; max-width: 380px; box-shadow: 0 30px 80px rgba(0,0,0,.4); text-align: center;
+    }
+    .login-logo {
+      width: 60px; height: 60px;
+      background: linear-gradient(135deg, var(--ocean), var(--ocean-lt));
+      border-radius: 14px; display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.2rem; font-size: 1.6rem; color: var(--blanco);
+    }
+    .login-box h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: .3rem; }
+    .login-box p  { color: var(--gris); font-size: .88rem; margin-bottom: 1.5rem; }
+    .login-input {
+      width: 100%; padding: .75rem 1rem; border: 2px solid var(--borde); border-radius: 10px;
+      font-size: .95rem; font-family: inherit; margin-bottom: 1rem; outline: none; transition: border-color .2s;
+    }
+    .login-input:focus { border-color: var(--ocean); }
+    .login-btn {
+      width: 100%; padding: .8rem;
+      background: linear-gradient(135deg, var(--ocean), var(--ocean-lt));
+      color: var(--blanco); border: none; border-radius: 10px;
+      font-size: 1rem; font-weight: 600; cursor: pointer;
+    }
+    .login-btn:hover { opacity: .9; }
+    .login-error { color: var(--rojo); font-size: .82rem; margin-top: .5rem; display: none; }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--sand);
-            color: var(--night);
-        }
+    /* NAV */
+    .panel-nav {
+      background: var(--night); padding: 1rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .panel-brand { color: var(--gold); font-family: 'Playfair Display', serif; font-size: 1.1rem; }
+    .nav-links { display: flex; align-items: center; gap: 1rem; }
+    .nav-links a { color: rgba(255,255,255,.6); text-decoration: none; font-size: .85rem; transition: color .2s; }
+    .nav-links a:hover { color: var(--gold); }
+    .logout-btn {
+      background: rgba(255,255,255,.1); color: var(--blanco);
+      border: 1px solid rgba(255,255,255,.2); border-radius: 50px;
+      padding: .35rem 1rem; font-size: .82rem; cursor: pointer;
+    }
 
-        /* ── LOGIN ── */
-        .login-wrap {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, var(--night), var(--ocean));
-        }
+    /* PANEL */
+    .panel-wrap { display: none; }
+    .panel-body { padding: 1.5rem 2rem; }
+    .panel-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: .3rem; }
+    .panel-sub   { color: var(--gris); font-size: .9rem; margin-bottom: 1.5rem; }
 
-        .login-box {
-            background: var(--blanco);
-            border-radius: 20px;
-            padding: 2.5rem;
-            width: 100%;
-            max-width: 380px;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, .4);
-            text-align: center;
-        }
+    /* CONTROLES */
+    .controles { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; margin-bottom: 1.5rem; }
+    .controles select, .controles button {
+      padding: .5rem 1rem; border-radius: 8px; font-family: inherit;
+      font-size: .9rem; cursor: pointer; border: 2px solid var(--borde); background: var(--blanco);
+    }
+    .btn-actualizar { background: var(--ocean)!important; color: #fff!important; border-color: var(--ocean)!important; font-weight: 600; }
+    .btn-hoy        { background: var(--gold)!important; color: var(--night)!important; border-color: var(--gold)!important; font-weight: 600; }
 
-        .login-logo {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--ocean), var(--ocean-lt));
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.2rem;
-            font-size: 1.6rem;
-            color: var(--blanco);
-        }
+    /* LEYENDA */
+    .leyenda { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; align-items: center; }
+    .leyenda-item { display: flex; align-items: center; gap: .4rem; font-size: .82rem; }
+    .leyenda-box { width: 22px; height: 22px; border-radius: 4px; border: 1px solid #ddd; }
+    .box-libre { background: var(--verde-lt); border-color: #c6f6d5; }
+    .box-ocup  { background: #fed7d7; border-color: #fc8181; }
+    .box-hoy   { background: #ebf8ff; border: 2px solid var(--ocean); }
 
-        .login-box h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            margin-bottom: .3rem;
-        }
+    /* TABLA */
+    .cal-wrapper { overflow-x: auto; border-radius: 16px; border: 1px solid var(--borde); background: var(--blanco); box-shadow: 0 4px 20px rgba(0,0,0,.06); }
 
-        .login-box p {
-            color: var(--gris);
-            font-size: .88rem;
-            margin-bottom: 1.5rem;
-        }
+    table.cal { border-collapse: collapse; width: 100%; }
 
-        .login-input {
-            width: 100%;
-            padding: .75rem 1rem;
-            border: 2px solid var(--borde);
-            border-radius: 10px;
-            font-size: .95rem;
-            font-family: inherit;
-            margin-bottom: 1rem;
-            outline: none;
-            transition: border-color .2s;
-        }
+    /* Cabecera fija */
+    table.cal thead th {
+      background: var(--night); color: var(--gold); font-weight: 700;
+      text-align: center; padding: .7rem .5rem; white-space: nowrap;
+      position: sticky; top: 0; z-index: 10; min-width: 130px;
+    }
+    table.cal thead th:first-child { min-width: 90px; text-align: left; padding-left: 1rem; }
 
-        .login-input:focus {
-            border-color: var(--ocean);
-        }
+    /* Fila mes */
+    tr.mes-header td {
+      background: linear-gradient(90deg, var(--ocean), var(--ocean-lt));
+      color: #fff; font-weight: 700; font-size: .8rem;
+      padding: .5rem 1rem; text-transform: uppercase; letter-spacing: .05em;
+    }
 
-        .login-btn {
-            width: 100%;
-            padding: .8rem;
-            background: linear-gradient(135deg, var(--ocean), var(--ocean-lt));
-            color: var(--blanco);
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: opacity .2s;
-        }
+    /* Filas días */
+    tr.dia-row td {
+      border-bottom: 1px solid #f0f4f7;
+      vertical-align: top; padding: 3px;
+    }
+    tr.dia-row td:first-child {
+      text-align: left; padding-left: 1rem; padding-top: 6px;
+      white-space: nowrap; color: var(--gris); font-size: .75rem;
+      vertical-align: middle; min-width: 90px;
+    }
+    tr.dia-row:hover td { background: #f7fbff; }
+    tr.dia-hoy td { background: #ebf8ff!important; }
+    tr.dia-hoy td:first-child { color: var(--ocean)!important; font-weight: 700; }
 
-        .login-btn:hover {
-            opacity: .9;
-        }
+    /* Celda vacía */
+    .celda-libre {
+      height: 32px; border-radius: 6px;
+      background: var(--verde-lt); border: 1px solid #c6f6d5;
+    }
 
-        .login-error {
-            color: var(--rojo);
-            font-size: .82rem;
-            margin-top: .5rem;
-            display: none;
-        }
+    /* Celda con reserva — GRANDE con info */
+    .celda-ocup {
+      border-radius: 6px;
+      background: #fed7d7; border: 1px solid #fc8181;
+      padding: 4px 6px; min-height: 32px;
+      font-size: .68rem; line-height: 1.3;
+      color: var(--night);
+    }
+    .celda-ocup.primera {
+      border-top-left-radius: 10px; border-top-right-radius: 10px;
+      background: #fc8181; color: #fff;
+      font-weight: 700; padding-top: 5px;
+    }
+    .celda-ocup .c-nombre { font-weight: 700; font-size: .72rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 110px; }
+    .celda-ocup .c-personas { color: #744210; font-size: .64rem; }
+    .celda-ocup .c-pagos { display: flex; flex-direction: column; gap: 1px; margin-top: 2px; }
+    .celda-ocup .c-pago { font-size: .62rem; color: #553c1a; }
+    .celda-ocup.primera .c-personas,
+    .celda-ocup.primera .c-pago { color: rgba(255,255,255,.85); }
 
-        /* ── NAV ── */
-        .panel-nav {
-            background: var(--night);
-            padding: 1rem 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+    /* Hoy */
+    .celda-libre.hoy, .celda-ocup.hoy { outline: 2px solid var(--ocean); }
 
-        .panel-brand {
-            color: var(--gold);
-            font-family: 'Playfair Display', serif;
-            font-size: 1.1rem;
-        }
+    /* LOADING */
+    .loading-overlay {
+      position: fixed; inset: 0; background: rgba(13,32,53,.7);
+      display: none; align-items: center; justify-content: center; z-index: 9999;
+    }
+    .loading-spinner {
+      width: 50px; height: 50px; border: 4px solid rgba(255,255,255,.2);
+      border-top-color: var(--gold); border-radius: 50%; animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
+    .error-box { background: #fff5f5; border: 1px solid #fed7d7; color: var(--rojo); padding: 1rem 1.5rem; border-radius: 10px; margin-bottom: 1rem; font-size: .88rem; }
 
-        .nav-links a {
-            color: rgba(255, 255, 255, .6);
-            text-decoration: none;
-            font-size: .85rem;
-            transition: color .2s;
-        }
-
-        .nav-links a:hover {
-            color: var(--gold);
-        }
-
-        .logout-btn {
-            background: rgba(255, 255, 255, .1);
-            color: var(--blanco);
-            border: 1px solid rgba(255, 255, 255, .2);
-            border-radius: 50px;
-            padding: .35rem 1rem;
-            font-size: .82rem;
-            cursor: pointer;
-            transition: all .2s;
-        }
-
-        .logout-btn:hover {
-            background: rgba(255, 255, 255, .2);
-        }
-
-        /* ── PANEL ── */
-        .panel-wrap {
-            display: none;
-        }
-
-        .panel-body {
-            max-width: 100%;
-            padding: 1.5rem 2rem;
-        }
-
-        .panel-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            margin-bottom: .3rem;
-        }
-
-        .panel-sub {
-            color: var(--gris);
-            font-size: .9rem;
-            margin-bottom: 1.5rem;
-        }
-
-        /* ── LEYENDA ── */
-        .leyenda {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            align-items: center;
-        }
-
-        .leyenda-item {
-            display: flex;
-            align-items: center;
-            gap: .5rem;
-            font-size: .82rem;
-        }
-
-        .leyenda-box {
-            width: 24px;
-            height: 24px;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: .75rem;
-            font-weight: 700;
-        }
-
-        .box-libre {
-            background: var(--verde-lt);
-            border: 1px solid #c6f6d5;
-            color: var(--verde);
-        }
-
-        .box-ocup {
-            background: var(--rojo-lt);
-            border: 1px solid #fed7d7;
-            color: var(--rojo);
-        }
-
-        .box-hoy {
-            background: #ebf8ff;
-            border: 1px solid #90cdf4;
-            color: var(--ocean);
-        }
-
-        /* ── SELECTOR AÑO / MES ── */
-        .controles {
-            display: flex;
-            flex-wrap: wrap;
-            gap: .75rem;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .controles select,
-        .controles button {
-            padding: .5rem 1rem;
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: .9rem;
-            cursor: pointer;
-            border: 2px solid var(--borde);
-            background: var(--blanco);
-            transition: border-color .2s;
-        }
-
-        .controles select:focus {
-            border-color: var(--ocean);
-            outline: none;
-        }
-
-        .btn-actualizar {
-            background: var(--ocean) !important;
-            color: var(--blanco) !important;
-            border-color: var(--ocean) !important;
-            font-weight: 600;
-        }
-
-        .btn-actualizar:hover {
-            opacity: .85;
-        }
-
-        .btn-hoy {
-            background: var(--gold) !important;
-            border-color: var(--gold) !important;
-            color: var(--night) !important;
-            font-weight: 600;
-        }
-
-        /* ── TABLA CALENDARIO ── */
-        .cal-wrapper {
-            overflow-x: auto;
-            border-radius: 16px;
-            border: 1px solid var(--borde);
-            background: var(--blanco);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, .06);
-        }
-
-        table.cal {
-            border-collapse: collapse;
-            min-width: 600px;
-            width: 100%;
-            font-size: .78rem;
-        }
-
-        /* cabecera cabañas */
-        table.cal thead th {
-            background: var(--night);
-            color: var(--gold);
-            font-weight: 700;
-            text-align: center;
-            padding: .7rem .4rem;
-            white-space: nowrap;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        table.cal thead th:first-child {
-            background: var(--night);
-            min-width: 100px;
-            text-align: left;
-            padding-left: 1rem;
-        }
-
-        /* filas de mes */
-        tr.mes-header td {
-            background: linear-gradient(90deg, var(--ocean), var(--ocean-lt));
-            color: var(--blanco);
-            font-weight: 700;
-            font-size: .8rem;
-            padding: .45rem 1rem;
-            letter-spacing: .05em;
-            text-transform: uppercase;
-        }
-
-        /* filas de días */
-        table.cal tbody tr.dia-row td {
-            padding: .3rem .4rem;
-            border-bottom: 1px solid #f0f4f7;
-            text-align: center;
-            vertical-align: middle;
-        }
-
-        table.cal tbody tr.dia-row td:first-child {
-            text-align: left;
-            padding-left: 1rem;
-            white-space: nowrap;
-            color: var(--gris);
-            font-size: .75rem;
-            min-width: 100px;
-        }
-
-        table.cal tbody tr.dia-row:hover td {
-            background: #f7fbff;
-        }
-
-        /* fila hoy */
-        tr.dia-hoy td:first-child {
-            color: var(--ocean) !important;
-            font-weight: 700;
-        }
-
-        tr.dia-hoy td {
-            background: #ebf8ff !important;
-        }
-
-        /* celdas de cabaña */
-        .celda {
-            width: 36px;
-            height: 28px;
-            border-radius: 5px;
-            margin: auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: .8rem;
-            cursor: default;
-            transition: transform .15s;
-        }
-
-        .celda:hover {
-            transform: scale(1.15);
-        }
-
-        .celda.libre {
-            background: var(--verde-lt);
-            color: #c6f6d5;
-        }
-
-        .celda.ocup {
-            background: var(--rojo-lt);
-            color: var(--rojo);
-        }
-
-        .celda.ocup.primera {
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-            background: #fed7d7;
-        }
-
-        .celda.ocup.ultima {
-            border-bottom-left-radius: 10px;
-            border-bottom-right-radius: 10px;
-        }
-
-        .celda.hoy {
-            outline: 2px solid var(--ocean);
-        }
-
-        /* tooltip */
-        .celda[title] {
-            cursor: pointer;
-        }
-
-        /* ── LOADING ── */
-        .loading-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(13, 32, 53, .7);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-        }
-
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid rgba(255, 255, 255, .2);
-            border-top-color: var(--gold);
-            border-radius: 50%;
-            animation: spin .8s linear infinite;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* ── RESPONSIVE ── */
-        @media(max-width:600px) {
-            .panel-body {
-                padding: 1rem;
-            }
-
-            table.cal {
-                font-size: .7rem;
-            }
-
-            .celda {
-                width: 26px;
-                height: 22px;
-                font-size: .68rem;
-            }
-        }
-    </style>
+    @media(max-width:700px) {
+      .panel-body { padding: 1rem; }
+      table.cal thead th { min-width: 90px; font-size: .72rem; }
+      .celda-ocup .c-nombre { max-width: 70px; }
+    }
+  </style>
 </head>
-
 <body>
 
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
+<div class="loading-overlay" id="loadingOverlay"><div class="loading-spinner"></div></div>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="loginWrap">
+  <div class="login-box">
+    <div class="login-logo"><i class="bi bi-calendar2-week-fill"></i></div>
+    <h2>Calendario de Reservas</h2>
+    <p>Cabañas Mariscadero — Panel administrador</p>
+    <input type="password" class="login-input" id="loginPass" placeholder="Contraseña"
+      onkeydown="if(event.key==='Enter') doLogin()" />
+    <button class="login-btn" onclick="doLogin()">Entrar</button>
+    <p class="login-error" id="loginError">⚠️ Contraseña incorrecta</p>
+    <p style="font-size:.75rem;color:#aaa;margin-top:1.5rem;">🔒 Solo para administradores</p>
+  </div>
+</div>
+
+<!-- PANEL -->
+<div class="panel-wrap" id="panelWrap">
+  <nav class="panel-nav">
+    <div class="panel-brand">🏠 Cabañas Mariscadero</div>
+    <div class="nav-links">
+      <a href="index.html" target="_blank"><i class="bi bi-house-fill"></i> Página web</a>
+      <a href="Disponibildad.html"><i class="bi bi-grid-fill"></i> Panel admin</a>
+      <button class="logout-btn" onclick="doLogout()"><i class="bi bi-box-arrow-left"></i> Salir</button>
+    </div>
+  </nav>
+
+  <div class="panel-body">
+    <h1 class="panel-title"><i class="bi bi-calendar3" style="color:var(--ocean)"></i> Calendario anual de reservas</h1>
+    <p class="panel-sub">Vista anual completa. Cada celda roja muestra nombre, personas y pagos de la reserva.</p>
+
+    <div id="errorBox" class="error-box" style="display:none"></div>
+
+    <div class="controles">
+      <label style="font-weight:600;font-size:.9rem;">Año:</label>
+      <select id="selAnio"></select>
+      <label style="font-weight:600;font-size:.9rem;">Mes:</label>
+      <select id="selMes">
+        <option value="0">Todo el año</option>
+        <option value="1">Enero</option><option value="2">Febrero</option>
+        <option value="3">Marzo</option><option value="4">Abril</option>
+        <option value="5">Mayo</option><option value="6">Junio</option>
+        <option value="7">Julio</option><option value="8">Agosto</option>
+        <option value="9">Septiembre</option><option value="10">Octubre</option>
+        <option value="11">Noviembre</option><option value="12">Diciembre</option>
+      </select>
+      <button class="btn-actualizar" onclick="recargar()"><i class="bi bi-arrow-clockwise"></i> Actualizar</button>
+      <button class="btn-hoy" onclick="irAHoy()"><i class="bi bi-calendar-check"></i> Ir a hoy</button>
     </div>
 
-    <!-- ── LOGIN ── -->
-    <div class="login-wrap" id="loginWrap">
-        <div class="login-box">
-            <div class="login-logo"><i class="bi bi-calendar2-week-fill"></i></div>
-            <h2>Calendario de Reservas</h2>
-            <p>Cabañas Mariscadero — Panel de administración</p>
-            <input type="password" class="login-input" id="loginPass" placeholder="Contraseña"
-                onkeydown="if(event.key==='Enter') doLogin()" />
-            <button class="login-btn" onclick="doLogin()">Ver calendario</button>
-            <p class="login-error" id="loginError">⚠️ Contraseña incorrecta</p>
-            <p style="font-size:.75rem;color:#aaa;margin-top:1.5rem;">🔒 Solo para administradores</p>
-        </div>
+    <div class="leyenda">
+      <div class="leyenda-item"><div class="leyenda-box box-ocup"></div><span>Reservado (con info visible)</span></div>
+      <div class="leyenda-item"><div class="leyenda-box box-libre"></div><span>Libre</span></div>
+      <div class="leyenda-item"><div class="leyenda-box box-hoy"></div><span>Hoy</span></div>
     </div>
 
-    <!-- ── PANEL ── -->
-    <div class="panel-wrap" id="panelWrap">
-        <nav class="panel-nav">
-            <div class="panel-brand">🏠 Cabañas Mariscadero</div>
-            <div class="nav-links">
-                <a href="index.html" target="_blank"><i class="bi bi-box-arrow-up-right"></i> Página</a>
-                <a href="Disponibildad.html"><i class="bi bi-grid-fill"></i> Panel admin</a>
-                <button class="logout-btn" onclick="doLogout()"><i class="bi bi-box-arrow-left"></i> Salir</button>
-            </div>
-        </nav>
-
-        <div class="panel-body">
-            <h1 class="panel-title"><i class="bi bi-calendar3" style="color:var(--ocean)"></i> Calendario anual de
-                reservas</h1>
-            <p class="panel-sub">Vista de todo el año. Las celdas ✓ muestran días reservados por cabaña. Se actualiza
-                desde la nube automáticamente.</p>
-
-            <!-- Controles -->
-            <div class="controles">
-                <label style="font-weight:600;font-size:.9rem;">Año:</label>
-                <select id="selAnio"></select>
-                <label style="font-weight:600;font-size:.9rem;">Mes:</label>
-                <select id="selMes">
-                    <option value="0">Todo el año</option>
-                    <option value="1">Enero</option>
-                    <option value="2">Febrero</option>
-                    <option value="3">Marzo</option>
-                    <option value="4">Abril</option>
-                    <option value="5">Mayo</option>
-                    <option value="6">Junio</option>
-                    <option value="7">Julio</option>
-                    <option value="8">Agosto</option>
-                    <option value="9">Septiembre</option>
-                    <option value="10">Octubre</option>
-                    <option value="11">Noviembre</option>
-                    <option value="12">Diciembre</option>
-                </select>
-                <button class="btn-actualizar" onclick="recargar()"><i class="bi bi-arrow-clockwise"></i>
-                    Actualizar</button>
-                <button class="btn-hoy" onclick="irAHoy()"><i class="bi bi-calendar-check"></i> Ir a hoy</button>
-            </div>
-
-            <!-- Leyenda -->
-            <div class="leyenda">
-                <div class="leyenda-item">
-                    <div class="leyenda-box box-ocup">✓</div><span>Día reservado</span>
-                </div>
-                <div class="leyenda-item">
-                    <div class="leyenda-box box-libre"></div><span>Día libre</span>
-                </div>
-                <div class="leyenda-item">
-                    <div class="leyenda-box box-hoy">●</div><span>Hoy</span>
-                </div>
-            </div>
-
-            <!-- Calendario -->
-            <div class="cal-wrapper" id="calWrapper">
-                <p style="padding:2rem;color:var(--gris)">Cargando calendario...</p>
-            </div>
-        </div>
+    <div class="cal-wrapper" id="calWrapper">
+      <p style="padding:2rem;color:var(--gris)">Cargando...</p>
     </div>
+  </div>
+</div>
 
-    <script>
-        // ── CONFIG ──
-        const ADMIN_PASS = 'mariscadero2025';
-        const PANTRY_ID = '6117a5bf-8250-4cae-a652-cdf866b37961';
-        const BASKET_NAME = 'reservas';
-        const API_URL = `https://getpantry.cloud/apiv1/pantry/${PANTRY_ID}/basket/${BASKET_NAME}`;
+<script>
+  var ADMIN_PASS  = 'mariscadero2025';
+  var PANTRY_ID   = '6117a5bf-8250-4cae-a652-cdf866b37961';
+  var BASKET_NAME = 'reservas';
+  var API_URL     = 'https://getpantry.cloud/apiv1/pantry/' + PANTRY_ID + '/basket/' + BASKET_NAME;
 
-        const MESES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-        const DIAS_S = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+  var MESES  = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  var DIAS_S = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+  var reservasData = {};
 
-        let reservasData = {};
-        const hoy = new Date();
-        const hoyStr = isoDate(hoy);
+  function toISO(d) {
+    var y = d.getFullYear();
+    var m = String(d.getMonth()+1).padStart(2,'0');
+    var dd = String(d.getDate()).padStart(2,'0');
+    return y + '-' + m + '-' + dd;
+  }
 
-        // ── HELPERS ──
-        function isoDate(d) {
-            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  function getHoy() { return toISO(new Date()); }
+
+  function showLoading(v) { document.getElementById('loadingOverlay').style.display = v ? 'flex' : 'none'; }
+
+  function showError(msg) {
+    var el = document.getElementById('errorBox');
+    el.style.display = msg ? 'block' : 'none';
+    el.textContent = msg || '';
+  }
+
+  function doLogin() {
+    if (document.getElementById('loginPass').value === ADMIN_PASS) {
+      document.getElementById('loginWrap').style.display = 'none';
+      document.getElementById('panelWrap').style.display = 'block';
+      iniciarPanel();
+    } else {
+      document.getElementById('loginError').style.display = 'block';
+    }
+  }
+
+  function doLogout() {
+    document.getElementById('loginWrap').style.display = 'flex';
+    document.getElementById('panelWrap').style.display = 'none';
+    document.getElementById('loginPass').value = '';
+  }
+
+  function iniciarPanel() {
+    var selAnio = document.getElementById('selAnio');
+    var anioActual = new Date().getFullYear();
+    for (var a = anioActual - 1; a <= anioActual + 2; a++) {
+      var opt = document.createElement('option');
+      opt.value = a; opt.textContent = a;
+      if (a === anioActual) opt.selected = true;
+      selAnio.appendChild(opt);
+    }
+    document.getElementById('selMes').value = new Date().getMonth() + 1;
+    cargarYRenderizar();
+  }
+
+  function cargarYRenderizar() {
+    showLoading(true); showError('');
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', API_URL, true);
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState !== 4) return;
+      if (xhr.status === 200) {
+        try { reservasData = JSON.parse(xhr.responseText) || {}; }
+        catch(e) { reservasData = {}; showError('⚠️ Error al leer datos.'); }
+      } else {
+        reservasData = {};
+        showError('⚠️ No se pudo conectar (' + xhr.status + '). Revisa tu conexión.');
+      }
+      renderCalendario();
+      showLoading(false);
+    };
+    xhr.onerror = function() {
+      reservasData = {}; showError('⚠️ Error de red.');
+      renderCalendario(); showLoading(false);
+    };
+    xhr.send();
+  }
+
+  function recargar() { cargarYRenderizar(); }
+
+  function irAHoy() {
+    document.getElementById('selAnio').value = new Date().getFullYear();
+    document.getElementById('selMes').value  = new Date().getMonth() + 1;
+    cargarYRenderizar();
+    setTimeout(function() {
+      var el = document.getElementById('fila-' + getHoy());
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 700);
+  }
+
+  // Construye mapa: "YYYY-MM-DD|cab" -> reserva completa
+  function buildReservasMap() {
+    var map = {};
+    for (var cab = 1; cab <= 7; cab++) {
+      var lista = reservasData[cab] || reservasData[String(cab)] || [];
+      for (var i = 0; i < lista.length; i++) {
+        var r = lista[i];
+        var cur = new Date(r.llegada + 'T12:00:00');
+        var fin = new Date(r.salida  + 'T12:00:00');
+        var primera = true;
+        while (cur < fin) {
+          var key = toISO(cur) + '|' + cab;
+          map[key] = { r: r, primera: primera };
+          primera = false;
+          cur.setDate(cur.getDate() + 1);
         }
+      }
+    }
+    return map;
+  }
 
-        function diasEnMes(anio, mes) { // mes 1-based
-            return new Date(anio, mes, 0).getDate();
-        }
+  function fmt(f) {
+    if (!f) return '';
+    var p = f.split('-');
+    return p[2] + '/' + p[1] + '/' + p[0];
+  }
 
-        function showLoading(v) {
-            document.getElementById('loadingOverlay').style.display = v ? 'flex' : 'none';
-        }
+  function fmtPeso(n) {
+    if (!n) return '';
+    return '$' + Number(n).toLocaleString('es-CL');
+  }
 
-        // ── LOGIN ──
-        function doLogin() {
-            if (document.getElementById('loginPass').value === ADMIN_PASS) {
-                document.getElementById('loginWrap').style.display = 'none';
-                document.getElementById('panelWrap').style.display = 'block';
-                iniciarPanel();
-            } else {
-                document.getElementById('loginError').style.display = 'block';
+  function diasEnMes(anio, mes) { return new Date(anio, mes, 0).getDate(); }
+
+  function renderCalendario() {
+    var anio   = parseInt(document.getElementById('selAnio').value, 10);
+    var mesSel = parseInt(document.getElementById('selMes').value, 10);
+    var hoyStr = getHoy();
+    var resMap = buildReservasMap();
+
+    var mesInicio = mesSel === 0 ? 1  : mesSel;
+    var mesFin    = mesSel === 0 ? 12 : mesSel;
+
+    var html = '<table class="cal"><thead><tr><th>Fecha</th>';
+    for (var c = 1; c <= 7; c++) html += '<th>🏠 Cabaña N°' + c + '</th>';
+    html += '</tr></thead><tbody>';
+
+    for (var mes = mesInicio; mes <= mesFin; mes++) {
+      html += '<tr class="mes-header"><td colspan="8">📅 ' + MESES[mes-1] + ' ' + anio + '</td></tr>';
+      var ndias = diasEnMes(anio, mes);
+
+      for (var d = 1; d <= ndias; d++) {
+        var mm    = String(mes).padStart(2,'0');
+        var dd    = String(d).padStart(2,'0');
+        var fecha = anio + '-' + mm + '-' + dd;
+        var diasem = new Date(fecha + 'T12:00:00').getDay();
+        var esHoy  = fecha === hoyStr;
+        var esFinde = diasem === 0 || diasem === 6;
+
+        html += '<tr class="dia-row' + (esHoy ? ' dia-hoy' : '') + '" id="fila-' + fecha + '">';
+        html += '<td style="' + (esFinde ? 'color:#d97706;font-weight:600' : '') + '">';
+        html += DIAS_S[diasem] + ' ' + d;
+        if (esHoy) html += ' <span style="font-size:.58rem;background:var(--ocean);color:#fff;border-radius:4px;padding:1px 4px">HOY</span>';
+        html += '</td>';
+
+        for (var cab = 1; cab <= 7; cab++) {
+          var key  = fecha + '|' + cab;
+          var info = resMap[key];
+
+          if (!info) {
+            // Libre
+            html += '<td><div class="celda-libre' + (esHoy ? ' hoy' : '') + '"></div></td>';
+          } else {
+            var r = info.r;
+            var clases = 'celda-ocup' + (info.primera ? ' primera' : '') + (esHoy ? ' hoy' : '');
+            html += '<td><div class="' + clases + '">';
+            if (info.primera) {
+              // Primera fila: mostrar todo
+              html += '<div class="c-nombre">👤 ' + r.nombre + '</div>';
+              html += '<div class="c-personas">👥 ' + (r.personas || '—') + ' personas</div>';
+              html += '<div class="c-pagos">';
+              if (r.deposito) html += '<div class="c-pago">🏦 Dep: ' + fmtPeso(r.deposito) + '</div>';
+              if (r.abono)    html += '<div class="c-pago">💵 Abono: ' + fmtPeso(r.abono) + '</div>';
+              if (r.efectivo) html += '<div class="c-pago">💰 Efect: ' + fmtPeso(r.efectivo) + '</div>';
+              html += '</div>';
             }
+            html += '</div></td>';
+          }
         }
+        html += '</tr>';
+      }
+    }
 
-        function doLogout() {
-            document.getElementById('loginWrap').style.display = 'flex';
-            document.getElementById('panelWrap').style.display = 'none';
-            document.getElementById('loginPass').value = '';
-        }
-
-        // ── INIT ──
-        function iniciarPanel() {
-            // Llenar selector de años (año actual ± 2)
-            const selAnio = document.getElementById('selAnio');
-            const anioActual = hoy.getFullYear();
-            for (let a = anioActual - 1; a <= anioActual + 2; a++) {
-                const opt = document.createElement('option');
-                opt.value = a;
-                opt.textContent = a;
-                if (a === anioActual) opt.selected = true;
-                selAnio.appendChild(opt);
-            }
-            // Mes actual por defecto
-            document.getElementById('selMes').value = hoy.getMonth() + 1;
-            cargarYRenderizar();
-        }
-
-        async function cargarYRenderizar() {
-            showLoading(true);
-            try {
-                const res = await fetch(API_URL);
-                reservasData = await res.json() || {};
-            } catch (e) {
-                console.error('Error Pantry:', e);
-                reservasData = {};
-            }
-            renderCalendario();
-            showLoading(false);
-        }
-
-        function recargar() { cargarYRenderizar(); }
-
-        function irAHoy() {
-            document.getElementById('selAnio').value = hoy.getFullYear();
-            document.getElementById('selMes').value = hoy.getMonth() + 1;
-            cargarYRenderizar();
-            setTimeout(() => {
-                const el = document.getElementById('fila-' + hoyStr);
-                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 400);
-        }
-
-        // ── LÓGICA RESERVAS ──
-        // Construye un Set con strings "YYYY-MM-DD|cabana" reservadas
-        function buildReservasSet() {
-            const set = new Set();
-            // Map: "YYYY-MM-DD|cabana" -> {nombre, llegada, salida}
-            const info = {};
-
-            for (let cab = 1; cab <= 7; cab++) {
-                const lista = reservasData[cab] || reservasData[String(cab)] || [];
-                for (const r of lista) {
-                    // Iterar día a día entre llegada (inclusive) y salida (exclusive)
-                    let cur = new Date(r.llegada + 'T00:00:00');
-                    const fin = new Date(r.salida + 'T00:00:00');
-                    while (cur < fin) {
-                        const key = isoDate(cur) + '|' + cab;
-                        set.add(key);
-                        info[key] = { nombre: r.nombre, llegada: r.llegada, salida: r.salida };
-                        cur.setDate(cur.getDate() + 1);
-                    }
-                }
-            }
-            return { set, info };
-        }
-
-        // ── RENDER ──
-        function renderCalendario() {
-            const anio = parseInt(document.getElementById('selAnio').value);
-            const mesSel = parseInt(document.getElementById('selMes').value); // 0 = todo el año
-
-            const { set: resSet, info: resInfo } = buildReservasSet();
-
-            // Rango de meses a mostrar
-            const mesInicio = mesSel === 0 ? 1 : mesSel;
-            const mesFin = mesSel === 0 ? 12 : mesSel;
-
-            let html = '<table class="cal"><thead><tr>';
-            html += '<th>Fecha</th>';
-            for (let c = 1; c <= 7; c++) html += `<th>🏠 N°${c}</th>`;
-            html += '</tr></thead><tbody>';
-
-            for (let mes = mesInicio; mes <= mesFin; mes++) {
-                // Fila de mes
-                html += `<tr class="mes-header"><td colspan="8">📅 ${MESES[mes - 1]} ${anio}</td></tr>`;
-
-                const ndias = diasEnMes(anio, mes);
-                for (let d = 1; d <= ndias; d++) {
-                    const fecha = `${anio}-${String(mes).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
-                    const diasem = new Date(fecha + 'T00:00:00').getDay();
-                    const esHoy = fecha === hoyStr;
-                    const esFinde = diasem === 0 || diasem === 6;
-
-                    html += `<tr class="dia-row${esHoy ? ' dia-hoy' : ''}" id="fila-${fecha}">`;
-                    html += `<td style="${esFinde ? 'color:#d97706;font-weight:600' : ''}">`;
-                    html += `${DIAS_S[diasem]} ${d}`;
-                    if (esHoy) html += ' <span style="font-size:.65rem;background:var(--ocean);color:#fff;border-radius:4px;padding:1px 5px;margin-left:2px">HOY</span>';
-                    html += '</td>';
-
-                    for (let cab = 1; cab <= 7; cab++) {
-                        const key = fecha + '|' + cab;
-                        const ocupado = resSet.has(key);
-                        const inf = resInfo[key];
-
-                        // Detectar si es primera o última noche del bloque
-                        const keyPrev = prevDate(fecha) + '|' + cab;
-                        const keyNext = nextDate(fecha) + '|' + cab;
-                        const esPrimera = ocupado && !resSet.has(keyPrev);
-                        const esUltima = ocupado && !resSet.has(keyNext);
-
-                        let clases = 'celda ' + (ocupado ? 'ocup' : 'libre');
-                        if (esPrimera) clases += ' primera';
-                        if (esUltima) clases += ' ultima';
-                        if (esHoy) clases += ' hoy';
-
-                        const titulo = ocupado && inf
-                            ? `${inf.nombre} | ${fmt(inf.llegada)} → ${fmt(inf.salida)}`
-                            : '';
-
-                        html += `<td><div class="${clases}"${titulo ? ` title="${titulo}"` : ''}>`;
-                        html += ocupado ? '✓' : '';
-                        html += '</div></td>';
-                    }
-                    html += '</tr>';
-                }
-            }
-
-            html += '</tbody></table>';
-            document.getElementById('calWrapper').innerHTML = html;
-        }
-
-        function prevDate(iso) {
-            const d = new Date(iso + 'T00:00:00');
-            d.setDate(d.getDate() - 1);
-            return isoDate(d);
-        }
-        function nextDate(iso) {
-            const d = new Date(iso + 'T00:00:00');
-            d.setDate(d.getDate() + 1);
-            return isoDate(d);
-        }
-        function fmt(f) {
-            if (!f) return '';
-            const [y, m, d] = f.split('-');
-            return `${d}/${m}/${y}`;
-        }
-    </script>
+    html += '</tbody></table>';
+    document.getElementById('calWrapper').innerHTML = html;
+  }
+</script>
 </body>
-
 </html>

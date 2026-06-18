@@ -152,6 +152,36 @@
       text-align: center; padding: 4px 2px;
     }
 
+    /* Fila resumen mensual */
+    tr.mes-resumen td {
+      background: linear-gradient(90deg, #1a3a5c, #1a5c3a);
+      padding: .6rem 1rem;
+    }
+    .mes-resumen-inner {
+      display: flex; flex-wrap: wrap; align-items: center; gap: .8rem;
+    }
+    .mes-resumen-label {
+      color: var(--gold); font-weight: 700; font-size: .8rem;
+      text-transform: uppercase; letter-spacing: .04em; white-space: nowrap;
+    }
+    .mes-resumen-items { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .mes-res-chip {
+      background: rgba(255,255,255,.12); border-radius: 20px;
+      padding: 3px 10px; font-size: .76rem; color: #fff; font-weight: 600; white-space: nowrap;
+    }
+    .mes-res-chip.total {
+      background: var(--gold); color: var(--night); font-weight: 700;
+    }
+    .mes-res-chip.cero { opacity: .45; }
+
+    /* Botón comprobante en celda */
+    .btn-comprobante {
+      display: inline-flex; align-items: center; gap: 3px;
+      background: rgba(255,255,255,.25); border: none; border-radius: 4px;
+      color: #fff; font-size: .6rem; cursor: pointer; padding: 2px 5px; margin-top: 3px;
+    }
+    .btn-comprobante:hover { background: rgba(255,255,255,.4); }
+
     /* Hoy */
     .celda-libre.hoy, .celda-ocup.hoy { outline: 2px solid var(--ocean); }
 
@@ -377,6 +407,54 @@
 
   function diasEnMes(anio, mes) { return new Date(anio, mes, 0).getDate(); }
 
+  // ===== MODAL COMPROBANTE =====
+  function verComprobante(id) {
+    var found = null;
+    for (var cab in reservasData) {
+      var lista = reservasData[cab] || [];
+      for (var i = 0; i < lista.length; i++) {
+        if (lista[i].id == id) { found = lista[i]; break; }
+      }
+      if (found) break;
+    }
+    if (!found || !found.comprobante) { alert('No hay comprobante disponible'); return; }
+    var modal = document.createElement('div');
+    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.9);display:flex;align-items:center;justify-content:center;z-index:10000;padding:1rem;';
+    modal.innerHTML =
+      '<button onclick="this.parentElement.remove()" style="position:absolute;top:1rem;right:1rem;background:#fff;border:none;border-radius:50%;width:40px;height:40px;font-size:1.5rem;cursor:pointer">✕</button>' +
+      '<div style="background:#fff;border-radius:12px;overflow:hidden;max-width:90vw;max-height:90vh;">' +
+        '<div style="background:linear-gradient(135deg,var(--ocean),var(--ocean-lt));color:#fff;padding:1rem 1.5rem;">' +
+          '<h3 style="margin:0;font-size:1.1rem">📎 Comprobante</h3>' +
+          '<p style="margin:.3rem 0 0 0;font-size:.85rem;opacity:.9">' + found.nombre + ' · ' + fmt(found.llegada) + ' → ' + fmt(found.salida) + '</p>' +
+        '</div>' +
+        '<div style="padding:1rem;background:#f5f5f5;display:flex;align-items:center;justify-content:center;">' +
+          '<img src="' + found.comprobante + '" style="max-width:100%;max-height:65vh;border-radius:8px;" />' +
+        '</div>' +
+      '</div>';
+    modal.onclick = function(e) { if (e.target === modal) modal.remove(); };
+    document.body.appendChild(modal);
+  }
+
+  // ===== RESUMEN MENSUAL =====
+  function calcularResumenMes(anio, mes) {
+    var totDep = 0, totAbo = 0, totEfe = 0;
+    var mm = String(mes).padStart(2,'0');
+    var prefijo = anio + '-' + mm + '-';
+    for (var cab in reservasData) {
+      var lista = reservasData[cab] || [];
+      for (var i = 0; i < lista.length; i++) {
+        var r = lista[i];
+        // Contar reservas cuya LLEGADA cae en este mes
+        if (r.llegada && r.llegada.indexOf(prefijo) === 0) {
+          totDep += Number(r.deposito) || 0;
+          totAbo += Number(r.abono)    || 0;
+          totEfe += Number(r.efectivo) || 0;
+        }
+      }
+    }
+    return { dep: totDep, abo: totAbo, efe: totEfe, total: totDep + totAbo + totEfe };
+  }
+
   function renderCalendario() {
     var anio   = parseInt(document.getElementById('selAnio').value, 10);
     var mesSel = parseInt(document.getElementById('selMes').value, 10);
@@ -413,14 +491,12 @@
           var info = resMap[key];
 
           if (!info) {
-            // Libre
             html += '<td><div class="celda-libre' + (esHoy ? ' hoy' : '') + '"></div></td>';
           } else {
             var r = info.r;
             var clases = 'celda-ocup' + (info.primera ? ' primera' : '') + (esHoy ? ' hoy' : '');
             html += '<td><div class="' + clases + '">';
             if (info.primera) {
-              // Primera fila: nombre, personas, pagos y hora de llegada
               html += '<div class="c-nombre">👤 ' + r.nombre + '</div>';
               if (r.horaLlegada) html += '<div class="c-hora">🕐 Entrada: ' + fmtHora(r.horaLlegada) + '</div>';
               html += '<div class="c-personas">👥 ' + (r.personas || '—') + ' personas</div>';
@@ -429,8 +505,11 @@
               if (r.abono)    html += '<div class="c-pago">💵 Abono: ' + fmtPeso(r.abono) + '</div>';
               if (r.efectivo) html += '<div class="c-pago">💰 Efect: ' + fmtPeso(r.efectivo) + '</div>';
               html += '</div>';
+              // Botón comprobante si existe
+              if (r.comprobante) {
+                html += '<button class="btn-comprobante" onclick="verComprobante(' + r.id + ')">📎 Ver foto</button>';
+              }
             } else if (info.ultima) {
-              // Última fila: solo hora de salida
               if (r.horaSalida) html += '<div class="c-hora-salida">🕛 Salida: ' + fmtHora(r.horaSalida) + '</div>';
             }
             html += '</div></td>';
@@ -438,6 +517,18 @@
         }
         html += '</tr>';
       }
+
+      // ── Fila resumen al final del mes ──
+      var res = calcularResumenMes(anio, mes);
+      html += '<tr class="mes-resumen"><td colspan="8">';
+      html += '<div class="mes-resumen-inner">';
+      html += '<span class="mes-resumen-label">💰 Ingresos ' + MESES[mes-1] + ':</span>';
+      html += '<div class="mes-resumen-items">';
+      html += '<span class="mes-res-chip' + (res.dep === 0 ? ' cero' : '') + '">🏦 Depósitos: ' + fmtPeso(res.dep || 0) + '</span>';
+      html += '<span class="mes-res-chip' + (res.abo === 0 ? ' cero' : '') + '">💵 Abonos: '    + fmtPeso(res.abo || 0) + '</span>';
+      html += '<span class="mes-res-chip' + (res.efe === 0 ? ' cero' : '') + '">💰 Efectivo: '  + fmtPeso(res.efe || 0) + '</span>';
+      html += '<span class="mes-res-chip total">✅ Total: ' + fmtPeso(res.total) + '</span>';
+      html += '</div></div></td></tr>';
     }
 
     html += '</tbody></table>';

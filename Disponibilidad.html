@@ -564,8 +564,16 @@
             <input type="date" id="fLlegada" />
           </div>
           <div class="form-group">
+            <label>Hora llegada</label>
+            <input type="time" id="fHoraLlegada" value="14:00" />
+          </div>
+          <div class="form-group">
             <label>Fecha salida</label>
             <input type="date" id="fSalida" />
+          </div>
+          <div class="form-group">
+            <label>Hora salida</label>
+            <input type="time" id="fHoraSalida" value="12:00" />
           </div>
           <div class="form-group">
             <label>Nombre cliente</label>
@@ -672,8 +680,10 @@
     // ===== BLOQUEAR =====
     async function bloquearCabana() {
       const cabana   = document.getElementById('fCabana').value;
-      const llegada  = document.getElementById('fLlegada').value;
-      const salida   = document.getElementById('fSalida').value;
+      const llegada      = document.getElementById('fLlegada').value;
+      const horaLlegada  = document.getElementById('fHoraLlegada').value || '14:00';
+      const salida       = document.getElementById('fSalida').value;
+      const horaSalida   = document.getElementById('fHoraSalida').value || '12:00';
       const nombre   = document.getElementById('fNombre').value.trim() || 'Reservado';
       const personas = document.getElementById('fPersonas').value;
       const deposito = parseInt(document.getElementById('fDeposito').value) || 0;
@@ -698,12 +708,14 @@
 
       if (conflicto && !confirm('⚠️ Hay una reserva que se superpone en esas fechas. ¿Agregar de todos modos?')) return;
 
-      data[cabana].push({ llegada, salida, nombre, personas, deposito, abono, efectivo, id: Date.now() });
+      data[cabana].push({ llegada, horaLlegada, salida, horaSalida, nombre, personas, deposito, abono, efectivo, id: Date.now() });
       await guardarReservas(data);
 
       alert(`✅ Reserva guardada: Cabaña N°${cabana} del ${fmt(llegada)} al ${fmt(salida)}`);
-      document.getElementById('fLlegada').value   = '';
-      document.getElementById('fSalida').value    = '';
+      document.getElementById('fLlegada').value      = '';
+      document.getElementById('fHoraLlegada').value  = '14:00';
+      document.getElementById('fSalida').value       = '';
+      document.getElementById('fHoraSalida').value   = '12:00';
       document.getElementById('fNombre').value    = '';
       document.getElementById('fPersonas').value  = '2';
       document.getElementById('fDeposito').value  = '';
@@ -764,7 +776,7 @@
             : reservas.map(r => `
               <div class="reserva-item">
                 <div style="flex:1">
-                  <div class="reserva-fechas"><i class="bi bi-calendar3"></i> ${fmt(r.llegada)} → ${fmt(r.salida)}</div>
+                  <div class="reserva-fechas"><i class="bi bi-calendar3"></i> ${fmt(r.llegada)} ${r.horaLlegada ? '⏰'+r.horaLlegada : ''} → ${fmt(r.salida)} ${r.horaSalida ? '⏰'+r.horaSalida : ''}</div>
                   <div class="reserva-nota"><i class="bi bi-person-fill"></i> ${r.nombre} &nbsp;·&nbsp; <i class="bi bi-people-fill"></i> ${r.personas || '—'} personas</div>
                   <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap">
                     ${r.deposito ? `<span style="font-size:.72rem;background:#ebf8ff;color:#2b6cb0;border-radius:5px;padding:2px 7px"><i class="bi bi-bank"></i> Dep: $${r.deposito.toLocaleString('es-CL')}</span>` : ''}

@@ -713,51 +713,56 @@
   <style>
     .clima-scroll-wrap {
       overflow-x: auto;
-      padding-bottom: 8px;
+      padding-bottom: 4px;
     }
     .clima-cards {
       display: flex;
       gap: 10px;
-      min-width: max-content;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    @media (max-width: 700px) {
+      .clima-cards { flex-wrap: nowrap; min-width: max-content; }
     }
     .clima-card {
       background: #fff;
-      border: 1px solid #dde8f0;
-      border-radius: 16px;
-      padding: 16px 14px;
-      min-width: 110px;
+      border: 1.5px solid #dde8f0;
+      border-radius: 18px;
+      padding: 18px 14px 14px;
+      min-width: 118px;
+      flex: 0 0 118px;
       text-align: center;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 5px;
-      transition: transform 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s;
       cursor: default;
     }
-    .clima-card:hover { transform: translateY(-3px); }
+    .clima-card:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(0,0,0,0.10); }
     .clima-card.hoy {
       background: #e8f4fb;
       border-color: #2a9bc4;
-      box-shadow: 0 4px 16px rgba(42,155,196,0.18);
+      box-shadow: 0 4px 18px rgba(42,155,196,0.22);
     }
     .clima-card-dia {
       font-weight: 700;
-      font-size: 0.92rem;
+      font-size: 0.95rem;
       color: #1a3a4a;
     }
     .clima-card-fecha {
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       color: #7a8fa0;
-      margin-top: -3px;
+      margin-top: -2px;
     }
     .clima-card-icono {
-      font-size: 2.4rem;
+      font-size: 2.5rem;
       line-height: 1;
-      margin: 4px 0;
+      margin: 6px 0 2px;
     }
     .clima-card-lluvia {
-      font-size: 0.82rem;
+      font-size: 0.9rem;
       font-weight: 700;
       color: #2a7dd4;
     }
@@ -768,15 +773,14 @@
     .clima-card-temps {
       font-size: 0.88rem;
       font-weight: 600;
+      margin-top: 2px;
     }
     .clima-card-temps .t-max { color: #e05e1b; }
     .clima-card-temps .t-min { color: #2a7dd4; }
     .clima-card-viento {
       font-size: 0.72rem;
       color: #5a6a7a;
-      display: flex;
-      align-items: center;
-      gap: 3px;
+      margin-top: 1px;
     }
     .clima-loading {
       padding: 2rem;
@@ -790,7 +794,12 @@
   </style>
 
   <script>
-    (async function cargarClima() {
+    // Obtiene la fecha local en Chile (América/Santiago) en formato YYYY-MM-DD
+    function fechaHoyChile() {
+      return new Date().toLocaleDateString('en-CA', { timeZone: 'America/Santiago' });
+    }
+
+    async function cargarClima() {
       const container = document.getElementById('climaCards');
       try {
         const url = 'https://api.open-meteo.com/v1/forecast?latitude=-35.8&longitude=-72.57' +
@@ -815,15 +824,23 @@
         const diasNom = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
         const mesesNom = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
         const flechaViento = (deg) => {
-          const dirs = ['↑','↗','→','↘','↓','↙','←','↖'];
+          const dirs = ['→','↗','↑','↖','←','↙','↓','↘'];
           return dirs[Math.round(deg / 45) % 8];
         };
 
+        const hoy = fechaHoyChile();
+        // Encontrar índice real de hoy en los datos (por si desfase UTC)
+        const idxHoy = data.daily.time.findIndex(d => d === hoy);
+
         let html = '';
-        const hoy = new Date().toISOString().split('T')[0];
         for (let i = 0; i < data.daily.time.length; i++) {
           const fecha = new Date(data.daily.time[i] + 'T12:00:00');
-          const diaNom = i === 0 ? 'Hoy' : (i === 1 ? 'Mañana' : diasNom[fecha.getDay()]);
+          const diffDias = i - (idxHoy >= 0 ? idxHoy : 0);
+          let diaNom;
+          if (diffDias === 0) diaNom = 'Hoy';
+          else if (diffDias === 1) diaNom = 'Mañana';
+          else diaNom = diasNom[fecha.getDay()];
+
           const diaNum = fecha.getDate();
           const mes = mesesNom[fecha.getMonth()];
           const emoji = emojiClima(data.daily.weathercode[i]);
@@ -852,6 +869,25 @@
       } catch(e) {
         container.innerHTML = '<p style="color:#9aafbf;padding:1rem">No se pudo cargar el pronóstico.</p>';
       }
+    }
+
+    // Carga inicial
+    cargarClima();
+
+    // Se refresca cada 30 minutos automáticamente
+    setInterval(cargarClima, 30 * 60 * 1000);
+
+    // También se refresca a medianoche (para que "Hoy" cambie al día siguiente)
+    (function programarMedianoche() {
+      const ahora = new Date();
+      const manana = new Date(ahora);
+      manana.setDate(ahora.getDate() + 1);
+      manana.setHours(0, 0, 10, 0); // 00:00:10 del día siguiente
+      const msHastaManana = manana - ahora;
+      setTimeout(() => {
+        cargarClima();
+        programarMedianoche(); // reprograma para la siguiente medianoche
+      }, msHastaManana);
     })();
   </script>
 

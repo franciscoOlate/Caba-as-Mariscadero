@@ -5,6 +5,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Panel Admin — Cabañas Mariscadero</title>
+  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
+  <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com;
+    font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net;
+    script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net;
+    img-src 'self' data: https:;
+    connect-src 'self' https://mariscadero-api.franciscopersonalolate.workers.dev;
+  " />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap"
@@ -552,7 +563,7 @@
     <div class="loading-spinner"></div>
   </div>
 
-  <!-- LOGIN -->
+  
   <div class="login-wrap" id="loginWrap">
     <div class="login-box">
       <div class="login-logo"><i class="bi bi-shield-lock-fill"></i></div>
@@ -566,7 +577,7 @@
     </div>
   </div>
 
-  <!-- PANEL -->
+  
   <div class="panel-wrap" id="panelWrap">
     <nav class="panel-nav">
       <div class="panel-brand">🏠 Cabañas Mariscadero</div>
@@ -699,38 +710,49 @@
   </div>
 
   <script>
-    // ===== CONFIGURACIÓN PANTRY =====
-    const ADMIN_PASS = 'mariscadero2025';
-    const PANTRY_ID = '6117a5bf-8250-4cae-a652-cdf866b37961';
-    const BASKET_NAME = 'reservas';
-    const API_URL = `https://getpantry.cloud/apiv1/pantry/${PANTRY_ID}/basket/${BASKET_NAME}`;
+    const WORKER_URL = 'https://mariscadero-api.franciscopersonalolate.workers.dev';
+    const API_URL = `${WORKER_URL}/reservas`;
 
     let comprobanteBase64 = null;
+    let sessionPass = null;
 
-    // ===== LOGIN =====
-    function doLogin() {
+    async function doLogin() {
       const pass = document.getElementById('loginPass').value;
-      if (pass === ADMIN_PASS) {
-        document.getElementById('loginWrap').style.display = 'none';
-        document.getElementById('panelWrap').style.display = 'block';
-        cargarReservas();
-      } else {
-        document.getElementById('loginError').style.display = 'block';
+      const btn = document.querySelector('.login-btn');
+      if (btn) btn.disabled = true;
+      try {
+        const res = await fetch(`${WORKER_URL}/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: pass })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          sessionPass = pass;
+          document.getElementById('loginWrap').style.display = 'none';
+          document.getElementById('panelWrap').style.display = 'block';
+          cargarReservas();
+        } else {
+          document.getElementById('loginError').style.display = 'block';
+        }
+      } catch (e) {
+        alert('Error de conexión al verificar la contraseña.');
+        console.error(e);
       }
+      if (btn) btn.disabled = false;
     }
 
     function doLogout() {
+      sessionPass = null;
       document.getElementById('loginWrap').style.display = 'flex';
       document.getElementById('panelWrap').style.display = 'none';
       document.getElementById('loginPass').value = '';
     }
 
-    // ===== LOADING =====
     function showLoading(v) {
       document.getElementById('loadingOverlay').style.display = v ? 'flex' : 'none';
     }
 
-    // ===== API PANTRY =====
     async function cargarReservas() {
       showLoading(true);
       try {
@@ -747,11 +769,19 @@
     async function guardarReservas(data) {
       showLoading(true);
       try {
-        await fetch(API_URL, {
+        const res = await fetch(API_URL, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${sessionPass}`
+          },
           body: JSON.stringify(data)
         });
+        if (!res.ok) {
+          alert('⚠️ Sesión inválida. Por favor inicia sesión de nuevo.');
+          doLogout();
+          return;
+        }
         localStorage.setItem('reservas_publicas', JSON.stringify(data));
         localStorage.setItem('reservas_cache_ts', Date.now().toString());
       } catch (e) {
@@ -761,12 +791,10 @@
       showLoading(false);
     }
 
-    // ===== MANEJO DE FOTO =====
     function previsualizarFoto(event) {
       const file = event.target.files[0];
       if (!file) return;
 
-      // Validar tamaño (5MB)
       if (file.size > 5 * 1024 * 1024) {
         alert('⚠️ La imagen es muy grande. El tamaño máximo es 5MB.');
         return;
@@ -774,11 +802,9 @@
 
       const reader = new FileReader();
       reader.onload = function(e) {
-        // Comprimir imagen
         comprimirImagen(e.target.result, function(b64) {
           comprobanteBase64 = b64;
           
-          // Mostrar preview
           document.getElementById('fotoImg').src = b64;
           document.getElementById('fotoPreview').style.display = 'block';
           document.getElementById('fotoBox').classList.add('has-file');
@@ -803,7 +829,6 @@
         let width = img.width;
         let height = img.height;
 
-        // Calcular nuevas dimensiones
         if (width > height) {
           if (width > MAX_WIDTH) {
             height = Math.round((height * MAX_WIDTH) / width);
@@ -816,14 +841,12 @@
           }
         }
 
-        // Crear canvas y comprimir
         const canvas = document.createElement('canvas');
         canvas.width = width;
         canvas.height = height;
         const ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0, width, height);
         
-        // Comprimir a JPEG con calidad 0.75
         const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.75);
         callback(compressedDataUrl);
       };
@@ -843,7 +866,6 @@
       document.getElementById('fotoStatus').textContent = '';
     }
 
-    // ===== BLOQUEAR =====
     async function bloquearCabana() {
       const cabana = document.getElementById('fCabana').value;
       const llegada = document.getElementById('fLlegada').value;
@@ -896,7 +918,6 @@
 
       alert(`✅ Reserva guardada: Cabaña N°${cabana} del ${fmt(llegada)} al ${fmt(salida)}`);
       
-      // Limpiar formulario
       document.getElementById('fLlegada').value = '';
       document.getElementById('fHoraLlegada').value = '14:00';
       document.getElementById('fSalida').value = '';
@@ -911,7 +932,6 @@
       renderPanel(data);
     }
 
-    // ===== ELIMINAR =====
     async function eliminarReserva(cabana, id) {
       if (!confirm('¿Eliminar esta reserva?')) return;
       showLoading(true);
@@ -927,7 +947,6 @@
       renderPanel(data);
     }
 
-    // ===== LIBERAR =====
     async function liberarCabana(cabana) {
       if (!confirm(`¿Eliminar TODAS las reservas de Cabaña N°${cabana}?`)) return;
       showLoading(true);
@@ -939,7 +958,6 @@
       renderPanel(data);
     }
 
-    // ===== RENDER =====
     function renderPanel(data) {
       const hoy = new Date().toISOString().split('T')[0];
       let libres = 0, ocupadas = 0, totalRes = 0;
@@ -992,9 +1010,7 @@
       return `${d}/${m}/${y}`;
     }
 
-    // Ver comprobante en modal
     function verComprobante(id) {
-      // Buscar la reserva en los datos
       fetch(API_URL).then(res => res.json()).then(data => {
         let reserva = null;
         for (let cab in data) {
@@ -1010,7 +1026,6 @@
           return;
         }
 
-        // Crear modal
         const modal = document.createElement('div');
         modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:10000;padding:1rem;';
         modal.innerHTML = `
@@ -1030,7 +1045,6 @@
       });
     }
 
-    // Fechas mínimas
     document.addEventListener('DOMContentLoaded', () => {
       const hoy = new Date().toISOString().split('T')[0];
       const fL = document.getElementById('fLlegada');
